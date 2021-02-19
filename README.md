@@ -12,3 +12,6 @@ Sistema de automação de processos, emissor de sinais, overview de estoque, ped
 - Rodar comandos: Migrate e Makemigrations;
 - Criar superuser; e
 - Começar a desenvolver
+
+# Jira
+https://rivoteam.atlassian.net/secure/RapidBoard.jspa?projectKey=AR&rapidView=2
