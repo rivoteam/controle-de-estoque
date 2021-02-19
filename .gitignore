@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.idea/
+.pyCharm/
+*.pyc
+logs.log
+python-version
+.python-version
