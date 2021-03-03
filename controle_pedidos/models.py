@@ -5,8 +5,9 @@ from controle_estoque.models import Produto
 
 STATUS_CHOICES = (
     (1, 'Gerado'),
-    (2, 'Enviado'),
-    (3, 'Concluído'),
+    (2, 'Em separação'),
+    (3, 'Enviado'),
+    (4, 'Concluído'),
 )
 
 
@@ -24,7 +25,7 @@ class PedidoItem(models.Model):
 class Pedido(models.Model):
     fornecedor = models.ForeignKey('controle_estoque.Fornecedor', on_delete=models.CASCADE, related_name='pedidos')
     produtos = models.ManyToManyField(PedidoItem)
-    preco_pedido = models.DecimalField('Preço Total do Pedido', decimal_places=2, max_digits=6, default=0)
+    preco_pedido = models.DecimalField('Preço Total do Pedido', decimal_places=2, max_digits=12, default=0)
     descricao = models.TextField('Descrição do Pedido', max_length=150, blank=True, null=True)
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
     data_pedido = models.DateTimeField('Pedido Realizado Em', auto_now_add=True, editable=True)
