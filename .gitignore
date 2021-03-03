@@ -133,3 +133,6 @@ dmypy.json
 logs.log
 python-version
 .python-version
+
+# NFE
+controle_pedidos/NFE/
