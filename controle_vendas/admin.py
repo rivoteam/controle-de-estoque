@@ -5,9 +5,9 @@ from controle_estoque.utils import export_as_csv, export_xlsx, salva_criado_por
 
 @admin.register(HistoricoVendas)
 class HistoricoVendasAdmin(admin.ModelAdmin):
-    list_display = ['id', 'itens_compra', 'status', 'valor_compra', 'vendedor', 'caixa', 'criado_por', 'criado_em', ]
-    search_fields = ['id', 'itens_compra', 'status', 'valor_compra', 'vendedor', 'caixa', 'criado_por', 'criado_em', ]
-    list_filter = ['itens_compra', 'status', 'valor_compra', 'vendedor', 'caixa', 'criado_por', 'criado_em', ]
+    list_display = ['id', 'vendas', 'status', 'valor_total_diario', 'vendedor', 'caixa', 'criado_por', 'criado_em', ]
+    search_fields = ['id', 'vendas', 'status', 'valor_total_diario', 'vendedor', 'caixa', 'criado_por', 'criado_em', ]
+    list_filter = ['vendas', 'status', 'valor_total_diario', 'vendedor', 'caixa', 'criado_por', 'criado_em', ]
 
     actions = (export_as_csv, export_xlsx)
 

@@ -29,22 +29,6 @@ class HistoricoAtualizacaoPrecos(models.Model):
         ordering = ['-criado_em']
 
 
-class HistoricoVendas(models.Model):
-    itens_compra = models.JSONField(default=dict)
-    status = models.CharField(max_length=30, choices=VENDAS_STATUS, default='Concluída')
-    valor_compra = models.DecimalField(max_digits=6, decimal_places=2)
-    vendedor = models.ForeignKey(Funcionario, on_delete=models.CASCADE, related_name='cargo_vendedor')
-    caixa = models.ForeignKey(Funcionario, on_delete=models.CASCADE, related_name='cargo_caixa')
-    criado_por = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hist_vendas_criado_por',
-                                   editable=False)
-    criado_em = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'Histórico de Venda'
-        verbose_name_plural = 'Histórico de Vendas'
-        ordering = ['-criado_em']
-
-
 class VendaItem(models.Model):
     produto = models.ForeignKey("controle_estoque.Produto", on_delete=models.CASCADE)
     # produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
@@ -106,3 +90,23 @@ class Venda(models.Model):
             super(Venda, self).save(*args, **kwargs)
         except ValueError:
             super(Venda, self).save(*args, **kwargs)
+
+
+
+class HistoricoVendas(models.Model):
+    vendas = models.ForeignKey(Venda, on_delete=models.CASCADE, related_name='vendas')
+    status = models.CharField(max_length=30, choices=VENDAS_STATUS, default='Concluída')
+    valor_total_diario = models.DecimalField(max_digits=6, decimal_places=2)
+    vendedor = models.ForeignKey(Funcionario, on_delete=models.CASCADE, related_name='cargo_vendedor')
+    caixa = models.ForeignKey(Funcionario, on_delete=models.CASCADE, related_name='cargo_caixa')
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hist_vendas_criado_por',
+                                   editable=False)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name = 'Histórico de Venda'
+        verbose_name_plural = 'Histórico de Vendas'
+        ordering = ['-criado_em']
+
+
