@@ -28,16 +28,19 @@ class Pedido(models.Model):
     preco_pedido = models.DecimalField('Preço Total do Pedido', decimal_places=2, max_digits=12, default=0)
     descricao = models.TextField('Descrição do Pedido', max_length=150, blank=True, null=True)
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
-    data_pedido = models.DateTimeField('Pedido Realizado Em', auto_now_add=True, editable=True)
+    data_pedido = models.DateTimeField('Pedido Realizado Em', auto_now_add=True)
     status = models.SmallIntegerField('Status', choices=STATUS_CHOICES, default=1)
-    criado_por = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pedido_criadopor',
+                                   editable=False)
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
 
     def __str__(self):
-        return f'Pedido {self.id} - {self.data_pedido.strftime("%d/%m/%Y - %H:%M:%S")}'
+        try:
+            return f'Pedido {self.id} - {self.data_pedido.strftime("%d/%m/%Y - %H:%M:%S")}'
+        except AttributeError:
+            return f'Pedido {self.id} - {self.data_pedido}'
 
     def calc_total(self):
         total = 0

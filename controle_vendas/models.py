@@ -68,21 +68,24 @@ class Venda(models.Model):
     desconto = models.DecimalField('Desconto', decimal_places=2, max_digits=12, default=0,
                                    help_text="Digite o valor de desconto da venda, exemplo R$ 10,00")
     forma_pagto = models.SmallIntegerField("Forma De Pagamento", choices=PAGAMENTO_CHOICES)
-    cpf = models.CharField("CPF", max_length=30)
+    cpf = models.CharField("CPF", max_length=30, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Venda'
         verbose_name_plural = 'Vendas'
 
     def __str__(self):
-        return f'Venda {self.id} - {self.criado_em.strftime("%d/%m/%Y - %H:%M:%S")}'
+        try:
+            return f'Pedido {self.id} - {self.criado_em.strftime("%d/%m/%Y - %H:%M:%S")}'
+        except AttributeError:
+            return f'Pedido {self.id} - {self.criado_em}'
 
     def calc_total(self):
         total = 0
         for order_item in self.produtos.all():
             total += order_item.get_total_preco_produto()
-        self.preco_venda = total - self.desconto
-        return self.preco_venda
+        self.valor_total_venda = total - self.desconto
+        return self.valor_total_venda
 
     def save(self, *args, **kwargs):
         try:

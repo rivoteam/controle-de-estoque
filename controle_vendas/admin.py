@@ -26,16 +26,15 @@ class HistoricoAtualizacaoPrecosAdmin(admin.ModelAdmin):
 
     actions = (export_as_csv, export_xlsx)
 
-# @admin.register(Venda)
-# class VendaAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'preco_venda', 'descricao', 'nota_fiscal', 'data_venda', 'status', 'criado_por',]
-#     search_fields = ['id', 'preco_venda', 'descricao', 'nota_fiscal', 'data_venda', 'status', 'criado_por',]
-#     list_filter = ['preco_venda', 'descricao', 'nota_fiscal', 'data_venda', 'status', 'criado_por', ]
-#
-#     actions = (export_as_csv, export_xlsx)
-#
-#     def save_model(self, request, obj, form, change):
-#         salva_criado_por(request, obj)
+@admin.register(Venda)
+class VendaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por',]
+    search_fields = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por',]
+    list_filter = ['valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', ]
 
-admin.site.register(Venda)
+    actions = (export_as_csv, export_xlsx)
+
+    def save_model(self, request, obj, form, change):
+        salva_criado_por(request, obj)
+
 admin.site.register(VendaItem)
