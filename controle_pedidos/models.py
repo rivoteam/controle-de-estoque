@@ -37,7 +37,7 @@ class Pedido(models.Model):
         verbose_name_plural = 'Pedidos'
 
     def __str__(self):
-        return f'{self.id} - {self.data_pedido}'
+        return f'Pedido {self.id} - {self.data_pedido.strftime("%d/%m/%Y - %H:%M:%S")}'
 
     def calc_total(self):
         total = 0
