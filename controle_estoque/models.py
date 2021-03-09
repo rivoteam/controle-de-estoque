@@ -139,7 +139,7 @@ class Produto(models.Model):
     atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.ean}'
+        return f'{self.descricao} {self.tamanho} - ean: {self.ean}'
 
     def generate_barcode(self):
         '''

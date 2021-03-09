@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'controle_estoque',
+    'controle_pedidos',
     'controle_vendas',
     'controle_usuarios',
     'interfaces',
