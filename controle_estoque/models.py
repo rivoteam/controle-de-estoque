@@ -127,7 +127,7 @@ class Produto(models.Model):
     total_pecas = models.PositiveSmallIntegerField()
     preco_compra = models.DecimalField(max_digits=6, decimal_places=2)
     preco_venda = models.DecimalField(max_digits=6, decimal_places=2)
-    motivo_alteracao_preco = models.CharField(max_length=300, null=True)
+    motivo_alteracao_preco = models.CharField(max_length=300, null=True, default='Novo produto')
     auto_pedido = models.BooleanField(default=False)
     ean = models.CharField(max_length=13, editable=False)
     sku = models.CharField(max_length=10, editable=False)
@@ -139,7 +139,7 @@ class Produto(models.Model):
     atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.ean}'
+        return f'{self.descricao} {self.tamanho} - ean: {self.ean}'
 
     def generate_barcode(self):
         '''
