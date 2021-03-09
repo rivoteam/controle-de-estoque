@@ -1,7 +1,15 @@
-from django.http import HttpResponse
-from datetime import datetime
 import csv
+from datetime import datetime
+
 import xlwt
+from django.http import HttpResponse
+
+GENERO_CHOICES = (
+    ('masculino', "Masculino"),
+    ('feminino', "Feminino"),
+    ('unissex', "Unissex"),
+    ('infantil', "Infantil"),
+)
 
 
 def export_as_csv(self, request, queryset):
@@ -52,3 +60,33 @@ def salva_criado_por(request, obj):
     else:
         obj.atualizado_por = request.user
     obj.save()
+
+
+STATUS_COMPRA_CHOICES = (
+    (1, 'Gerado'),
+    (2, 'Em separação'),
+    (3, 'Enviado'),
+    (4, 'Concluído'),
+)
+
+CARGOS_CHOICES = (
+    ("estoquista", "Estoquista"),
+    ("caixa", "Caixa"),
+    ("vendedor", "Vendedor"),
+    ("analista", "Analista"),
+    ("gerente", "Gerente"),
+)
+
+STATUS_VENDA_CHOICES = (
+    (1, 'Pendente'),
+    (2, 'Cancelada'),
+    (3, 'Concluída'),
+)
+
+PAGAMENTO_CHOICES = (
+    (1, 'Debito'),
+    (2, 'Credito'),
+    (3, 'Dinheiro'),
+    (4, 'PicPay'),
+    (5, 'Pix'),
+)
