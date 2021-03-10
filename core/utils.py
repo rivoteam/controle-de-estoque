@@ -59,7 +59,6 @@ GENERO_CHOICES = (
     ('masculino', "Masculino"),
     ('feminino', "Feminino"),
     ('unissex', "Unissex"),
-    ('infantil', "Infantil"),
 )
 
 STATUS_COMPRA_CHOICES = (
@@ -91,7 +90,8 @@ PAGAMENTO_CHOICES = (
     (5, 'Pix'),
 )
 
-numeros = tuple((str(n), str(n)) for n in range(2, 62, 2))
+numeros_social = tuple((str(n), str(n)) for n in range(1, 6))
+numeros = tuple((str(n), str(n)) for n in range(30, 62, 2))
 letras = tuple((l, l) for l in ["P", "M", "G", "GG", "XG"])
-TAMANHO_CHOICES = numeros + letras
+TAMANHO_CHOICES = numeros_social + numeros + letras
 
