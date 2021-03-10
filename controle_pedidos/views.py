@@ -1,3 +1,4 @@
 from django.shortcuts import render
+from .models import PedidoItem, Pedido, Produto
 
-# Create your views here.
+PedidoItem.objects.create(produto=Produto.objects.last(), quantidade=5)
