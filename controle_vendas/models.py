@@ -17,20 +17,20 @@ class CarrinhoVenda(models.Model):
 
 
 class Venda(models.Model):
-    valor_total_venda = models.DecimalField('Valor Total da Venda', decimal_places=2, max_digits=12, default=0)
     descricao = models.TextField('Descrição da Venda', max_length=150, blank=True, null=True)
-    nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
-    criado_em = models.DateTimeField('Venda Realizada Em', auto_now_add=True)
     status = models.SmallIntegerField('Status', choices=STATUS_VENDA_CHOICES, default=1)
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='vendas_criadopor', editable=False)
     caixa = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name='vendas_caixa',
                               verbose_name='Operador/Caixa', help_text="Caixa que está efetuando a venda")
     vendedor = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name='vendas_vendedor',
                                  verbose_name="Vendedor", help_text="Vendedor que atendeu o cliente")
+    nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
+    cpf = models.CharField("CPF", max_length=30, null=True, blank=True)
     desconto = models.DecimalField('Desconto', decimal_places=2, max_digits=12, default=0,
                                    help_text="Digite o valor de desconto da venda, exemplo R$ 10,00")
     forma_pagto = models.SmallIntegerField("Forma De Pagamento", choices=PAGAMENTO_CHOICES)
-    cpf = models.CharField("CPF", max_length=30, null=True, blank=True)
+    valor_total_venda = models.DecimalField('Valor Total da Venda', decimal_places=2, max_digits=12, default=0)
+    criado_em = models.DateTimeField('Venda Realizada Em', auto_now_add=True)
+    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='vendas_criadopor', editable=False)
 
     class Meta:
         verbose_name = 'Venda'
@@ -38,9 +38,9 @@ class Venda(models.Model):
 
     def __str__(self):
         try:
-            return f'Pedido {self.id} - {self.criado_em.strftime("%d/%m/%Y - %H:%M:%S")}'
+            return f'Venda {self.id} - {self.criado_em.strftime("%d/%m/%Y - %H:%M:%S")}'
         except AttributeError:
-            return f'Pedido {self.id} - {self.criado_em}'
+            return f'Venda {self.id} - {self.criado_em}'
 
     def calc_total(self):
         total = 0
@@ -61,6 +61,9 @@ class Venda(models.Model):
         for produto in CarrinhoVenda.objects.filter(venda=self):
             queryset.append(produto.produto)
         return queryset
+
+    # def get_produtos_vendidos(self):
+    #     return [produto.produto for produto in CarrinhoVenda.objects.filter(venda=self)]
 
     def get_valores_produtos_vendidos(self):
         queryset = {}

@@ -17,9 +17,12 @@ class HistoricoVendasAdmin(admin.ModelAdmin):
 
 @admin.register(Venda)
 class VendaAdmin(admin.ModelAdmin):
-    list_display = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', ]
-    search_fields = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', ]
-    list_filter = ['valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', ]
+    list_display = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', 'caixa',
+                    'vendedor', 'desconto', 'forma_pagto', 'cpf']
+    search_fields = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por',
+                     'caixa', 'vendedor', 'desconto', 'forma_pagto', 'cpf', ]
+    list_filter = ['valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', 'caixa',
+                   'vendedor', 'desconto', 'forma_pagto', 'cpf', ]
 
     actions = (export_as_csv, export_xlsx)
 

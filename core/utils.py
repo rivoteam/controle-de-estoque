@@ -4,13 +4,6 @@ from datetime import datetime
 import xlwt
 from django.http import HttpResponse
 
-GENERO_CHOICES = (
-    ('masculino', "Masculino"),
-    ('feminino', "Feminino"),
-    ('unissex', "Unissex"),
-    ('infantil', "Infantil"),
-)
-
 
 def export_as_csv(self, request, queryset):
     meta = self.model._meta
@@ -62,6 +55,13 @@ def salva_criado_por(request, obj):
     obj.save()
 
 
+GENERO_CHOICES = (
+    ('masculino', "Masculino"),
+    ('feminino', "Feminino"),
+    ('unissex', "Unissex"),
+    ('infantil', "Infantil"),
+)
+
 STATUS_COMPRA_CHOICES = (
     (1, 'Gerado'),
     (2, 'Em separação'),
@@ -90,3 +90,8 @@ PAGAMENTO_CHOICES = (
     (4, 'PicPay'),
     (5, 'Pix'),
 )
+
+numeros = tuple((str(n), str(n)) for n in range(2, 62, 2))
+letras = tuple((l, l) for l in ["P", "M", "G", "GG", "XG"])
+TAMANHO_CHOICES = numeros + letras
+

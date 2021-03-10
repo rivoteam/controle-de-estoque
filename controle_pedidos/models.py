@@ -25,6 +25,10 @@ class PedidoCompra(models.Model):
     status = models.SmallIntegerField('Status', choices=STATUS_COMPRA_CHOICES, default=1)
     criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='pedido_criadopor',
                                    editable=False)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+                                       related_name='pedido_atualizado_por', editable=False, null=True, blank=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Pedido'

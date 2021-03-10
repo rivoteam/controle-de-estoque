@@ -14,7 +14,6 @@ class Funcionario(models.Model):
     data_admissao = models.DateField('Admitido em', auto_now_add=True)
     data_demissao = models.DateField('Demitido em', blank=True, null=True)
     ativo = models.BooleanField(default=True)
-    atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.funcionario} - {self.cargo_funcionario}'

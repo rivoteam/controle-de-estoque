@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Fornecedor, Categoria, Subcategoria, Produto, TamanhoProduto, HistoricoAtualizacaoPrecos
+from .models import Fornecedor, Categoria, Subcategoria, Produto, HistoricoAtualizacaoPrecos
 from core.utils import export_as_csv, export_xlsx, salva_criado_por
 
 
@@ -11,9 +11,6 @@ class FornecedorAdmin(admin.ModelAdmin):
 
     actions = (export_as_csv, export_xlsx)
 
-    def save_model(self, request, obj, form, change):
-        salva_criado_por(request, obj)
-
 
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
@@ -23,9 +20,6 @@ class CategoriaAdmin(admin.ModelAdmin):
 
     actions = (export_as_csv, export_xlsx)
 
-    def save_model(self, request, obj, form, change):
-        salva_criado_por(request, obj)
-
 
 @admin.register(Subcategoria)
 class SubcategoriaAdmin(admin.ModelAdmin):
@@ -34,21 +28,6 @@ class SubcategoriaAdmin(admin.ModelAdmin):
     list_filter = ['subcategoria', 'codigo']
 
     actions = (export_as_csv, export_xlsx)
-
-    def save_model(self, request, obj, form, change):
-        salva_criado_por(request, obj)
-
-
-@admin.register(TamanhoProduto)
-class TamanhoProdutoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'tamanho']
-    search_fields = ['id', 'tamanho']
-    list_filter = ['tamanho']
-
-    actions = (export_as_csv, export_xlsx)
-
-    def save_model(self, request, obj, form, change):
-        salva_criado_por(request, obj)
 
 
 @admin.register(Produto)
