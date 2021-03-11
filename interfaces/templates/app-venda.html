@@ -2,12 +2,37 @@
 {% block content %}
     <div id="vue-app">
         <div class="card">
-            <div class="card-header">
-                <h2>Titulo</h2>
+            <div class="card-header text-center">
+                <h2 class="card-text">App de Venda</h2>
             </div>
             <div class="card-body">
-                <p>Ipsum Lorem...........</p>
-                <p>[[ myTitle ]]</p>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-5">
+                            <label for="codproduto">Produto</label>
+                        </div>
+                        <div class="col-7">
+                            <label for="qtdproduto">Quantidade</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <input class="form-control" id="codproduto">
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <input class="form-control" id="qtdproduto">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header text-center">
+
+                    <h2>Lista de produtos selecionados:</h2>
+                </div>
+                <p>[[ produtos ]]</p>
+
             </div>
         </div>
     </div>
@@ -19,7 +44,7 @@
             el: "#vue-app",
             delimiters: ['[[', ']]'],
             data: {
-                myTitle: 'Hello Vue!',
+                produtos: "{% for produto in produtos %}{{ produto.descricao }}{% endfor %}"
             },
         });
     </script>
