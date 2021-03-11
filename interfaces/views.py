@@ -12,3 +12,4 @@ def homepage(request):
     if request.user.funcionario.image:
         context['profile_photo'] = request.user.funcionario.image.url
     return render(request, 'homepage.html', context)
+
