@@ -4,6 +4,7 @@
 <html lang="en-us">
 
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
@@ -12,10 +13,13 @@
     <link rel="icon" href="{% static 'img/brand/favicon.png' %}" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href="{% static 'vendor/nucleo/css/nucleo.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+          integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
           type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'js/select2-4.0.13/css/select2.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/argon.min.css' %}?v=1.2.0" type="text/css">
     {% block extracss %}{% endblock %}
 </head>
@@ -56,7 +60,7 @@
     </div>
     <div class="container-fluid mt--6">
         {% block content %} {% endblock %}
-        <footer class="footer pt-0">
+        <footer class="footer pt-0" style="position: fixed; bottom: 0; width: auto">
             <div class="row align-items-center justify-content-lg-between">
                 <div class="col-lg-6">
                     <div class="copyright text-center  text-lg-left  text-muted">
@@ -91,18 +95,26 @@
 
 <!-- Argon Scripts -->
 <!-- Core -->
-<script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'vendor/js-cookie/js.cookie.js' %}"></script>
-<script src="{% static 'vendor/jquery.scrollbar/jquery.scrollbar.min.js' %}"></script>
-
-<script src="{% static 'vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js' %}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"
+        integrity="sha512-Meww2sXqNHxI1+5Dyh/9KAtvI9RZSA4c1K2k5iL02oiPO/RH3Q30L3M1albtqMg50u4gRTYdV4EXOQqXEI336A=="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.min.js"
+        integrity="sha512-5AcaBUUUU/lxSEeEcruOIghqABnXF8TWqdIDXBZ2SNEtrTGvD408W/ShtKZf0JNjQUfOiRBJP+yHk6Ab2eFw3Q=="
+        crossorigin="anonymous"></script>
 
 <!-- Optional JS -->
-<script src="{% static 'vendor/chart.js/dist/Chart.min.js' %}"></script>
-<script src="{% static 'vendor/chart.js/dist/Chart.extension.js' %}"></script>
-<!-- Argon JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+        integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+        crossorigin="anonymous"></script>
 <script src="{% static 'js/argon.js' %}?v=1.2.0"></script>
 <!-- Select2 JS -->
 <script src="{% static 'js/select2-4.0.13/js/select2.min.js' %}"></script>

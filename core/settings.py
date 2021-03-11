@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'controle_vendas',
     'controle_usuarios',
     'interfaces',
+    'api',
     'widget_tweaks',
 ]
 
