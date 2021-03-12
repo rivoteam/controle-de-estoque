@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from controle_estoque.models import Produto
 from core.settings import STATIC_URL
 
 
@@ -12,3 +14,10 @@ def homepage(request):
     if request.user.funcionario.image:
         context['profile_photo'] = request.user.funcionario.image.url
     return render(request, 'homepage.html', context)
+
+
+def detalhe_produto(request, pk):
+    context = {
+        'produto': Produto.objects.get(pk=pk)
+    }
+    return render(request, 'produto_detalhe.html', context)
