@@ -1,32 +1,82 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div id="vue-app">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="card-text">App de Venda</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
 
+<div>
+    <table class="table align-items-center">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="sort" data-sort="name">Categoria</th>
+                <th scope="col" class="sort" data-sort="budget">SubCategoria</th>
+                <th scope="col" class="sort" data-sort="status">Preço de Venda</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="list">
+            <tr>
+                <th scope="row">
+                    <div class="media align-items-center">
+                        <div class="media-body">
+                            <span class="name mb-0 text-sm">{{ produto.categoria }}</span>
+                        </div>
+                    </div>
+                </th>
+                <td class="budget">
+                    {{ produto.subcategoria }}
+                </td>
+                <td class="budget">
+                    {{ produto.preco_venda }}
+                </td>
 
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        {{ produto }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+                <td class="text-right">
+                    <div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                            <a class="dropdown-item" href="#">Detalhes</a>
+                            <a class="dropdown-item" href="#">Outra Ação</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
+</div>
+{#                <table>#}
+{#                    <tr>#}
+{#                        <th>Categoria</th>#}
+{#                        <th>SubCategoria</th>#}
+{#                        <th>Preço de Venda</th>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>{{ produto.categoria }}</td>#}
+{#                        <td>{{ produto.subcategoria }}</td>#}
+{#                        <td>{{ produto.preco_venda }}</td>#}
+{#                    </tr>#}
+{#                </table>#}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#vue-app",
+            delimiters: ['[[', ']]'],
+            data: {
+                produtos: "{{ produto }}"
+            },
+        });
+    </script>
 {% endblock %}
