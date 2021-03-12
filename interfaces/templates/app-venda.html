@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="vue-app">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="card-text">App de Venda</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-5">
+                            <label for="codproduto">Produto</label>
+                        </div>
+                        <div class="col-7">
+                            <label for="qtdproduto">Quantidade</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <input class="form-control" id="codproduto">
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <input class="form-control" id="qtdproduto">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header text-center">
+
+                    <h2>Lista de produtos selecionados:</h2>
+                </div>
+                <p>[[ produtos ]]</p>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extrajs %}
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#vue-app",
+            delimiters: ['[[', ']]'],
+            data: {
+                produtos: "{% for produto in produtos %}{{ produto.descricao }}{% endfor %}"
+            },
+        });
+    </script>
+{% endblock %}
