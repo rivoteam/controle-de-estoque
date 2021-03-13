@@ -27,7 +27,7 @@ def detalhe_produto(request, pk):
     context = {
         'produto': Produto.objects.get(pk=pk),
     }
-    return render(request, 'detalhe_produto.html', context)
+    return render(request, 'modal_detalhe_produto.html', context)
 
 
 def lista_pedidos(request):
