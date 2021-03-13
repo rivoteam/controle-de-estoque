@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-darker">Listagem Pedidos</h3>
+        </div>
+        <div class="card-body">
+            <p>LISTA DE PEIDIDOS</p>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <tr>
+                    <th> ID Do Pedido</th>
+                    <th> Fornecedor</th>
+                    <th> Data Pedido</th>
+                    <th> Quantidade Produtos</th>
+                    <th> Descrição</th>
+                    <th> Status</th>
+                    <th> Criado em</th>
+                    <th> Criado Por</th>
+                    <th> Atualizado em</th>
+                    <th> Informações</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for pedido in pedidos %}
+
+                    <tr>
+                        <td> {{ pedido.id }} </td>
+                        <td> {{ pedido.fornecedor }} </td>
+                        <td> {{ pedido.data_pedido }} </td>
+                        <td> {{ pedido.get_len_produtos_comprados }} Un.</td>
+                        <td> {{ pedido.descricao }} </td>
+                        <td> {{ pedido.status }} </td>
+                        <td> {{ pedido.criado_em }} </td>
+                        <td> {{ pedido.criado_por }} </td>
+                        <td> {{ pedido.atualizado_em }} </td>
+                        <td><a href="#modal {{ pedido.id }}" data-toggle="modal"> Detalhes Do Pedido </a></td>
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}
+{% bootstrap_javascript jquery='full' %}
