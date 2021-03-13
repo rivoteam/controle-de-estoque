@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'interfaces',
     'api',
     'widget_tweaks',
-    'bootstrap4',
 ]
 
 MIDDLEWARE = [

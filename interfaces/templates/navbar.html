@@ -3,7 +3,7 @@
     <div class="collapse navbar-collapse" id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link active" href="{% url 'homepage' %}">
+                <a class="nav-link {% if active == "homepage" %} active {% endif %}" href="{% url 'homepage' %}">
                     <i class="fa fa-dashboard"></i>
                     <span class="nav-link-text">Dashboard</span>
                 </a>
@@ -14,8 +14,8 @@
                     <span class="nav-link-text">Produtos em Estoque</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'lista-pedidos' %}">
+            <li class="nav-item ">
+                <a class="nav-link {% if active == 'lista-pedidos' %} active {% endif %}"  href="{% url 'lista-pedidos' %}">
                     <i class="fa fa-pencil"></i>
                     <span class="nav-link-text">Listagem Pedidos</span>
                 </a>
@@ -43,7 +43,7 @@
         <!-- Navigation -->
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'appvendas' %}">
+                <a class="nav-link {% if active == "app-vendas" %} active {% endif %}" href="{% url 'appvendas' %}">
                     <i class="fa fa-dollar-sign"></i>
                     <span class="nav-link-text">App de Vendas</span>
                 </a>
