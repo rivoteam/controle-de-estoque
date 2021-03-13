@@ -9,7 +9,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if active == 'lista-produtos' %} active {% endif %}"  href="{% url 'lista-produtos' %}">
                     <i class="fa fa-list"></i>
                     <span class="nav-link-text">Produtos em Estoque</span>
                 </a>

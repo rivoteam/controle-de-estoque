@@ -23,6 +23,14 @@ def appvendas(request):
     return render(request, 'app_venda.html', context)
 
 
+def lista_produtos(request):
+    context = {
+        "produtos": Produto.objects.all(),
+        "active": "lista-produtos"
+    }
+    context.update(get_user_profile(request))
+    return render(request, 'produtos.html', context)
+
 def detalhe_produto(request, pk):
     context = {
         'produto': Produto.objects.get(pk=pk),
