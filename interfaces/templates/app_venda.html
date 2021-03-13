@@ -31,7 +31,8 @@
 
                     <h2>Lista de produtos selecionados:</h2>
                 </div>
-                <p>[[ produtos ]]</p>
+                <p>[[ produtos[0].preco_venda ]]</p>
+                <p>[[ produtos[0] ]]</p>
 
             </div>
         </div>
@@ -44,8 +45,17 @@
             el: "#vue-app",
             delimiters: ['[[', ']]'],
             data: {
-                produtos: "{% for produto in produtos %}{{ produto.descricao }}{% endfor %}"
+                produtos: []
             },
+            mounted() {
+                axios.get("{% url 'prod' %}").then(response => (this.produtos.push(response.data[0])))
+                console.log(this.produtos)
+            },
+            methods() {
+                //function add_produto(produto) {
+                  //  axios.get("{% url 'prod' %}").then(response => (this.produtos.push(response.data[0])))
+                //}
+            }
         });
     </script>
 {% endblock %}

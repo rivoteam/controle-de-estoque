@@ -16,12 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from interfaces import urls as interface_urls
+from api import urls as api_urls
 from django.conf import settings  # visualizar img
 from django.conf.urls.static import static  # visualizar img
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(interface_urls)),
+    path('api-rest/', include(api_urls)),
 ]
 
 if settings.DEBUG:
