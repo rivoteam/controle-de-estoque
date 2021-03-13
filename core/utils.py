@@ -65,7 +65,8 @@ STATUS_COMPRA_CHOICES = (
     (1, 'Gerado'),
     (2, 'Em separação'),
     (3, 'Enviado'),
-    (4, 'Concluído'),
+    (4, 'Mecadoria Recebida'),
+    (5, 'Concluído'),
 )
 
 CARGOS_CHOICES = (

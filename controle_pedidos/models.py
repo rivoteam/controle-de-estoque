@@ -44,15 +44,11 @@ class PedidoCompra(models.Model):
         total = 0
         for order_item in CarrinhoPedido.objects.filter(pedidocompra_id=self.id):
             total += order_item.get_total_preco_produto()
-        self.preco_pedido = total
-        return self.preco_pedido
+        return total
 
     def save(self, *args, **kwargs):
-        try:
-            self.calc_total()
-            super(PedidoCompra, self).save(*args, **kwargs)
-        except ValueError:
-            super(PedidoCompra, self).save(*args, **kwargs)
+        self.preco_pedido = self.calc_total()
+        super(PedidoCompra, self).save(*args, **kwargs)
 
     def get_produtos_comprados(self):
         queryset = []

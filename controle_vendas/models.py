@@ -46,24 +46,17 @@ class Venda(models.Model):
         total = 0
         for order_item in CarrinhoVenda.objects.filter(venda_id=self.id):
             total += order_item.get_total_preco_produto()
-        self.valor_total_venda = total - self.desconto
-        return self.valor_total_venda
+        return total
 
     def save(self, *args, **kwargs):
-        try:
-            self.calc_total()
-            super(Venda, self).save(*args, **kwargs)
-        except ValueError:
-            super(Venda, self).save(*args, **kwargs)
+        self.valor_total_venda = self.calc_total()
+        super(Venda, self).save(*args, **kwargs)
 
     def get_produtos_vendidos(self):
         queryset = []
         for produto in CarrinhoVenda.objects.filter(venda=self):
             queryset.append(produto.produto)
         return queryset
-
-    # def get_produtos_vendidos(self):
-    #     return [produto.produto for produto in CarrinhoVenda.objects.filter(venda=self)]
 
     def get_valores_produtos_vendidos(self):
         queryset = {}
