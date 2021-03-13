@@ -1,4 +1,5 @@
 import os
+
 from pathlib import Path
 from decouple import config
 
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     'interfaces',
     'api',
     'widget_tweaks',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [

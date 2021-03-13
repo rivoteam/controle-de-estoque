@@ -65,3 +65,9 @@ class PedidoCompra(models.Model):
         for produto in CarrinhoPedido.objects.filter(pedidocompra=self):
             queryset.update({"produto": produto.produto, "preco": produto.produto.preco_compra})
         return queryset
+
+    def get_len_produtos_comprados(self):
+        quantidade = 0
+        for produto in CarrinhoPedido.objects.filter(pedidocompra=self):
+            quantidade += produto.quantidade
+        return quantidade

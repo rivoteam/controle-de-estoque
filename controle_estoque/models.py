@@ -142,3 +142,5 @@ class HistoricoAtualizacaoPrecos(models.Model):
         verbose_name = 'Historico de Atualização de Preços'
         verbose_name_plural = 'Historico de Atualização de Preços'
         ordering = ['-criado_em']
+
+
