@@ -5,6 +5,9 @@ from rest_framework import serializers
 
 
 class ProdutoSerializer(serializers.ModelSerializer):
+    nome_categoria = serializers.CharField(source='categoria')
+    nome_subcategoria = serializers.CharField(source='subcategoria')
+
     class Meta:
         model = Produto
         fields = '__all__'
