@@ -42,29 +42,33 @@ def generate_barcode(self):
 
 
 @receiver(pre_save, sender=Produto)
-def pre_save_ean_sku(sender, created, instance, **kwargs):
-    motivo = instance.motivo_alteracao_preco
+def pre_save_ean_sku(sender, instance, **kwargs):
     tamanho_sku = f"{(2 - len(instance.tamanho)) * '0'}{instance.tamanho}"
     instance.limite_alerta_min = False if instance.total_pecas <= instance.alerta_min else True
-    instance.motivo_alteracao_preco = None
     instance.ean = generate_barcode(self=instance.id) if not instance.ean else instance.ean
     instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}{tamanho_sku}".upper()
+    return
 
 
 @receiver(post_save, sender=Produto)
-def post_save_ean_sku(sender, instance, **kwargs):
-    historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).first()
+def post_save_create_historico(sender, instance, **kwargs):
+    historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).last()
 
-    if ((historico and instance) and ((historico.preco_compra != instance.preco_compra) or (
-            historico.preco_venda != instance.preco_venda))) or instance and not historico:
+    if ((historico and instance)
+        and ((historico.preco_compra != instance.preco_compra)
+             or (historico.preco_venda != instance.preco_venda))) \
+            or instance and not historico:
         HistoricoAtualizacaoPrecos.objects.create(
             produto=instance,
             descricao=instance.descricao,
             preco_compra=instance.preco_compra,
             preco_venda=instance.preco_venda,
-            motivo_alteracao_preco=instance.motivo,
+            motivo_alteracao_preco=instance.motivo_alteracao_preco,
             criado_por=instance.criado_por
         )
+        instance.motivo_alteracao_preco = None
+        instance.save()
+    return
 
 
 '''
@@ -79,4 +83,5 @@ if =
      COMPARA se existe somente produto_salvo em Produto AND NOT existe historico
      Se não existir historico do produto, será criado ou caso exista será criado um novo historico
      para o produto
+    
 '''
