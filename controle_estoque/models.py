@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from random import randint
 from core.utils import GENERO_CHOICES, TAMANHO_CHOICES
 
 
@@ -84,36 +83,8 @@ class Produto(models.Model):
     def __str__(self):
         return f'{self.descricao} {self.tamanho} - ean: {self.ean}'.title()
 
-    def generate_barcode(self):
-        '''
-        Se não encontrar esse code_id no DB atribui o code_id ao produto
-        Se já existir gera outro code_id
-        '''
-        code_id = str(randint(7890000000000, 7899999999999))
-        if not Produto.objects.filter(ean=code_id).first() is None:
-            self.generate_barcode()
-        return code_id
-
     def save(self, *args, **kwargs):
-        motivo = self.motivo_alteracao_preco
-        tamanho_sku = f"{(2 - len(self.tamanho)) * '0'}{self.tamanho}"
-        self.limite_alerta_min = False if self.total_pecas <= self.alerta_min else True
-        self.motivo_alteracao_preco = None
-        self.ean = self.generate_barcode() if not self.ean else self.ean
-        self.sku = f"{self.genero[:1]}{self.categoria.codigo}{self.subcategoria.codigo}{tamanho_sku}".upper()
         super(Produto, self).save(*args, **kwargs)
-
-        p = Produto.objects.filter(ean=self.ean).first()
-        h = HistoricoAtualizacaoPrecos.objects.filter(produto=p).first()
-        if ((h and p) and ((h.preco_compra != p.preco_compra) or (h.preco_venda != p.preco_venda))) or p and not h:
-            HistoricoAtualizacaoPrecos.objects.create(
-                produto=p,
-                descricao=self.descricao,
-                preco_compra=self.preco_compra,
-                preco_venda=self.preco_venda,
-                motivo_alteracao_preco=motivo,
-                criado_por=self.criado_por
-            )
 
     class Meta:
         verbose_name = 'Produto'
@@ -142,5 +113,3 @@ class HistoricoAtualizacaoPrecos(models.Model):
         verbose_name = 'Historico de Atualização de Preços'
         verbose_name_plural = 'Historico de Atualização de Preços'
         ordering = ['-criado_em']
-
-
