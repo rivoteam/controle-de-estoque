@@ -17,7 +17,7 @@
                                     <label class="sr-only" for="Produto"></label>
                                     <input type="text" id="Produto" name="produto_ean"
                                            class="form-control" placeholder="Digite o EAN do produto"
-                                           v-model="produto_ean"/>
+                                           v-model="produto_ean" maxlength="13" data-ls-module="charCounter"/>
                                 </div>
                             </div>
                             <div class="col-sm-3">
@@ -57,13 +57,14 @@
                                 <th scope="col">Genero</th>
                                 <th scope="col">Codigo de Barras</th>
                                 <th scope="col">Em estoque</th>
+                                <th scope="col">Preço</th>
                                 <th scope="col">Remover</th>
                             </tr>
                             </thead>
                             <tbody>
                             <template v-for="produto in produtos">
                                 <tr>
-                                    <td>[[ produto.produto.descricao ]]</td>
+                                    <td >[[ produto.produto.descricao ]]</td>
                                     <td>[[ produto.produto.nome_categoria ]]</td>
                                     <td>[[ produto.produto.nome_subcategoria ]]</td>
                                     <td>[[ produto.produto.tamanho ]]</td>
@@ -72,10 +73,9 @@
                                     <td>[[ produto.produto.genero.toUpperCase() ]]</td>
                                     <td>[[ produto.produto.ean ]]</td>
                                     <td>[[ produto.produto.total_pecas ]]</td>
+                                    <td>[[ produto.produto.preco_venda * produto.quantidade ]]</td>
                                     <td>
-                                        <button
-                                                @click="remove_produto(produto)"
-                                                class="btn btn-sm btn-danger">
+                                        <button @click="remove_produto(produto)" class="btn btn-sm btn-danger">
                                             <i aria-hidden="true" class="fa fa-times"></i>
                                         </button>
                                     </td>
@@ -90,7 +90,7 @@
 
             </div>
             <div class="card-blockquote">
-                <h3 style="position: absolute; right: 4em">Valor total da venda: R$ [[ valor_total ]]</h3>
+                <h3 style="position: absolute; right: 4em">Valor total: R$ [[ valor_total ]]</h3>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@
                         this.errors = "Não encontrado"
                         console.log(this.errors)
                     } else {
-                        axios.get(this.http + "produto/" + this.produto_ean)
+                        axios.get(`${this.http}produto/${this.produto_ean}`)
                             .then(response => {
                                 if (response.status === 200) {
                                     this.produtos.push(
@@ -124,10 +124,9 @@
                                             "quantidade": this.quantidade
                                         }
                                     )
-
-                                    this.valor_total += Number(response.data.preco_venda)
-                                    console.log(response)
-                                    console.log(this.produto_ean)
+                                    this.produto_ean = ""
+                                    this.quantidade = 1
+                                    this.valor_total += (Number(response.data.preco_venda) * this.quantidade)
                                 }
                             })
                             .catch(error => {
@@ -143,10 +142,15 @@
                     }
                 },
                 remove_produto(produto) {
+                    this.valor_total -= (Number(this.produtos[this.produtos.indexOf(produto)].produto.preco_venda) *
+                        this.produtos[this.produtos.indexOf(produto)].quantidade)
                     this.produtos.splice(this.produtos.indexOf(produto), 1)
+                    if (this.produtos.length === 0){
+                        this.valor_total = 0
+                    }
                 },
                 realiza_venda() {
-                    axios.post("{% url 'produto' %}", {"produto": this.produto, "quantidade": this.quantidade})
+                    axios.post("{% url 'produto' %}", this.produtos)
                         .then(response => {
                             if (response.status === 200) {
                                 location.reload()
@@ -158,22 +162,5 @@
                 }
             }
         })
-
-        /*mounted() {
-                    axios.get(this.http + 'produtos/')
-                        .then(response => {
-                            if (response.status === 200) {
-                                (console.log(response.data)
-                                )
-                            }
-                        })
-                        .catch(error => {
-                            if (error.status === 404){
-                                this.errors = response.data
-                                console.log(this.errors)
-                            }
-                            console.log(error)
-                        })
-                },*/
     </script>
 {% endblock %}
