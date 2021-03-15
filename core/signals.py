@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from controle_pedidos.models import CarrinhoPedido, PedidoCompra
 from controle_vendas.models import Venda, CarrinhoVenda
@@ -41,32 +41,31 @@ def generate_barcode(self):
     return code_id
 
 
+@receiver(pre_save, sender=Produto)
+def pre_save_ean_sku(sender, created, instance, **kwargs):
+    motivo = instance.motivo_alteracao_preco
+    tamanho_sku = f"{(2 - len(instance.tamanho)) * '0'}{instance.tamanho}"
+    instance.limite_alerta_min = False if instance.total_pecas <= instance.alerta_min else True
+    instance.motivo_alteracao_preco = None
+    instance.ean = generate_barcode(self=instance.id) if not instance.ean else instance.ean
+    instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}{tamanho_sku}".upper()
+
+
 @receiver(post_save, sender=Produto)
-def post_save_ean_sku(sender, created, instance, **kwargs):
-    produto = Produto.objects.get(pk=instance.id)
+def post_save_ean_sku(sender, instance, **kwargs):
+    historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).first()
 
-    if created:
-        motivo = produto.motivo_alteracao_preco
-        tamanho_sku = f"{(2 - len(produto.tamanho)) * '0'}{produto.tamanho}"
-        produto.limite_alerta_min = False if produto.total_pecas <= produto.alerta_min else True
-        produto.motivo_alteracao_preco = None
-        produto.ean = generate_barcode(self=produto.id) if not produto.ean else produto.ean
-        produto.sku = f"{produto.genero[:1]}{produto.categoria.codigo}{produto.subcategoria.codigo}{tamanho_sku}".upper()
-        produto.save()
+    if ((historico and instance) and ((historico.preco_compra != instance.preco_compra) or (
+            historico.preco_venda != instance.preco_venda))) or instance and not historico:
+        HistoricoAtualizacaoPrecos.objects.create(
+            produto=instance,
+            descricao=instance.descricao,
+            preco_compra=instance.preco_compra,
+            preco_venda=instance.preco_venda,
+            motivo_alteracao_preco=instance.motivo,
+            criado_por=instance.criado_por
+        )
 
-        produto_salvo = Produto.objects.filter(ean=produto.ean).first()
-        historico = HistoricoAtualizacaoPrecos.objects.filter(produto=produto_salvo).first()
-
-        if ((historico and produto_salvo) and ((historico.preco_compra != produto_salvo.preco_compra) or (
-                historico.preco_venda != produto_salvo.preco_venda))) or produto_salvo and not historico:
-            HistoricoAtualizacaoPrecos.objects.create(
-                produto=produto_salvo,
-                descricao=produto.descricao,
-                preco_compra=produto.preco_compra,
-                preco_venda=produto.preco_venda,
-                motivo_alteracao_preco=motivo,
-                criado_por=produto.criado_por
-            )
 
 '''
 produto_salvo = Busca o produto salvo acima
