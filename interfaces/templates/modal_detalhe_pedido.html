@@ -20,12 +20,17 @@
                         </div>
                     </div>
                     <div class="row mt-lg-3">
-                        <div class="col-md-6 mb-4">
-                            <p>XXXXXXXX</p>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <p>XXXXXXXX</p>
-                        </div>
+                        {% for prod in produto.carrinhopedido_set.all %}
+                            <div class="col-md-6 mb-4">
+                                <p> Produto {{ prod.produto }}</p>
+                                <p>P Venda{{ prod.produto.preco_venda }}</p>
+                                <p>QTD {{ prod.quantidade }}</p>
+                            </div>
+                        {% endfor %}
+                            <div class="col-md-6 mb-4">
+                                <p> Produto</p>
+                                <p>P Venda</p>
+                                <p>QTD</p></div>
                     </div>
                 </div>
             </div>
