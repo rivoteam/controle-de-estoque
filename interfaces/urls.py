@@ -4,11 +4,11 @@ from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_
 
 urlpatterns = [
     path('', homepage, name="homepage"),
-    path('app-vendas', appvendas, name="appvendas"),
+    path('app-vendas/', appvendas, name="appvendas"),
 
     # Listagem
-    path('lista-pedidos', lista_pedidos, name="lista-pedidos"),
-    path('lista-produtos', lista_produtos, name="lista-produtos"),
+    path('lista-pedidos/', lista_pedidos, name="lista-pedidos"),
+    path('lista-produtos/', lista_produtos, name="lista-produtos"),
 
     # Detalhes por object
     path('detalhe-produto/<int:pk>', detalhe_produto, name='detalhe_produto'),

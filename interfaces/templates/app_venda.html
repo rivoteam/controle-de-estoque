@@ -6,33 +6,91 @@
                 <h2 class="card-text">App de Venda</h2>
             </div>
             <div class="card-body">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-5">
-                            <label for="codproduto">Produto</label>
-                        </div>
-                        <div class="col-7">
-                            <label for="qtdproduto">Quantidade</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <input class="form-control" id="codproduto">
-                        </div>
-                        <div class="col-1">
-                        </div>
-                        <div class="col-2">
-                            <input class="form-control" id="qtdproduto">
-                            <i class="fa fa-plus"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-header text-center">
+                <div class="alert-warning" v-if="errors">
 
-                    <h2>Lista de produtos selecionados:</h2>
                 </div>
-                <p>[[ produtos ]]</p>
+                <form @submit.prevent="add_produto" name="produtos_comprados">
+                    <div class="col-sm-12 padding-off">
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <div class="form-group-inline">
+                                    <label class="sr-only" for="Produto"></label>
+                                    <input type="text" id="Produto" name="produto_ean"
+                                           class="form-control" placeholder="Digite o EAN do produto"
+                                           v-model="produto_ean"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group-inline">
+                                    <label class="sr-only" for="quantidade"></label>
+                                    <input type="text" id="quantidade" name="newDomain"
+                                           class="form-control" v-model="quantidade"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 padding-off">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-outline-success btn-block">
+                                        <i aria-hidden="true" class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
+                    </div>
+                </form>
+
+                <div class="col-sm-12 mt-15 pt-5">
+                    <template v-if="produtos.length">
+                        <div class="card-header text-center">
+
+                            <h2>Lista de produtos selecionados:</h2>
+                        </div>
+                        <table class="table table-responsive-lg">
+                            <thead class="thead-active text-muted">
+                            <tr>
+                                <th scope="col">Produtos</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Subcategoria</th>
+                                <th scope="col">Tamanho</th>
+                                <th scope="col">Quantidade</th>
+                                <th scope="col">Cor</th>
+                                <th scope="col">Genero</th>
+                                <th scope="col">Codigo de Barras</th>
+                                <th scope="col">Em estoque</th>
+                                <th scope="col">Remover</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template v-for="produto in produtos">
+                                <tr>
+                                    <td>[[ produto.produto.descricao ]]</td>
+                                    <td>[[ produto.produto.nome_categoria ]]</td>
+                                    <td>[[ produto.produto.nome_subcategoria ]]</td>
+                                    <td>[[ produto.produto.tamanho ]]</td>
+                                    <td>[[ produto.quantidade ]]</td>
+                                    <td>[[ produto.produto.cor ]]</td>
+                                    <td>[[ produto.produto.genero.toUpperCase() ]]</td>
+                                    <td>[[ produto.produto.ean ]]</td>
+                                    <td>[[ produto.produto.total_pecas ]]</td>
+                                    <td>
+                                        <button
+                                                @click="remove_produto(produto)"
+                                                class="btn btn-sm btn-danger">
+                                            <i aria-hidden="true" class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </template>
+                            </tbody>
+                        </table>
+                    </template>
+
+                </div>
+
+            </div>
+            <div class="card-blockquote">
+                <h3 style="position: absolute; right: 4em">Valor total da venda: R$ [[ valor_total ]]</h3>
             </div>
         </div>
     </div>
@@ -44,8 +102,78 @@
             el: "#vue-app",
             delimiters: ['[[', ']]'],
             data: {
-                produtos: "{% for produto in produtos %}{{ produto.descricao }}{% endfor %}"
+                produto_ean: '',
+                quantidade: 1,
+                produtos: [],
+                valor_total: 0.00,
+                errors: '',
+                http: "{% url 'api_http' %}"
             },
-        });
+            methods: {
+                add_produto() {
+                    if (this.produto_ean === "") {
+                        this.errors = "Não encontrado"
+                        console.log(this.errors)
+                    } else {
+                        axios.get(this.http + "produto/" + this.produto_ean)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    this.produtos.push(
+                                        {
+                                            'produto': response.data,
+                                            "quantidade": this.quantidade
+                                        }
+                                    )
+
+                                    this.valor_total += Number(response.data.preco_venda)
+                                    console.log(response)
+                                    console.log(this.produto_ean)
+                                }
+                            })
+                            .catch(error => {
+                                if (error.response) {
+                                    console.log(error.response.status);
+                                }
+                                if (error === 404) {
+                                    //this.errors = response.data
+                                    console.log(this.errors)
+                                }
+                                console.log(error);
+                            })
+                    }
+                },
+                remove_produto(produto) {
+                    this.produtos.splice(this.produtos.indexOf(produto), 1)
+                },
+                realiza_venda() {
+                    axios.post("{% url 'produto' %}", {"produto": this.produto, "quantidade": this.quantidade})
+                        .then(response => {
+                            if (response.status === 200) {
+                                location.reload()
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+            }
+        })
+
+        /*mounted() {
+                    axios.get(this.http + 'produtos/')
+                        .then(response => {
+                            if (response.status === 200) {
+                                (console.log(response.data)
+                                )
+                            }
+                        })
+                        .catch(error => {
+                            if (error.status === 404){
+                                this.errors = response.data
+                                console.log(this.errors)
+                            }
+                            console.log(error)
+                        })
+                },*/
     </script>
 {% endblock %}
