@@ -50,8 +50,8 @@ def run():
         Produto.objects.create(
             descricao="",
             genero="unissex",
-            categoria=todas_categorias[randint(1, len(categorias))],
-            subcategoria=todas_subcategorias[randint(1, len(subcategorias))],
+            categoria=todas_categorias[randint(1, len(categorias)-1)],
+            subcategoria=todas_subcategorias[randint(1, len(subcategorias)-1)],
             tamanho="42",
             cor=cores[randint(0, (len(cores)-1))],
             min_pecas=1,
