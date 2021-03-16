@@ -1,58 +1,16 @@
-import csv
+from django.http import HttpResponse
+from django.conf import settings
+from django.core import mail
 from datetime import datetime
 from core.settings import STATIC_URL
+import csv
 import xlwt
-from django.http import HttpResponse
+import logging
 
 
-def export_as_csv(self, request, queryset):
-    meta = self.model._meta
-    field_names = [field.name for field in meta.fields]
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename={meta}.csv'
-    writer = csv.writer(response)
-    writer.writerow(field_names)
-    for obj in queryset:
-        obj.criado_em = obj.criado_em.strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow([getattr(obj, field) for field in field_names])
-    return response
-
-
-def export_xlsx(self, request, queryset):
-    meta = self.model._meta
-    field_names = [field.name for field in meta.fields]
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{meta}.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('meta')
-
-    row_num = 0
-
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-
-    for col_num in range(len(field_names)):
-        ws.write(row_num, col_num, field_names[col_num], font_style)
-
-    default_style = xlwt.XFStyle()
-    rows = queryset.values_list()
-    rows = [[x.strftime("%Y-%m-%d %H:%M:%S") if isinstance(x, datetime) else x for x in row] for row in rows]
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], default_style)
-
-    wb.save(response)
-    return response
-
-
-def salva_criado_por(request, obj):
-    if not obj.pk:
-        obj.criado_por = request.user
-    else:
-        obj.atualizado_por = request.user
-    obj.save()
+# logger = logging.getLogger('file')
+logger = logging.getLogger(__name__)
+logger_django = logging.getLogger('django.request')
 
 
 GENERO_CHOICES = (
@@ -110,3 +68,75 @@ def get_user_profile(request):
     if request.user.funcionario.image:
         context['profile_photo'] = request.user.funcionario.image.url
     return context
+
+
+def export_as_csv(self, request, queryset):
+    meta = self.model._meta
+    field_names = [field.name for field in meta.fields]
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename={meta}.csv'
+    writer = csv.writer(response)
+    writer.writerow(field_names)
+    for obj in queryset:
+        obj.criado_em = obj.criado_em.strftime("%Y-%m-%d %H:%M:%S")
+        writer.writerow([getattr(obj, field) for field in field_names])
+    return response
+
+
+def export_xlsx(self, request, queryset):
+    meta = self.model._meta
+    field_names = [field.name for field in meta.fields]
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{meta}.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('meta')
+
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    for col_num in range(len(field_names)):
+        ws.write(row_num, col_num, field_names[col_num], font_style)
+
+    default_style = xlwt.XFStyle()
+    rows = queryset.values_list()
+    rows = [[x.strftime("%Y-%m-%d %H:%M:%S") if isinstance(x, datetime) else x for x in row] for row in rows]
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], default_style)
+
+    wb.save(response)
+    return response
+
+
+def salva_criado_por(request, obj):
+    if not obj.pk:
+        obj.criado_por = request.user
+    else:
+        obj.atualizado_por = request.user
+    obj.save()
+
+
+def send_email_logs():
+    logger.info('Email enviado com sucesso!')
+    filename = 'logs.log'
+
+    email_default = settings.DEFAULT_FROM_EMAIL
+
+    with open(filename) as logfile:
+        mail.EmailMessage(
+            'Novo log gerado',
+            'Mensagem de teste de envio de email do Django',
+            email_default,
+            [email_default],
+            attachments=[(filename, logfile.read(), 'text/plain')]
+        ).send()
+
+
+def teste_logging():
+    logger.warning("Resposta do teste de logging warning")
+    # logger_django.info("INFO = Mostra os logs do django")
+    # logger_django.warning("WARNING = Mostra os logs do django")

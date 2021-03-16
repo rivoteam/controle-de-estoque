@@ -116,23 +116,49 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 # EMAIL BACKEND
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 EMAIL_HOST = config('EMAIL_HOST')
-
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
-
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 # LOGGING
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/debug.log',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
 
+'''
+# LOGGING
+ADMINS = (
+    ('Rivoteam', 'gruporivoteam@gmail.com'),
+)
+'''
+
+'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -184,3 +210,4 @@ LOGGING = {
         }
     },
 }
+'''
