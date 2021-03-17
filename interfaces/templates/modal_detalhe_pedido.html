@@ -1,8 +1,8 @@
-{% load static %}
+gi{% load static %}
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Produtos:</h3>
+        <div class="modal-header text-center">
+            <h3 class="modal-title">{{pedido}}</h3>
             <button type="button" class="close" data-dismiss="modal">
                 <span class="text-danger">x</span>
             </button>
@@ -12,20 +12,49 @@
                 <div class="col-md-12">
                     <div class="row mt-lg-3">
                         <div class="col-md-6 mb-4">
-                            <h2>Nome</h2>
-                            <p>XXXXXXXX</p>
+                            <h4>Fornecedor</h4>
+                            <p>{{pedido.fornecedor}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <p>XXXXXXXX</p>
+                            <h4>Nota Fiscal</h4>
+                            <p>{{pedido.nota_fiscal}}</p>
                         </div>
                     </div>
                     <div class="row mt-lg-3">
                         <div class="col-md-6 mb-4">
-                            <p>XXXXXXXX</p>
+                            <h4>Status</h4>
+                            <p>{{pedido.get_status_display}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <p>XXXXXXXX</p>
+                            <h4>Descrição</h4>
+                            <p>{{pedido.descricao}}</p>
                         </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Preço do Pedido</h4>
+                            <p>{{pedido.preco_pedido}}</p>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <h4>Data de Pedido</h4>
+                            <p>{{pedido.data_pedido}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Criado Por</h4>
+                            <p>{{pedido.criado_por}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Criado Em</h4>
+                            <p>{{pedido.criado_em}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Atualizado Por</h4>
+                            <p>{{pedido.atualizado_por}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Atualizado Em</h4>
+                            <p>{{pedido.atualizado_em}}</p>
+                        </div>
+
                     </div>
                 </div>
             </div>
