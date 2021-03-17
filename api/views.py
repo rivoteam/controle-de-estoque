@@ -9,7 +9,8 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
 
 
 def api_home(request):
@@ -19,33 +20,40 @@ def api_home(request):
 class ProdutoListApi(ListAPIView):
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class ProdutoViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class PedidoViewSet(viewsets.ModelViewSet):
     queryset = PedidoCompra.objects.all()
     serializer_class = PedidoSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class CarrinhoPedidoViewSet(viewsets.ModelViewSet):
     queryset = CarrinhoPedido.objects.all()
     serializer_class = CarrinhoPedidoSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class VendaViewSet(viewsets.ModelViewSet):
     queryset = Venda.objects.all()
     serializer_class = VendaSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class CarrinhoVendaViewSet(viewsets.ModelViewSet):
     queryset = CarrinhoVenda.objects.all()
     serializer_class = CarrinhoVendaSerializer
+    permission_classes = (IsAuthenticated,)
 
 
+@login_required
 def get_detail_produtos(request, pk):
     try:
         produto = Produto.objects.get(ean=pk)
@@ -57,6 +65,7 @@ def get_detail_produtos(request, pk):
 
 @require_http_methods("POST")
 @csrf_exempt
+@login_required
 def post_realiza_vendas(request):
     produtos_json = json.loads(request.body)
     instance_venda = Venda.objects.create(caixa=request.user.funcionario, vendedor=request.user.funcionario,
