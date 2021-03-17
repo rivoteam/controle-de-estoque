@@ -10,7 +10,7 @@ import logging
 
 # logger = logging.getLogger('file')
 logger = logging.getLogger(__name__)
-logger_django = logging.getLogger('django.request')
+# logger_db = logging.getLogger('django.db.backends')
 
 
 GENERO_CHOICES = (
