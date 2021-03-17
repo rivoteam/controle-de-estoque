@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
@@ -7,6 +9,11 @@ from controle_pedidos.models import PedidoCompra
 @login_required()
 def homepage(request):
     return render(request, 'homepage.html')
+
+@login_required()
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/')
 
 
 @login_required()
