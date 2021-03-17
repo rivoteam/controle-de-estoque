@@ -1,36 +1,32 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from controle_estoque.models import Produto
-from core.utils import get_user_profile
 from controle_pedidos.models import PedidoCompra
 
 
+@login_required()
 def homepage(request):
-    context_user = get_user_profile(request)
-    context = {
-        "active": "homepage"
-    }
-    context.update(context_user)
-    return render(request, 'homepage.html', context)
+    return render(request, 'homepage.html')
 
 
+@login_required()
 def appvendas(request):
     context = {
         'produtos': Produto.objects.all(),
         "active": "app-vendas"
     }
-    context_user = get_user_profile(request)
-    context.update(context_user)
     return render(request, 'app_venda.html', context)
 
 
+@login_required()
 def lista_produtos(request):
     context = {
         "produtos": Produto.objects.all(),
         "active": "lista-produtos"
     }
-    context.update(get_user_profile(request))
     return render(request, 'produtos.html', context)
 
+@login_required()
 def detalhe_produto(request, pk):
     context = {
         'produto': Produto.objects.get(pk=pk),
@@ -38,16 +34,16 @@ def detalhe_produto(request, pk):
     return render(request, 'modal_detalhe_produto.html', context)
 
 
+@login_required()
 def lista_pedidos(request):
-    context_user = get_user_profile(request)
     context = {
         "pedidos": PedidoCompra.objects.all(),
         "active": "lista-pedidos"
     }
-    context.update(context_user)
     return render(request, 'pedidos.html', context)
 
 
+@login_required()
 def detalhe_pedido(request, pk):
     context = {
         'produto': PedidoCompra.objects.get(pk=pk),

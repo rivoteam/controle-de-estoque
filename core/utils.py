@@ -55,21 +55,6 @@ letras = tuple((l, l) for l in ["P", "M", "G", "GG", "XG"])
 TAMANHO_CHOICES = numeros_social + numeros + letras
 
 
-def get_user_profile(request):
-    """
-    Pega informações de usuario para renderizar foto de perfil e exibir nome nas paginas do site
-    """
-    context = {
-        'profile_photo': STATIC_URL + 'img/theme/avocado.png',
-        'fullname': f'{request.user.first_name} {request.user.last_name}',
-    }
-    if request.user.first_name == "":
-        context['fullname'] = request.user.username
-    if request.user.funcionario.image:
-        context['profile_photo'] = request.user.funcionario.image.url
-    return context
-
-
 def export_as_csv(self, request, queryset):
     meta = self.model._meta
     field_names = [field.name for field in meta.fields]
@@ -118,6 +103,16 @@ def salva_criado_por(request, obj):
     else:
         obj.atualizado_por = request.user
     obj.save()
+
+
+# def generate_barcode(self):
+#     code_id = str(randint(7890000000000, 7899999999999))
+#     if not Produto.objects.filter(ean=code_id).first() is None:
+#         self.generate_barcode()
+#     ean_number = barcode.get('ean13', code_id)
+#     barcodes_folder = Path(__file__).resolve().parent / "barcodes"
+#     ean_number.save()
+#     return code_id
 
 
 def send_email_logs():
