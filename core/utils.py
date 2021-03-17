@@ -1,8 +1,18 @@
-import csv
+from django.conf import settings
+from django.core import mail
 from datetime import datetime
 from core.settings import STATIC_URL
+import csv
 import xlwt
 from django.http import HttpResponse
+import logging
+
+
+# logger = logging.getLogger('file')
+logger = logging.getLogger(__name__)
+# logger_db = logging.getLogger('django.db.backends')
+
+
 # from random import randint
 # from controle_estoque.models import Produto
 
@@ -57,6 +67,21 @@ letras = tuple((l, l) for l in ["P", "M", "G", "GG", "XG"])
 TAMANHO_CHOICES = numeros_social + numeros + letras
 
 
+def get_user_profile(request):
+    """
+    Pega informações de usuario para renderizar foto de perfil e exibir nome nas paginas do site
+    """
+    context = {
+        'profile_photo': STATIC_URL + 'img/theme/avocado.png',
+        'fullname': f'{request.user.first_name} {request.user.last_name}',
+    }
+    if request.user.first_name == "":
+        context['fullname'] = request.user.username
+    if request.user.funcionario.image:
+        context['profile_photo'] = request.user.funcionario.image.url
+    return context
+
+
 def export_as_csv(self, request, queryset):
     meta = self.model._meta
     field_names = [field.name for field in meta.fields]
@@ -107,17 +132,23 @@ def salva_criado_por(request, obj):
     obj.save()
 
 
-def get_user_profile(request):
-    """
-    Pega informações de usuario para renderizar foto de perfil e exibir nome nas paginas do site
-    """
-    context = {
-        'profile_photo': STATIC_URL + 'img/theme/avocado.png',
-        'fullname': f'{request.user.first_name} {request.user.last_name}',
-    }
-    if request.user.first_name == "":
-        context['fullname'] = request.user.username
-    if request.user.funcionario.image:
-        context['profile_photo'] = request.user.funcionario.image.url
-    return context
+def send_email_logs():
+    logger.info('Email enviado com sucesso!')
+    filename = 'logs.log'
 
+    email_default = settings.DEFAULT_FROM_EMAIL
+
+    with open(filename) as logfile:
+        mail.EmailMessage(
+            'Novo log gerado',
+            'Mensagem de teste de envio de email do Django',
+            email_default,
+            [email_default],
+            attachments=[(filename, logfile.read(), 'text/plain')]
+        ).send()
+
+
+def teste_logging():
+    logger.warning("Resposta do teste de logging warning")
+    # logger_django.info("INFO = Mostra os logs do django")
+    # logger_django.warning("WARNING = Mostra os logs do django")
