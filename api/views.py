@@ -7,6 +7,9 @@ from .serializers import ProdutoSerializer, PedidoSerializer, CarrinhoPedidoSeri
     CarrinhoVendaSerializer
 from django.http import JsonResponse
 import json
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.models import User
 
 
 def api_home(request):
@@ -50,3 +53,17 @@ def get_detail_produtos(request, pk):
         return JsonResponse(serializer.data, status=200, safe=False)
     except:
         return JsonResponse('Nao encontrado', status=404, safe=False)
+
+
+@require_http_methods("POST")
+@csrf_exempt
+def post_realiza_vendas(request):
+    produtos = json.loads(request.body)
+    user = request.user
+    instance_venda = Venda.objects.create(caixa_id=user.funcionario.id, vendedor_id=user.funcionario.id,
+                                          forma_pagto=5, criado_por=user)
+    for produto_json in produtos:
+        produto = Produto.objects.get(id=produto_json['produto']['id'])
+        quantidade = produto_json['quantidade']
+        CarrinhoVenda.objects.create(produto=produto, quantidade=quantidade, venda=instance_venda)
+    return JsonResponse({"Requisicao": f"deu certo, venda {instance_venda}"}, status=200, safe=False)

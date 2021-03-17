@@ -10,6 +10,7 @@
 
                 </div>
                 <form @submit.prevent="add_produto" name="produtos_comprados">
+                    {% csrf_token %}
                     <div class="col-sm-12 padding-off">
                         <div class="row">
                             <div class="col-sm-7">
@@ -64,7 +65,7 @@
                             <tbody>
                             <template v-for="produto in produtos">
                                 <tr>
-                                    <td >[[ produto.produto.descricao ]]</td>
+                                    <td>[[ produto.produto.descricao ]]</td>
                                     <td>[[ produto.produto.nome_categoria ]]</td>
                                     <td>[[ produto.produto.nome_subcategoria ]]</td>
                                     <td>[[ produto.produto.tamanho ]]</td>
@@ -89,8 +90,17 @@
                 </div>
 
             </div>
-            <div class="card-blockquote">
-                <h3 style="position: absolute; right: 4em">Valor total: R$ [[ valor_total ]]</h3>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-2">
+                        <h3>Valor total: R$ [[ valor_total ]]</h3>
+                    </div>
+                    <div class="col-4">
+                        <button @click="realiza_venda" class="btn btn-outline-info">
+                            <i aria-hidden="true" class="fas fa-money-bill-wave"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -125,8 +135,8 @@
                                         }
                                     )
                                     this.produto_ean = ""
-                                    this.quantidade = 1
                                     this.valor_total += (Number(response.data.preco_venda) * this.quantidade)
+                                    this.quantidade = 1
                                 }
                             })
                             .catch(error => {
@@ -145,19 +155,40 @@
                     this.valor_total -= (Number(this.produtos[this.produtos.indexOf(produto)].produto.preco_venda) *
                         this.produtos[this.produtos.indexOf(produto)].quantidade)
                     this.produtos.splice(this.produtos.indexOf(produto), 1)
-                    if (this.produtos.length === 0){
+                    if (this.produtos.length === 0) {
                         this.valor_total = 0
                     }
                 },
                 realiza_venda() {
-                    axios.post("{% url 'produto' %}", this.produtos)
+                    function getCookie(name) {
+                        let cookieValue = null;
+                        if (document.cookie && document.cookie !== '') {
+                            const cookies = document.cookie.split(';');
+                            for (let i = 0; i < cookies.length; i++) {
+                                const cookie = cookies[i].trim();
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+
+                    const csrftoken = getCookie('csrftoken');
+                    console.log(csrftoken)
+                    axios.post("{% url 'post_realiza_vendas' %}", data=this.produtos, headers = {
+                        'csrftoken': csrftoken
+                    })
                         .then(response => {
                             if (response.status === 200) {
+                                console.log("realizado")
                                 location.reload()
                             }
                         })
                         .catch(error => {
-                            console.log(error);
+                            console.log(error.response);
                         })
                 }
             }
