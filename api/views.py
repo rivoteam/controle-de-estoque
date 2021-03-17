@@ -58,12 +58,10 @@ def get_detail_produtos(request, pk):
 @require_http_methods("POST")
 @csrf_exempt
 def post_realiza_vendas(request):
-    produtos = json.loads(request.body)
-    user = request.user
-    instance_venda = Venda.objects.create(caixa_id=user.funcionario.id, vendedor_id=user.funcionario.id,
-                                          forma_pagto=5, criado_por=user)
-    for produto_json in produtos:
+    produtos_json = json.loads(request.body)
+    instance_venda = Venda.objects.create(caixa=request.user.funcionario, vendedor=request.user.funcionario,
+                                          forma_pagto=5, criado_por=request.user)
+    for produto_json in produtos_json:
         produto = Produto.objects.get(id=produto_json['produto']['id'])
-        quantidade = produto_json['quantidade']
-        CarrinhoVenda.objects.create(produto=produto, quantidade=quantidade, venda=instance_venda)
-    return JsonResponse({"Requisicao": f"deu certo, venda {instance_venda}"}, status=200, safe=False)
+        CarrinhoVenda.objects.create(produto=produto, quantidade=produto_json['quantidade'], venda=instance_venda)
+    return JsonResponse({"Requisicao": f"Venda registrada {instance_venda}"}, status=200, safe=False)
