@@ -1,7 +1,14 @@
+"""
+Feito para testar em desenvolvimento e popular banco de dados
+Instruções:
+Executar o seguinte comando no terminal ou cmd:
+python manage.py runscript zeraDB_cria_admin
+Digitar sim para apagar todos os dados e criar superuser ou ENTER para cancelar
+"""
+
 import subprocess
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-
 from controle_usuarios.models import Funcionario
 
 

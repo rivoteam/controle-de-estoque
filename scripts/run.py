@@ -1,7 +1,8 @@
 """
-Feito para testar em desenvolvimento e popular banco de todos
+Feito para testar em desenvolvimento e popular banco de dados
 Instruções:
-Copiar Código e colar no shell do Python Manage.py Shell
+Executar o seguinte comando no terminal ou cmd:
+python manage.py runscript run
 """
 
 from django.contrib.auth.models import User
@@ -34,37 +35,18 @@ def run():
     todas_categorias = Categoria.objects.all()
     todas_subcategorias = Subcategoria.objects.all()
 
-    # produtos = [Produto(
-    #     descricao=f"Descrição do Produto {i + 1}",
-    #     genero=choice(generos),
-    #     categoria=todas_categorias[randint(1, len(categorias) - 1)],
-    #     subcategoria=todas_subcategorias[randint(1, len(subcategorias) - 1)],
-    #     tamanho=choice(tamanho),
-    #     cor=choice(cores),
-    #     min_pecas=randint(0, 40),
-    #     alerta_min=randint(41, 70),
-    #     total_pecas=randint(0, 100),
-    #     preco_compra=randint(20, 120),
-    #     preco_venda=randint(121, 150),
-    #     motivo_alteracao_preco="Novo produto",
-    #     criado_por=usuario,
-    #     fornecedor=fornecedor
-    # ) for i in range(120)]
-    #
-    # Produto.objects.bulk_create(produtos)
-
     for i in range(120):
         Produto.objects.create(
             descricao=f"Descrição do Produto {i + 1}",
             genero=choice(generos),
-            categoria=todas_categorias[randint(1, len(categorias)-1)],
-            subcategoria=todas_subcategorias[randint(1, len(subcategorias)-1)],
+            categoria=todas_categorias[randint(1, len(categorias) - 1)],
+            subcategoria=todas_subcategorias[randint(1, len(subcategorias) - 1)],
             tamanho=choice(tamanho),
-            cor=cores[randint(0, (len(cores)-1))],
+            cor=choice(cores),
             min_pecas=randint(0, 40),
             alerta_min=randint(41, 70),
             total_pecas=randint(0, 100),
-            preco_compra=randint(30, 120),
+            preco_compra=randint(20, 120),
             preco_venda=randint(121, 150),
             motivo_alteracao_preco="Novo produto",
             auto_pedido=choice([True, False]),
@@ -72,13 +54,12 @@ def run():
             fornecedor=fornecedor
         )
 
-    pedidos = [PedidoCompra(fornecedor=fornecedor, criado_por=usuario) for p in range(5)]
-    PedidoCompra.objects.bulk_create(pedidos)
+    for p in range(5):
+        PedidoCompra.objects.create(fornecedor=fornecedor, descricao=f"Pedido {p + 1}", criado_por=usuario)
 
     todos_produtos = Produto.objects.all()
     todos_pedidos = PedidoCompra.objects.all()
 
-    carrinhos = [
-        CarrinhoPedido(produto=choice(todos_produtos), quantidade=randint(1, 12), pedidocompra=choice(todos_pedidos))
-        for p in range(40)]
-    CarrinhoPedido.objects.bulk_create(carrinhos)
+    for p in range(40):
+        CarrinhoPedido.objects.create(produto=choice(todos_produtos), quantidade=randint(1, 12),
+                                      pedidocompra=choice(todos_pedidos))
