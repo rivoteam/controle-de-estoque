@@ -50,6 +50,6 @@ def lista_pedidos(request):
 
 def detalhe_pedido(request, pk):
     context = {
-        'produto': PedidoCompra.objects.get(pk=pk),
+        'pedido': PedidoCompra.objects.get(pk=pk),
     }
     return render(request, 'modal_detalhe_pedido.html', context)
