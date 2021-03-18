@@ -49,7 +49,10 @@ def lista_pedidos(request):
 
 
 def detalhe_pedido(request, pk):
+    pedido = PedidoCompra.objects.get(pk=pk)
+    produtos = pedido.carrinhopedido_set.all()
     context = {
-        'pedido': PedidoCompra.objects.get(pk=pk),
+        'pedido': pedido,
+        'produtos': produtos,
     }
     return render(request, 'modal_detalhe_pedido.html', context)
