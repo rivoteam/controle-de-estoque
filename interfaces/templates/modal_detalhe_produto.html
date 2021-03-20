@@ -13,11 +13,15 @@
                     <div class="row mt-lg-3">
                         <div class="col-md-6 mb-4">
                             <h4>Descrição</h4>
+                            {% if produto.descricao == "" %}
+                            <p>Sem Descrição</p>
+                            {% else %}
                             <p>{{produto.descricao}}</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Gênero</h4>
-                            <p>{{produto.genero}}</p>
+                            <p>{{produto.genero|title}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Categoria</h4>
@@ -45,7 +49,11 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Limite Alerta Mínimo de Peças</h4>
-                            <p>{{produto.limite_alerta_min}}</p>
+                            {% if produto.limite_alerta_min %}
+                            <i class="fa fa-check-circle text-sucess"></i>
+                            {% else%}
+                            <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Total Peças em Estoque</h4>
@@ -61,7 +69,11 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Pedido Automático </h4>
-                            <p>{{produto.auto_pedido}}</p>
+                            {% if produto.auto_pedido %}
+                            <i class="fa fa-check-circle text-sucess"></i>
+                            {% else%}
+                            <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>EAN</h4>
@@ -77,23 +89,27 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Criado Por:</h4>
-                            <p>{{produto.criado_por}}</p>
+                            <p>{{produto.criado_por|title}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Criado em:</h4>
+                            <h4>Data Criação:</h4>
                             <p>{{produto.criado_em}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Atualizado Por:</h4>
-                            <p>{{produto.atualizado_por}}</p>
+                            {% if produto.atualizado_por == None %}
+                            <p> Sem Atualização</p>
+                            {% else %}
+                            <p>{{produto.atualizado_por|title}}</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Atualizado em:</h4>
+                            <h4>Ultima Atualização:</h4>
+                            {% if produto.atualizado_por == None %}
+                            <p> Sem Atualização</p>
+                            {% else %}
                             <p>{{produto.atualizado_em}}</p>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <h4>Atualizado em:</h4>
-                            <p>{{produto.atualizado_em}}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
