@@ -74,7 +74,8 @@
                                     <td>[[ produto.produto.genero.toUpperCase() ]]</td>
                                     <td>[[ produto.produto.ean ]]</td>
                                     <td>[[ produto.produto.total_pecas ]]</td>
-                                    <td>[[ produto.produto.preco_venda * produto.quantidade ]]</td>
+                                    <td>[[ (produto.produto.preco_venda * produto.quantidade).toLocaleString(
+                                            'pt-br',{style: 'currency', currency: 'BRL'}) ]]</td>
                                     <td>
                                         <button @click="remove_produto(produto)" class="btn btn-sm btn-danger">
                                             <i aria-hidden="true" class="fa fa-times"></i>
@@ -89,7 +90,8 @@
                 </div>
                 <div class="row mt-lg-5 d-flex justify-content-center">
 
-                    <h3 class="mr-5">Valor total: R$ [[ valor_total ]]</h3>
+                    <h3 class="mr-5">Valor total: [[ valor_total.toLocaleString(
+                        'pt-br',{style: 'currency', currency: 'BRL'}) ]]</h3>
                     <button @click="realiza_venda" class="btn btn-success mr-5">
                         Finalizar Venda
                         <i aria-hidden="true" class="fas fa-money-bill-wave"></i>
@@ -131,6 +133,7 @@
                                     this.produto_ean = ""
                                     this.valor_total += (Number(response.data.preco_venda) * this.quantidade)
                                     this.quantidade = 1
+                                    console.log(this.valor_total)
                                 }
                             })
                             .catch(error => {
