@@ -8,8 +8,8 @@ urlpatterns = [
     path('app-vendas', appvendas, name="appvendas"),
 
     # Listagem
-    path('lista-pedidos/', lista_pedidos, name="lista-pedidos"),
-    path('lista-produtos/', lista_produtos, name="lista-produtos"),
+    path('lista-pedidos', lista_pedidos, name="lista-pedidos"),
+    path('lista-produtos', lista_produtos, name="lista-produtos"),
 
     # Detalhes por object
     path('detalhe-produto/<int:pk>', detalhe_produto, name='detalhe_produto'),
