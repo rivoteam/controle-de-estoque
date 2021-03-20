@@ -21,12 +21,19 @@ gi{% load static %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Descrição</h4>
+                            {% if pedido.descricao == "" %}
+                            <p>Sem Descrição</p>
+                            {% else %}
                             <p>{{pedido.descricao}}</p>
+                            {% endif %}
                         </div>
-
-
                         <div class="col-md-6 mb-4">
                             <h4>Nota Fiscal</h4>
+                            {% if pedido.nota_fiscal%}
+                            <i class="fa fa-check-circle text-sucess"></i>
+                            {% else %}
+                            <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %}
                             <p>{{pedido.nota_fiscal}}</p>
                         </div>
                     </div>
@@ -35,17 +42,13 @@ gi{% load static %}
                             <h4>Data de Pedido</h4>
                             <p>{{pedido.data_pedido}}</p>
                         </div>
-
-
                         <div class="col-md-6 mb-4">
                             <h4>Preço do Pedido</h4>
-                            <p>{{pedido.preco_pedido}}</p>
+                            <p>R$ {{pedido.preco_pedido}}</p>
                         </div>
-
-
                         <div class="col-md-6 mb-4">
                             <h4>Criado Por</h4>
-                            <p>{{pedido.criado_por}}</p>
+                            <p>{{pedido.criado_por|title}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Criado Em</h4>
@@ -53,20 +56,27 @@ gi{% load static %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Atualizado Por</h4>
-                            <p>{{pedido.atualizado_por}}</p>
+                            {% if pedido.atualizado_por == None %}
+                            <p>Sem Atualização</p>
+                            {% else %}
+                            <p>{{pedido.atualizado_por|title}}</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Atualizado Em</h4>
+                            {% if pedido.atualizado_por == None %}
+                            <p>Sem Atualização</p>
+                            {% else %}
                             <p>{{pedido.atualizado_em}}</p>
+                            {% endif %}
                         </div>
                     </div>
-
+                    {% if produtos %}
                     <div class="row mt-lg-12">
                         <h4>Produtos</h4>
-
                         <div class="table-responsive">
                             <table class="table">
-                                <thead class="table-dark">
+                                <thead class="table" style="background-color: #5e72e4; color: #fff">
                                 <tr>
                                     <th>SKU</th>
                                     <th>Cor</th>
@@ -88,20 +98,17 @@ gi{% load static %}
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
-
+                    {% else %}
+                    <h4>Sem produtos cadastrados para este pedido</h4>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer mb-5">
-        <div class="row mt-5" style="position: absolute; right: 2em">
-            <button class="btn btn-info mr-2" type="submit">Salvar</button>
-            <a href="#">
-                <button class="btn btn-danger" type="button">Deletar</button>
-            </a>
+        <div class="modal-footer mb-5">
+            <div class="row mt-5" style="position: absolute; right: 2em">
+                <button type="submit" class="btn btn-info mr-2" data-dismiss="modal">Fechar</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
