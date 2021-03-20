@@ -13,6 +13,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['www.globo.com']
 
 # Application definition
 
@@ -117,23 +118,104 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 # EMAIL BACKEND
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 EMAIL_HOST = config('EMAIL_HOST')
-
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
-
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+DEFAULT_EMAIL_NAME = config('DEFAULT_EMAIL_NAME')
+EMAIL_SUBJECT_PREFIX = "Arara Modas - "
+EMAIL_USE_LOCALTIME = True
 
 # LOGGING
+ADMINS = (
+    (DEFAULT_EMAIL_NAME, DEFAULT_FROM_EMAIL),
+)
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'standard': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        # 'special': {
+        #     '()': 'project.logging.SpecialFilter',
+        #     'foo': 'bar',
+        # },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/debug.log',
+        },
+        'file_disallowed_hosts': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/disallowed_hosts.log',
+            'formatter': 'standard',
+        },
+        'file_csrf': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/csrf.log',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            # 'filters': ['special']
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        # Salva hosts não permitidos que tentaram acessar o sistema
+        'django.security.DisallowedHost': {
+            'handlers': ['file_disallowed_hosts', 'mail_admins'],
+            'propagate': False,
+        },
+        'django.security.csrf': {
+            'handlers': ['file_csrf', 'mail_admins'],
+            'propagate': False,
+        },
+    },
+}
+
+
+
+'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -185,9 +267,13 @@ LOGGING = {
         }
     },
 }
+<<<<<<< HEAD
 
 REST_FRAMEWORK = {
 'DEFAULT_PERMISSION_CLASSES': (
     'rest_framework.permissions.IsAuthenticated',
 )
 }
+=======
+'''
+>>>>>>> modal-thais
