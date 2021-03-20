@@ -8,7 +8,7 @@ from controle_pedidos.models import PedidoCompra
 
 @login_required()
 def homepage(request):
-    return render(request, 'homepage.html')
+    return render(request, 'homepage.html', {'active': 'homepage'})
 
 @login_required()
 def user_logout(request):

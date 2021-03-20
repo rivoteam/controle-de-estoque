@@ -30,9 +30,9 @@ gi{% load static %}
                         <div class="col-md-6 mb-4">
                             <h4>Nota Fiscal</h4>
                             {% if pedido.nota_fiscal%}
-                            <i class="fa fa-check-circle text-sucess"></i>
+                            <span class="text-center"><i class="fa fa-check-circle text-success"></i></span>
                             {% else %}
-                            <i class="fa fa-times-circle text-danger"></i>
+                                <span class="text-center"><i class="fa fa-times-circle text-danger"></i></span>
                             {% endif %}
                             <p>{{pedido.nota_fiscal}}</p>
                         </div>
@@ -73,7 +73,7 @@ gi{% load static %}
                     </div>
                     {% if produtos %}
                     <div class="row mt-lg-12">
-                        <h4>Produtos</h4>
+                        <h4 class="text-center">Produtos</h4>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class="table" style="background-color: #5e72e4; color: #fff">

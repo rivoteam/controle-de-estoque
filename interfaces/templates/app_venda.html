@@ -2,7 +2,7 @@
 {% block content %}
     <div id="vue-app">
         <div class="card">
-            <div class="card-header text-center">
+            <div class="card-header text-center mt-lg-5">
                 <h2 class="card-text">App de Venda</h2>
             </div>
             <div class="card-body">
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-sm-2 padding-off">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-outline-success btn-block">
+                                    <button type="submit" class="btn btn-success btn-block">
                                         <i aria-hidden="true" class="fa fa-plus"></i>
                                     </button>
                                 </div>
@@ -40,13 +40,13 @@
                     </div>
                 </form>
 
-                <div class="col-sm-12 mt-15 pt-5">
+                <div class="col-sm-12 mt-15 pt-5 mb-lg-5">
                     <template v-if="produtos.length">
                         <div class="card-header text-center">
 
                             <h2>Lista de produtos selecionados:</h2>
                         </div>
-                        <table class="table table-responsive-lg">
+                        <table class="table table-responsive-lg mt-lg-5">
                             <thead class="thead-active text-muted">
                             <tr>
                                 <th scope="col">Produtos</th>
@@ -86,20 +86,14 @@
                             </tbody>
                         </table>
                     </template>
-
                 </div>
+                <div class="row mt-lg-5 d-flex justify-content-center">
 
-            </div>
-            <div class="card-footer">
-                <div class="row">
-                    <div class="col-2">
-                        <h3>Valor total: R$ [[ valor_total ]]</h3>
-                    </div>
-                    <div class="col-4">
-                        <button @click="realiza_venda" class="btn btn-outline-info">
-                            <i aria-hidden="true" class="fas fa-money-bill-wave"></i>
-                        </button>
-                    </div>
+                    <h3 class="mr-5">Valor total: R$ [[ valor_total ]]</h3>
+                    <button @click="realiza_venda" class="btn btn-success mr-5">
+                        Finalizar Venda
+                        <i aria-hidden="true" class="fas fa-money-bill-wave"></i>
+                    </button>
                 </div>
             </div>
         </div>

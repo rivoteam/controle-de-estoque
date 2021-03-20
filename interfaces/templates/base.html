@@ -26,7 +26,8 @@
     <div class="scrollbar-inner">
         <div class="sidenav-header ">
             <a class="navbar-brand" href="{% url 'homepage' %}">
-                <img src="{% static 'img/brand/araras.png' %}" class="navbar-brand-img" style="width: 100%; height: auto;" alt="">
+                <img src="{% static 'img/brand/araras.png' %}" class="navbar-brand-img"
+                     style="width: 100%; height: auto;" alt="">
             </a>
         </div>
         {% include "navbar.html" %}
@@ -58,36 +59,18 @@
     </div>
     <div class="container-fluid mt--6">
         {% block content %} {% endblock %}
-        <footer class="container mt-lg-10">
-
-            <div class="row align-items-center justify-content-lg-between">
-                <div class="col-lg-6">
-                    <div class="copyright text-center  text-lg-left  text-muted">
-                        &copy; 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1"
-                                       target="_blank">Creative Tim</a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative
-                                Tim</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com/presentation" class="nav-link"
-                               target="_blank">About
-                                Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md"
-                               class="nav-link" target="_blank">MIT License</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <footer class="footer container text-center">
+            <ul class="nav nav-footer justify-content-center">
+                <li class="nav-item">
+                     <a href="#" class="nav-link">&copy; 2021</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">RivoTeam - Oficina de Projeto Empresa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Sem fins lucrativos</a>
+                </li>
+            </ul>
         </footer>
     </div>
 </div>
