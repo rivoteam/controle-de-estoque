@@ -1,11 +1,8 @@
 from random import choice, randint
-
 from django.contrib.auth.models import User
-from django.db import IntegrityError
-from django.db.transaction import TransactionManagementError
 from django.test import TestCase
-
 from controle_estoque.models import Produto, Subcategoria, Categoria, Fornecedor
+from core.signals import generate_barcode
 
 
 class EstoqueTest(TestCase):
@@ -92,7 +89,7 @@ class EstoqueTest(TestCase):
         for i in range(10):
             choice_produto = choice(self.todos_produtos)
             ean_one_product = choice_produto.ean
-            barcode = Produto.generate_barcode(ean_one_product)
+            barcode = generate_barcode(ean_one_product)
             with self.subTest():
                 self.assertNotEqual(ean_one_product, barcode)
                 self.assertEqual(0, len(Produto.objects.filter(ean=barcode)))
