@@ -42,11 +42,12 @@ def generate_barcode(self):
 
 
 @receiver(pre_save, sender=Produto)
-def pre_save_ean_sku(sender, instance, **kwargs):
+def pre_save_ean_sku_limite_alerta_min(sender, instance, **kwargs):
     tamanho_sku = f"{(2 - len(instance.tamanho)) * '0'}{instance.tamanho}"
     instance.limite_alerta_min = False if instance.total_pecas <= instance.alerta_min else True
     instance.ean = generate_barcode(self=instance.id) if not instance.ean else instance.ean
-    instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}{tamanho_sku}".upper()
+    instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}" \
+                   f"{tamanho_sku}".upper()
     return
 
 
