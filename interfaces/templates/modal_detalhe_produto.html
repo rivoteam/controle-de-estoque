@@ -36,35 +36,31 @@
                             <p>{{produto.cor}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Mínimo de Peças</h4>
+                            <h4>Mínimo de Peças em Estoque</h4>
                             <p>{{produto.min_pecas}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Alerta Mínimo</h4>
+                            <h4>Alerta Mínimo de Peças</h4>
                             <p>{{produto.alerta_min}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Limite Alerta Mínimo</h4>
+                            <h4>Limite Alerta Mínimo de Peças</h4>
                             <p>{{produto.limite_alerta_min}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Total Peças</h4>
+                            <h4>Total Peças em Estoque</h4>
                             <p>{{produto.total_pecas}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Preço Compra</h4>
-                            <p>{{produto.preco_compra}}</p>
+                            <p>R$ {{produto.preco_compra}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Preço Venda</h4>
-                            <p>{{produto.preco_venda}}</p>
+                            <p>R$ {{produto.preco_venda}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Motivo Alteração Preço</h4>
-                            <p>{{produto.motivo_alteracao_preco}}</p>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <h4>Pedido Automático</h4>
+                            <h4>Pedido Automático </h4>
                             <p>{{produto.auto_pedido}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
@@ -80,7 +76,7 @@
                             <p>{{produto.fornecedor}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Criado por:</h4>
+                            <h4>Criado Por:</h4>
                             <p>{{produto.criado_por}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
@@ -88,8 +84,12 @@
                             <p>{{produto.criado_em}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <h4>Atualizado por:</h4>
+                            <h4>Atualizado Por:</h4>
                             <p>{{produto.atualizado_por}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Atualizado em:</h4>
+                            <p>{{produto.atualizado_em}}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Atualizado em:</h4>
@@ -101,10 +101,7 @@
         </div>
         <div class="modal-footer mb-5">
             <div class="row mt-5" style="position: absolute; right: 2em">
-                <button class="btn btn-info mr-2" type="submit">Salvar</button>
-                <a href="#">
-                    <button class="btn btn-danger" type="button">Deletar</button>
-                </a>
+                <button type="submit" class="btn btn-info mr-2" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>
