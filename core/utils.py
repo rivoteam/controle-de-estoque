@@ -1,16 +1,14 @@
+from django.contrib.auth import logout
 from django.http import HttpResponse
 from django.conf import settings
 from django.core import mail
 from datetime import datetime
-from core.settings import STATIC_URL
 import csv
 import xlwt
 import logging
 
 
-# logger = logging.getLogger('file')
 logger = logging.getLogger(__name__)
-# logger_db = logging.getLogger('django.db.backends')
 
 
 GENERO_CHOICES = (
@@ -105,16 +103,6 @@ def salva_criado_por(request, obj):
     obj.save()
 
 
-# def generate_barcode(self):
-#     code_id = str(randint(7890000000000, 7899999999999))
-#     if not Produto.objects.filter(ean=code_id).first() is None:
-#         self.generate_barcode()
-#     ean_number = barcode.get('ean13', code_id)
-#     barcodes_folder = Path(__file__).resolve().parent / "barcodes"
-#     ean_number.save()
-#     return code_id
-
-
 def send_email_logs():
     logger.info('Email enviado com sucesso!')
     filename = 'logs.log'
@@ -131,7 +119,14 @@ def send_email_logs():
         ).send()
 
 
-def teste_logging():
-    logger.warning("Resposta do teste de logging warning")
-    # logger_django.info("INFO = Mostra os logs do django")
-    # logger_django.warning("WARNING = Mostra os logs do django")
+# //TODO Deixar esse código comentado por enquanto
+'''
+def generate_barcode(self):
+    code_id = str(randint(7890000000000, 7899999999999))
+    if not Produto.objects.filter(ean=code_id).first() is None:
+        self.generate_barcode()
+    ean_number = barcode.get('ean13', code_id)
+    barcodes_folder = Path(__file__).resolve().parent / "barcodes"
+    ean_number.save()
+    return code_id
+'''
