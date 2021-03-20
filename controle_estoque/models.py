@@ -22,16 +22,22 @@ class Fornecedor(models.Model):
 
 
 class Categoria(models.Model):
-    categoria = models.CharField(max_length=30)
-    codigo = models.CharField(max_length=3)
+    categoria = models.CharField(max_length=30, unique=True)
+    codigo = models.CharField(max_length=3, unique=True)
 
     def __str__(self):
-        return f'{self.categoria}'.title()
+        return f'{self.categoria}'
 
     class Meta:
         verbose_name = 'Categoria'
         verbose_name_plural = 'Categorias'
         ordering = ['categoria']
+
+    def save(self, *args, **kwargs):
+        self.categoria = self.categoria.title()
+        self.codigo = self.codigo.upper()
+        super(Categoria, self).save(*args, **kwargs)
+
 
 
 class Subcategoria(models.Model):
@@ -39,21 +45,26 @@ class Subcategoria(models.Model):
     codigo = models.CharField(max_length=3)
 
     def __str__(self):
-        return f'{self.subcategoria}'.title()
+        return f'{self.subcategoria}'
 
-    def save(self, *args, **kwargs):
-        subcategorias = Subcategoria.objects.all()
-        codigos = [i.codigo for i in subcategorias]
-        if not self.codigo in codigos:
-            super(Subcategoria, self).save(*args, **kwargs)
-        else:
-            self.codigo = 'NUL'
-            super(Subcategoria, self).save()
+    # def save(self, *args, **kwargs):
+    #     subcategorias = Subcategoria.objects.all()
+    #     codigos = [subcategoria.codigo for subcategoria in subcategorias]
+    #     if not self.codigo in codigos:
+    #         super(Subcategoria, self).save(*args, **kwargs)
+    #     else:
+    #         self.codigo = 'NUL'
+    #         super(Subcategoria, self).save()
 
     class Meta:
         verbose_name = 'Subcategoria'
         verbose_name_plural = 'Subcategorias'
         ordering = ['subcategoria']
+
+    def save(self, *args, **kwargs):
+        self.subcategoria = self.subcategoria.title()
+        self.codigo = self.codigo.upper()
+        super(Subcategoria, self).save(*args, **kwargs)
 
 
 class Produto(models.Model):

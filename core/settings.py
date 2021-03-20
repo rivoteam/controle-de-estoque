@@ -50,7 +50,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates_custom_admin'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,8 +117,11 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
+LOGIN_URL = config("LOGIN_URL")
+# LOGOUT_REDIRECT_URL = config("LOGOUT_REDIRECT_URL")
+
 # EMAIL BACKEND
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
@@ -212,68 +215,3 @@ LOGGING = {
         },
     },
 }
-
-
-
-'''
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {message}',
-            'datefmt': '%Y-%m-%d %H:%M:%S',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            # 'filters': ['require_debug_true'],
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': './logs.log',
-        },
-        'mail_admins': {
-            'level': 'INFO',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'formatter': 'verbose',
-            'email_backend': 'django.core.mail.backends.filebased.EmailBackend',
-            'include_html': True,
-        }
-    },
-    'loggers': {
-        'file': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'sendemail': {
-            'handlers': ['mail_admins'],
-            'level': 'INFO',
-            'propagate': True,
-        }
-    },
-}
-<<<<<<< HEAD
-
-REST_FRAMEWORK = {
-'DEFAULT_PERMISSION_CLASSES': (
-    'rest_framework.permissions.IsAuthenticated',
-)
-}
-=======
-'''
->>>>>>> modal-thais

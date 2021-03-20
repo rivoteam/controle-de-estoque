@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.urls import path
-from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos
+from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos, user_logout
 
 urlpatterns = [
     path('', homepage, name="homepage"),
-    path('app-vendas/', appvendas, name="appvendas"),
+    path('logout/', user_logout, name="logout"),
+    path('app-vendas', appvendas, name="appvendas"),
 
     # Listagem
     path('lista-pedidos/', lista_pedidos, name="lista-pedidos"),
