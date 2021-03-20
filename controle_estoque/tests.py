@@ -22,14 +22,15 @@ class EstoqueTest(TestCase):
         Subcategoria.objects.bulk_create(subcategorias)
 
         self.fornecedor = Fornecedor.objects.create(nome_empresa="Renner", cnpj="123216351", telefone="00000",
-                                  endereco="Avenida Brasil", pessoa_contato="Cleidson",
-                                  email="cleidson@renner.com")
+                                                    endereco="Avenida Brasil", pessoa_contato="Cleidson",
+                                                    email="cleidson@renner.com")
 
         self.usuario = User.objects.create(username="admin", password="admin")
 
         self.cores = ["Azul", "Verde", "Cinza", "Amarelo", "Preto", "Branco"]
         self.generos = ["Masculino", "Feminino", "Unissex"]
-        self.tamanho = [str(ns) for ns in range(1, 6)] + [str(n) for n in range(30, 62, 2)] + ["P", "M", "G", "GG", "XG"]
+        self.tamanho = [str(ns) for ns in range(1, 6)] + [str(n) for n in range(30, 62, 2)] + ["P", "M", "G", "GG",
+                                                                                               "XG"]
         self.todas_categorias = Categoria.objects.all()
         self.todas_subcategorias = Subcategoria.objects.all()
 
@@ -61,19 +62,6 @@ class EstoqueTest(TestCase):
         self.assertEqual(len(self.todas_categorias) + 1, len(Categoria.objects.all()))
         self.assertEqual("Blazer", new_category.categoria)
         self.assertEqual("BLA", new_category.codigo)
-
-    def test_create_existing_category(self):
-        try:
-            Categoria.objects.create(categoria="Camisa", codigo="CAM")
-        except TransactionManagementError:
-            pass
-        except IntegrityError:
-            pass
-        except Exception:
-            raise TransactionManagementError
-
-        self.assertEqual(9, len(self.todas_categorias))
-        self.assertEqual(1, len(Categoria.objects.filter(categoria="Camisa")))
 
     def test_len_Subcategoria(self):
         self.assertEqual(8, len(self.todas_subcategorias))
@@ -117,3 +105,28 @@ class EstoqueTest(TestCase):
             tamanho_sku = f"{(2 - len(produto.tamanho)) * '0'}{produto.tamanho}"
             with self.subTest():
                 self.assertEqual(produto.sku, f"{genero}{codigo_categoria}{codigo_subcategoria}{tamanho_sku}")
+
+    def test_sku_creating_product(self):
+        categoria = Categoria.objects.get(categoria="Camiseta")
+        subcategoria = Subcategoria.objects.get(subcategoria="Gola V")
+        tamanho = "M"
+        genero = "Masculino"
+        novo_produto = Produto.objects.create(
+            descricao=f"Descrição do Novo Produto",
+            genero=genero,
+            categoria=categoria,
+            subcategoria=subcategoria,
+            tamanho=tamanho,
+            cor="Azul",
+            min_pecas=20,
+            alerta_min=40,
+            total_pecas=70,
+            preco_compra=25,
+            preco_venda=45,
+            motivo_alteracao_preco="Novo produto",
+            auto_pedido=True,
+            criado_por=self.usuario,
+            fornecedor=self.fornecedor
+        )
+        self.assertEqual(novo_produto.sku, "MCATGOV0M")
+
