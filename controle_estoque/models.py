@@ -94,9 +94,6 @@ class Produto(models.Model):
     def __str__(self):
         return f'{self.descricao} {self.tamanho} - ean: {self.ean}'.title()
 
-    def save(self, *args, **kwargs):
-        super(Produto, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name = 'Produto'
         verbose_name_plural = 'Produtos'
