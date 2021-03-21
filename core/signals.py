@@ -60,8 +60,6 @@ def pre_save_ean_sku_limite_alerta_min(sender, instance, **kwargs):
             motivo_alteracao_preco=instance.motivo_alteracao_preco,
             criado_por=instance.criado_por
         )
-        instance.motivo_alteracao_preco = None
-        return
     instance.motivo_alteracao_preco = None
     return
 
