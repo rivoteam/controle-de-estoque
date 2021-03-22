@@ -1,7 +1,7 @@
 from random import choice, randint
 from django.contrib.auth.models import User
 from django.test import TestCase
-from controle_estoque.models import Produto, Subcategoria, Categoria, Fornecedor
+from controle_estoque.models import Produto, Subcategoria, Categoria, Fornecedor, HistoricoAtualizacaoPrecos
 from core.signals import generate_barcode
 
 
@@ -26,8 +26,8 @@ class EstoqueTest(TestCase):
 
         self.cores = ["Azul", "Verde", "Cinza", "Amarelo", "Preto", "Branco"]
         self.generos = ["Masculino", "Feminino", "Unissex"]
-        self.tamanho = [str(ns) for ns in range(1, 6)] + [str(n) for n in range(30, 62, 2)] + ["P", "M", "G", "GG",
-                                                                                               "XG"]
+        self.tamanhos = [str(ns) for ns in range(1, 6)] + [str(n) for n in range(30, 62, 2)] + ["P", "M", "G", "GG",
+                                                                                                "XG"]
         self.todas_categorias = Categoria.objects.all()
         self.todas_subcategorias = Subcategoria.objects.all()
 
@@ -37,7 +37,7 @@ class EstoqueTest(TestCase):
                 genero=choice(self.generos),
                 categoria=self.todas_categorias[randint(1, len(self.todas_categorias) - 1)],
                 subcategoria=self.todas_subcategorias[randint(1, len(self.todas_subcategorias) - 1)],
-                tamanho=choice(self.tamanho),
+                tamanho=choice(self.tamanhos),
                 cor=choice(self.cores),
                 min_pecas=randint(0, 40),
                 alerta_min=randint(41, 70),
@@ -50,6 +50,29 @@ class EstoqueTest(TestCase):
                 fornecedor=self.fornecedor
             )
         self.todos_produtos = Produto.objects.all()
+
+        # Para criação de um produto nos testes abaixo
+        self.categoria = Categoria.objects.get(categoria="Camiseta")
+        self.subcategoria = Subcategoria.objects.get(subcategoria="Gola V")
+        self.tamanho = "M"
+        self.genero = "Masculino"
+        self.novo_produto = Produto(
+            descricao=f"Descrição do Novo Produto",
+            genero=self.genero,
+            categoria=self.categoria,
+            subcategoria=self.subcategoria,
+            tamanho=self.tamanho,
+            cor="Azul",
+            min_pecas=20,
+            alerta_min=40,
+            total_pecas=70,
+            preco_compra=25,
+            preco_venda=45,
+            motivo_alteracao_preco="Novo produto",
+            auto_pedido=True,
+            criado_por=self.usuario,
+            fornecedor=self.fornecedor
+        )
 
     def test_len_Categoria(self):
         self.assertEqual(9, len(self.todas_categorias))
@@ -104,26 +127,20 @@ class EstoqueTest(TestCase):
                 self.assertEqual(produto.sku, f"{genero}{codigo_categoria}{codigo_subcategoria}{tamanho_sku}")
 
     def test_sku_creating_product(self):
-        categoria = Categoria.objects.get(categoria="Camiseta")
-        subcategoria = Subcategoria.objects.get(subcategoria="Gola V")
-        tamanho = "M"
-        genero = "Masculino"
-        novo_produto = Produto.objects.create(
-            descricao=f"Descrição do Novo Produto",
-            genero=genero,
-            categoria=categoria,
-            subcategoria=subcategoria,
-            tamanho=tamanho,
-            cor="Azul",
-            min_pecas=20,
-            alerta_min=40,
-            total_pecas=70,
-            preco_compra=25,
-            preco_venda=45,
-            motivo_alteracao_preco="Novo produto",
-            auto_pedido=True,
-            criado_por=self.usuario,
-            fornecedor=self.fornecedor
-        )
-        self.assertEqual(novo_produto.sku, "MCATGOV0M")
+        self.novo_produto.save()
+        self.assertEqual("MCATGOV0M", self.novo_produto.sku)
 
+    def test_create_product(self):
+        self.novo_produto.save()
+        historico = HistoricoAtualizacaoPrecos.objects.get(produto=self.novo_produto)
+        self.assertEqual(None, self.novo_produto.motivo_alteracao_preco)
+        self.assertEqual("Novo produto", historico.motivo_alteracao_preco)
+
+    def test_update_product_price(self):
+        self.novo_produto.save()
+        self.novo_produto.preco_venda += 10.00
+        self.novo_produto.motivo_alteracao_preco = "Reajuste"
+        self.novo_produto.save()
+        historico = HistoricoAtualizacaoPrecos.objects.filter(produto=self.novo_produto).first()
+        self.assertEqual(None, self.novo_produto.motivo_alteracao_preco)
+        self.assertEqual("Reajuste", historico.motivo_alteracao_preco)
