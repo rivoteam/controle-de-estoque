@@ -43,9 +43,6 @@ def generate_barcode(self):
 
 @receiver(pre_save, sender=Produto)
 def pre_save_product_data(sender, instance, **kwargs):
-    # motivo = instance.motivo_alteracao_preco
-    # instance.motivo_alteracao_preco = None
-
     tamanho_sku = f"{(2 - len(instance.tamanho)) * '0'}{instance.tamanho}"
     instance.limite_alerta_min = False if instance.total_pecas <= instance.alerta_min else True
     instance.ean = generate_barcode(self=instance.id) if not instance.ean else instance.ean
@@ -67,8 +64,7 @@ def post_save_price_update_history(sender, instance, **kwargs):
             motivo_alteracao_preco=instance.motivo_alteracao_preco,
             criado_por=instance.criado_por
         )
-    # import pdb; pdb.set_trace()
-    instance.motivo_alteracao_preco = None
+    Produto.objects.filter(pk=instance.pk).update(motivo_alteracao_preco=None)
     return
 
 '''
