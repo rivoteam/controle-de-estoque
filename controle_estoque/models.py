@@ -39,22 +39,12 @@ class Categoria(models.Model):
         super(Categoria, self).save(*args, **kwargs)
 
 
-
 class Subcategoria(models.Model):
     subcategoria = models.CharField(max_length=30)
     codigo = models.CharField(max_length=3)
 
     def __str__(self):
         return f'{self.subcategoria}'
-
-    # def save(self, *args, **kwargs):
-    #     subcategorias = Subcategoria.objects.all()
-    #     codigos = [subcategoria.codigo for subcategoria in subcategorias]
-    #     if not self.codigo in codigos:
-    #         super(Subcategoria, self).save(*args, **kwargs)
-    #     else:
-    #         self.codigo = 'NUL'
-    #         super(Subcategoria, self).save()
 
     class Meta:
         verbose_name = 'Subcategoria'
