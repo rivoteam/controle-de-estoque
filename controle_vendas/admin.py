@@ -15,8 +15,19 @@ class HistoricoVendasAdmin(admin.ModelAdmin):
         salva_criado_por(request, obj)
 
 
+@admin.register(CarrinhoVenda)
+class CarrinhoVendaAdmin(admin.ModelAdmin):
+    list_display = ['produto', 'quantidade', 'venda']
+
+
+class CarrinhoVendaInLine(admin.TabularInline):
+    model = CarrinhoVenda
+    extra = 0
+
+
 @admin.register(Venda)
 class VendaAdmin(admin.ModelAdmin):
+    inlines = [CarrinhoVendaInLine]
     list_display = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por', 'caixa',
                     'vendedor', 'desconto', 'forma_pagto', 'cpf']
     search_fields = ['id', 'valor_total_venda', 'descricao', 'nota_fiscal', 'criado_em', 'status', 'criado_por',
@@ -28,6 +39,3 @@ class VendaAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         salva_criado_por(request, obj)
-
-
-admin.site.register(CarrinhoVenda)
