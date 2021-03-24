@@ -4,8 +4,8 @@ from core.utils import GENERO_CHOICES, TAMANHO_CHOICES
 
 
 class Fornecedor(models.Model):
-    nome_empresa = models.CharField(max_length=150)
-    cnpj = models.CharField(max_length=15)
+    nome_empresa = models.CharField(unique=True, max_length=150)
+    cnpj = models.CharField(unique=True, max_length=15)
     telefone = models.CharField(max_length=11)
     endereco = models.CharField(max_length=300)
     pessoa_contato = models.CharField(max_length=100)
@@ -22,7 +22,7 @@ class Fornecedor(models.Model):
 
 
 class Categoria(models.Model):
-    categoria = models.CharField(max_length=30, unique=True)
+    categoria = models.CharField(unique=True, max_length=30, unique=True)
     codigo = models.CharField(max_length=3, unique=True)
 
     def __str__(self):
@@ -41,8 +41,8 @@ class Categoria(models.Model):
 
 
 class Subcategoria(models.Model):
-    subcategoria = models.CharField(max_length=30)
-    codigo = models.CharField(max_length=3)
+    subcategoria = models.CharField(unique=True, max_length=30)
+    codigo = models.CharField(unique=True, max_length=3)
 
     def __str__(self):
         return f'{self.subcategoria}'
@@ -82,8 +82,8 @@ class Produto(models.Model):
     preco_venda = models.DecimalField(max_digits=6, decimal_places=2)
     motivo_alteracao_preco = models.CharField(max_length=300, null=True)
     auto_pedido = models.BooleanField(default=False)
-    ean = models.CharField(max_length=13, editable=False)
-    sku = models.CharField(max_length=10, editable=False)
+    ean = models.CharField(unique=True, max_length=13, editable=False)
+    sku = models.CharField(unique=True, max_length=10, editable=False)
     fornecedor = models.ForeignKey("Fornecedor", on_delete=models.DO_NOTHING)
     criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='produto_criado_por', editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
