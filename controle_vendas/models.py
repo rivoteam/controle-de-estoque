@@ -19,9 +19,9 @@ class CarrinhoVenda(models.Model):
 class Venda(models.Model):
     descricao = models.TextField('Descrição da Venda', max_length=150, blank=True, null=True)
     status = models.SmallIntegerField('Status', choices=STATUS_VENDA_CHOICES, default=1)
-    caixa = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name='vendas_caixa',
+    caixa = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name='venda_caixa',
                               verbose_name='Operador/Caixa', help_text="Caixa que está efetuando a venda")
-    vendedor = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name='vendas_vendedor',
+    vendedor = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name='venda_vendedor',
                                  verbose_name="Vendedor", help_text="Vendedor que atendeu o cliente")
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
     cpf = models.CharField("CPF", max_length=30, null=True, blank=True)
@@ -30,7 +30,10 @@ class Venda(models.Model):
     forma_pagto = models.SmallIntegerField("Forma De Pagamento", choices=PAGAMENTO_CHOICES)
     valor_total_venda = models.DecimalField('Valor Total da Venda', decimal_places=2, max_digits=12, default=0)
     criado_em = models.DateTimeField('Venda Realizada Em', auto_now_add=True)
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='vendas_criadopor', editable=False)
+    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='venda_criadopor', editable=False)
+    atualizado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+                                       related_name='venda_atualizado_por', editable=False, null=True, blank=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Venda'
@@ -63,19 +66,3 @@ class Venda(models.Model):
         for produto in CarrinhoVenda.objects.filter(venda=self):
             queryset.update({"produto": produto.produto, "preco": produto.produto.preco_venda})
         return queryset
-
-
-class HistoricoVendas(models.Model):
-    vendas = models.ForeignKey(Venda, on_delete=models.DO_NOTHING)
-    status = models.SmallIntegerField(choices=STATUS_VENDA_CHOICES, default='Concluída')
-    valor_total_diario = models.DecimalField(max_digits=6, decimal_places=2)
-    vendedor = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name="historico_vendedor")
-    caixa = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, related_name="historico_caixa")
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="historico_criado",
-                                   editable=False)
-    criado_em = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'Histórico de Venda'
-        verbose_name_plural = 'Histórico de Vendas'
-        ordering = ['-criado_em']
