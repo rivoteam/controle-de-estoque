@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
+from controle_vendas.models import Venda
 
 
 @login_required()
@@ -59,3 +60,14 @@ def detalhe_pedido(request, pk):
         'produtos': produtos,
     }
     return render(request, 'modal_detalhe_pedido.html', context)
+
+
+@login_required()
+def lista_vendas(request):
+    context = {
+        "vendas": Venda.objects.all(),
+        "active": "lista-vendas"
+    }
+    return render(request, 'vendas.html', context)
+
+

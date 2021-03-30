@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
-from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos, user_logout
+from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos, user_logout, \
+    lista_vendas
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -10,6 +11,7 @@ urlpatterns = [
     # Listagem
     path('lista-pedidos', lista_pedidos, name="lista-pedidos"),
     path('lista-produtos', lista_produtos, name="lista-produtos"),
+    path('lista-vendas', lista_vendas, name="lista-vendas"),
 
     # Detalhes por object
     path('detalhe-produto/<int:pk>', detalhe_produto, name='detalhe_produto'),
