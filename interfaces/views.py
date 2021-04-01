@@ -59,3 +59,5 @@ def detalhe_pedido(request, pk):
         'produtos': produtos,
     }
     return render(request, 'modal_detalhe_pedido.html', context)
+
+
