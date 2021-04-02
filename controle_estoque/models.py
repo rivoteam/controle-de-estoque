@@ -91,16 +91,16 @@ class Produto(models.Model):
 
 
 class HistoricoAtualizacaoPrecos(models.Model):
-    produto = models.ForeignKey("controle_estoque.Produto", on_delete=models.DO_NOTHING,
+    produto = models.ForeignKey("controle_estoque.Produto", on_delete=models.CASCADE,
                                 related_name='hist_preco_produto')
     descricao = models.CharField(max_length=30)
     preco_compra = models.DecimalField(max_digits=6, decimal_places=2)
     preco_venda = models.DecimalField(max_digits=6, decimal_places=2)
     motivo_alteracao_preco = models.CharField(max_length=300)
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='hist_preco_criado_por',
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hist_preco_criado_por',
                                    editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+    atualizado_por = models.ForeignKey(User, on_delete=models.CASCADE,
                                        related_name='hist_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 

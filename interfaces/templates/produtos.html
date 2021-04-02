@@ -8,7 +8,8 @@
             <table class="table table-striped table-responsive-lg">
                 <thead class="thead-light">
                 <tr>
-                    <th class="text-center">#</th>
+                    <th>id</th>
+                    <th class="text-center">Produto</th>
                     <th>categoria</th>
                     <th>subcategoria</th>
                     <th>tamanho</th>
@@ -23,6 +24,7 @@
                 {% for produto in produtos %}
 
                     <tr>
+                        <td>{{produto.id}}</td>
                         <td>
                             <a href="#" onclick="open_modal_details('{% url 'detalhe_produto' produto.id %}')">
                                 Produto {{ produto.ean }}
@@ -35,8 +37,8 @@
                         <td> {{ produto.total_pecas }} </td>
                         <td> {{ produto.ean }} </td>
                         <td> {{ produto.sku }} </td>
-                        <td><i class="fa fa-edit text-info"></i></td>
-                        <td><i class="fa fa-trash text-danger"></i></td>
+                        <td><a href="{% url 'atualiza-produto' produto.id %}"><i class="fa fa-edit text-info"></i></a></td>
+                        <td><a href="{% url 'remove-produto' produto.id %}"><i class="fa fa-trash text-danger"></i></a></td>
                     </tr>
 
                 {% endfor %}

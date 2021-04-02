@@ -2,9 +2,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView, DeleteView
+
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
 from controle_vendas.models import Venda
+from interfaces.forms import NovoProdutoForm
 
 
 @login_required()
@@ -71,3 +75,35 @@ def lista_vendas(request):
     return render(request, 'vendas.html', context)
 
 
+@login_required()
+class CriaProduto(CreateView):
+    template_name = "cria-produto.html"
+    model = Produto
+    fields = "__all__"
+    context_object_name = "form"
+    success_url = reverse_lazy("lista-produtos")
+
+    def form_valid(self, form):
+        form.instance.criado_por = self.request.user
+        return super().form_valid(form)
+
+@login_required()
+class AtualizaProduto(UpdateView):
+    template_name = "cria-produto.html"
+    model = Produto
+    fields = "__all__"
+    success_url = reverse_lazy("lista-produtos")
+
+    def form_valid(self, form):
+        form.instance.atualizado_por = self.request.user
+        return super().form_valid(form)
+
+@login_required()
+def remove_produto(request, pk):
+    produto = Produto.objects.get(pk=pk)
+    produto.delete()
+    return HttpResponseRedirect("/lista-produtos")
+
+
+cria_produto = CriaProduto.as_view()
+atualiza_produto = AtualizaProduto.as_view()
