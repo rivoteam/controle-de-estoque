@@ -22,7 +22,7 @@ class Fornecedor(models.Model):
 
 
 class Categoria(models.Model):
-    categoria = models.CharField(unique=True, max_length=30, unique=True)
+    categoria = models.CharField(unique=True, max_length=30)
     codigo = models.CharField(max_length=3, unique=True)
 
     def __str__(self):
@@ -60,8 +60,8 @@ class Subcategoria(models.Model):
 class Produto(models.Model):
     descricao = models.CharField(max_length=50)
     genero = models.CharField(choices=GENERO_CHOICES, max_length=255)
-    categoria = models.ForeignKey("Categoria", on_delete=models.DO_NOTHING)
-    subcategoria = models.ForeignKey("Subcategoria", on_delete=models.DO_NOTHING)
+    categoria = models.ForeignKey("Categoria", on_delete=models.PROTECT)
+    subcategoria = models.ForeignKey("Subcategoria", on_delete=models.PROTECT)
     tamanho = models.CharField("Tamanho", choices=TAMANHO_CHOICES, max_length=5)
     cor = models.CharField(max_length=30)
     min_pecas = models.PositiveSmallIntegerField()
@@ -74,10 +74,10 @@ class Produto(models.Model):
     auto_pedido = models.BooleanField(default=False)
     ean = models.CharField(unique=True, max_length=13, editable=False)
     sku = models.CharField(unique=True, max_length=10, editable=False)
-    fornecedor = models.ForeignKey("Fornecedor", on_delete=models.DO_NOTHING)
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='produto_criado_por', editable=False)
+    fornecedor = models.ForeignKey("Fornecedor", on_delete=models.PROTECT)
+    criado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='produto_criado_por', editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+    atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT,
                                        related_name='produto_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
@@ -91,16 +91,16 @@ class Produto(models.Model):
 
 
 class HistoricoAtualizacaoPrecos(models.Model):
-    produto = models.ForeignKey("controle_estoque.Produto", on_delete=models.DO_NOTHING,
+    produto = models.ForeignKey("controle_estoque.Produto", on_delete=models.PROTECT,
                                 related_name='hist_preco_produto')
     descricao = models.CharField(max_length=30)
     preco_compra = models.DecimalField(max_digits=6, decimal_places=2)
     preco_venda = models.DecimalField(max_digits=6, decimal_places=2)
     motivo_alteracao_preco = models.CharField(max_length=300)
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='hist_preco_criado_por',
+    criado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='hist_preco_criado_por',
                                    editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+    atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT,
                                        related_name='hist_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 

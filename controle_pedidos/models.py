@@ -5,9 +5,9 @@ from core.utils import STATUS_COMPRA_CHOICES
 
 
 class CarrinhoPedido(models.Model):
-    produto = models.ForeignKey(Produto, on_delete=models.DO_NOTHING)
+    produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
     quantidade = models.IntegerField(default=1)
-    pedidocompra = models.ForeignKey("PedidoCompra", on_delete=models.DO_NOTHING)
+    pedidocompra = models.ForeignKey("PedidoCompra", on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.quantidade} peças de {self.produto.descricao}"
@@ -17,16 +17,16 @@ class CarrinhoPedido(models.Model):
 
 
 class PedidoCompra(models.Model):
-    fornecedor = models.ForeignKey('controle_estoque.Fornecedor', on_delete=models.DO_NOTHING, related_name='pedidos')
+    fornecedor = models.ForeignKey('controle_estoque.Fornecedor', on_delete=models.PROTECT, related_name='pedidos')
     preco_pedido = models.DecimalField('Preço Total do Pedido', decimal_places=2, max_digits=12, default=0)
     descricao = models.TextField('Descrição do Pedido', max_length=150, blank=True, null=True)
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
     data_pedido = models.DateTimeField('Pedido Realizado Em', auto_now_add=True)
     status = models.SmallIntegerField('Status', choices=STATUS_COMPRA_CHOICES, default=1)
-    criado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='pedido_criadopor',
+    criado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='pedido_criadopor',
                                    editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+    atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT,
                                        related_name='pedido_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
