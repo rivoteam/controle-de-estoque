@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from random import randint, choice
 from controle_estoque.models import Produto, Categoria, Subcategoria, Fornecedor
 from controle_pedidos.models import PedidoCompra, CarrinhoPedido
+from controle_vendas.models import Venda, CarrinhoVenda
 
 
 def run():
@@ -54,12 +55,26 @@ def run():
             fornecedor=fornecedor
         )
 
+    # Cria pedidos
     for p in range(5):
         PedidoCompra.objects.create(fornecedor=fornecedor, descricao=f"Pedido {p + 1}", criado_por=usuario)
 
     todos_produtos = Produto.objects.all()
     todos_pedidos = PedidoCompra.objects.all()
 
+    # Cria carrinho de pedido com produtos
     for p in range(40):
         CarrinhoPedido.objects.create(produto=choice(todos_produtos), quantidade=randint(1, 12),
                                       pedidocompra=choice(todos_pedidos))
+
+    # Cria vendas
+    for p in range(5):
+        Venda.objects.create(fornecedor=fornecedor, descricao=f"Pedido {p + 1}", criado_por=usuario)
+
+    todos_vendas = Venda.objects.all()
+
+    # Cria carrinho de venda com produtos
+    for p in range(40):
+        CarrinhoVenda.objects.create(produto=choice(todos_produtos), quantidade=randint(1, 12),
+                                      venda=choice(todos_pedidos))
+
