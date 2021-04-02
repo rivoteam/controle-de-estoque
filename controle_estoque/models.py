@@ -73,13 +73,14 @@ class Produto(models.Model):
     motivo_alteracao_preco = models.CharField(max_length=300, null=True)
     auto_pedido = models.BooleanField(default=False)
     ean = models.CharField(unique=True, max_length=13, editable=False)
-    sku = models.CharField(unique=True, max_length=10, editable=False)
+    sku = models.CharField(max_length=10, editable=False)   # adicionar na prox sprint unique=True
     fornecedor = models.ForeignKey("Fornecedor", on_delete=models.PROTECT)
     criado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='produto_criado_por', editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT,
                                        related_name='produto_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
+    ativo = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.descricao} {self.tamanho} - ean: {self.ean}'.title()
