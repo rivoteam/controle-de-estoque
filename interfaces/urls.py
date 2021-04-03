@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos, user_logout, \
-    lista_vendas, detalhe_venda, modal_cria_pedido, modal_atualiza_pedido, modal_remove_pedido
+    lista_vendas, detalhe_venda, modal_cria_pedido, modal_atualiza_pedido, modal_remove_pedido, remove_pedido
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -19,8 +19,12 @@ urlpatterns = [
     path('detalhe-venda/<int:pk>', detalhe_venda, name='detalhe_venda'),
 
     # Criação
-    # path('cria-pedido', cria_pedido, name='cria-pedido'),
     path('modal-cria-pedido', modal_cria_pedido, name='modal-cria-pedido'),
-    path('modal-atualiza-pedido', modal_atualiza_pedido, name='modal-atualiza-pedido'),
-    path('modal-remove-pedido', modal_remove_pedido, name='modal-remove-pedido'),
+
+    # Atualização
+    path('modal-atualiza-pedido/<int:pk>', modal_atualiza_pedido, name='modal-atualiza-pedido'),
+
+    # Remoção
+    path("remove-pedido/<int:pk>", remove_pedido, name="remove-pedido"),
+    path('modal-remove-pedido/<int:pk>', modal_remove_pedido, name='modal-remove-pedido'),
 ]

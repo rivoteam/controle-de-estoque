@@ -8,14 +8,11 @@
         <table class="table table-striped table-responsive-lg">
             <thead class="thead-light">
             <tr>
-                <th class="text-center">#</th>
+                <th class="text-center">Pedido</th>
                 <th>Fornecedor</th>
                 <th>Data Pedido</th>
                 <th>Qtd. Produtos</th>
                 <th>Status</th>
-                <th>Criado em</th>
-                <th>Criado Por</th>
-                <th>Atualizado em</th>
                 <th>Descrição</th>
 
                 <th colspan="2" class="text-center">Ações</th>
@@ -34,16 +31,13 @@
                 <td> {{ pedido.data_pedido }}</td>
                 <td> {{ pedido.get_len_produtos_comprados }} un.</td>
                 <td> {{ pedido.get_status_display }}</td>
-                <td> {{ pedido.criado_em }}</td>
-                <td> {{ pedido.criado_por }}</td>
-                <td> {{ pedido.atualizado_em }}</td>
                 {% if pedido.descricao == "" %}
                 <td> Sem descrição</td>
                 {% else %}
                 <td> {{ pedido.descricao }}</td>
                 {% endif %}
-                <td><a href="{% url 'modal-cria-pedido' %}"><i class="fa fa-edit text-info"></i></a>
-                    <a href="#" onclick="open_modal_cria('{% url 'modal-cria-pedido' %}')">
+                <td><a href="#" onclick="open_modal_cria('{% url 'modal-cria-pedido' %}')"><i class="fa fa-edit text-info"></i></a>
+                    <a href="#" onclick="open_modal_remove('{% url 'modal-remove-pedido' pedido.id %}')">
                         <i class="fa fa-trash text-danger"></i></a>
                 </td>
             </tr>
