@@ -9,19 +9,22 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if active == 'lista-produtos' %} active {% endif %}"  href="{% url 'lista-produtos' %}">
+                <a class="nav-link {% if active == 'lista-produtos' %} active {% endif %}"
+                   href="{% url 'lista-produtos' %}">
                     <i class="fa fa-list"></i>
                     <span class="nav-link-text">Produtos em Estoque</span>
                 </a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link {% if active == 'lista-pedidos' %} active {% endif %}"  href="{% url 'lista-pedidos' %}">
+                <a class="nav-link {% if active == 'lista-pedidos' %} active {% endif %}"
+                   href="{% url 'lista-pedidos' %}">
                     <i class="fa fa-list"></i>
                     <span class="nav-link-text">Listagem Pedidos</span>
                 </a>
             </li>
             <li class="nav-item">
-               <a class="nav-link {% if active == 'lista-vendas' %} active {% endif %}"  href="{% url 'lista-vendas' %}">
+                <a class="nav-link {% if active == 'lista-vendas' %} active {% endif %}"
+                   href="{% url 'lista-vendas' %}">
                     <i class="fa fa-pencil"></i>
                     <span class="nav-link-text">Listagem Vendas</span>
                 </a>
@@ -43,9 +46,9 @@
         <!-- Navigation -->
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link {% if active == "app-vendas" %} active {% endif %}" href="{% url 'appvendas' %}">
-                    <i class="fa fa-dollar-sign"></i>
-                    <span class="nav-link-text">App de Vendas</span>
+                <a class="nav-link {% if active == 'app-vendas' %} active {% endif %}" href="{% url 'appvendas' %}">
+                <i class="fa fa-dollar-sign"></i>
+                <span class="nav-link-text">App de Vendas</span>
                 </a>
             </li>
         </ul>

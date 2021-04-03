@@ -2,9 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, UpdateView
-
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, DeleteView, UpdateView
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
 from controle_vendas.models import Venda
@@ -74,6 +73,17 @@ def lista_vendas(request):
     return render(request, 'vendas.html', context)
 
 
+@login_required()
+def detalhe_venda(request, pk):
+    venda = Venda.objects.get(pk=pk)
+    produtos = venda.carrinhovenda_set.all()
+    context = {
+        'venda': venda,
+        'produtos': produtos,
+    }
+    return render(request, 'modal_detalhe_venda.html', context)
+
+
 # @login_required()
 class CriaProduto(CreateView):
     template_name = "cria-produto.html"
@@ -82,9 +92,18 @@ class CriaProduto(CreateView):
     context_object_name = "form"
     success_url = reverse_lazy("lista-produtos")
 
+
+class ModalCriaPedido(CreateView):
+    template_name = "modal_cria_pedido.html"
+    model = PedidoCompra
+    fields = "__all__"
+    context_object_name = "form"
+    success_url = reverse_lazy("lista-pedidos")
+
     def form_valid(self, form):
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
+
 
 # @login_required()
 class AtualizaProduto(UpdateView):
@@ -96,16 +115,6 @@ class AtualizaProduto(UpdateView):
     def form_valid(self, form):
         form.instance.atualizado_por = self.request.user
         return super().form_valid(form)
-
-# @login_required()
-# def remove_produto(request, pk):
-#     produto = Produto.objects.get(pk=pk)
-#     produto.delete()
-#     return HttpResponseRedirect("/lista-produtos")
-
-
-cria_produto = CriaProduto.as_view()
-atualiza_produto = AtualizaProduto.as_view()
 
 
 @login_required()
@@ -123,4 +132,30 @@ def remove_produto(request, pk):
     produto.ativo = False
     produto.save()
     return redirect(reverse('lista-produtos'))
+
+
+@login_required()
+def modal_atualiza_pedido(request):
+    pass
+
+
+@login_required()
+def modal_remove_pedido(request, pk):
+    pedido = get_object_or_404(PedidoCompra, pk=pk)
+    context = {
+        'pedido': pedido,
+    }
+    return render(request, 'modal_remove_pedido.html', context)
+
+
+@login_required()
+def remove_pedido(request, pk):
+    pedido = PedidoCompra.objects.get(pk=pk)
+    pedido.delete()
+    return redirect(reverse('lista-pedidos'))
+
+
+modal_cria_pedido = ModalCriaPedido.as_view()
+cria_produto = CriaProduto.as_view()
+atualiza_produto = AtualizaProduto.as_view()
 

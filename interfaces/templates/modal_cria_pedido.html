@@ -1,0 +1,27 @@
+{% load static %}
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-center">
+            <h3 class="modal-title">{{pedido}}</h3>
+            <button type="button" class="close" data-dismiss="modal">
+                <span class="text-danger">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="container mt-lg-4">
+                <div class="col-md-12">
+                    <form action="{% url 'modal-cria-pedido' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{form}}
+                        <button type="submit" class="btn btn-info mr-2" >Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mb-5">
+            <div class="row mt-5" style="position: absolute; right: 2em">
+                <button type="submit" class="btn btn-info mr-2" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

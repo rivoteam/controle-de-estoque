@@ -1,7 +1,7 @@
-from django.contrib import admin
 from django.urls import path
 from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos, user_logout, \
-    cria_produto, atualiza_produto, remove_produto, modal_remove_produto, lista_vendas
+    lista_vendas, detalhe_venda, modal_cria_pedido, modal_atualiza_pedido, modal_remove_pedido, remove_pedido, \
+    cria_produto, modal_remove_produto, remove_produto, atualiza_produto
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -15,14 +15,20 @@ urlpatterns = [
 
     # Criação
     path("cria-produto", cria_produto, name="cria-produto"),
-    path("atualiza-produto/<int:pk>", atualiza_produto, name="atualiza-produto"),
+    path('modal-cria-pedido', modal_cria_pedido, name='modal-cria-pedido'),
 
-    # Detalhes por object
+    # Detalhes
     path('detalhe-produto/<int:pk>', detalhe_produto, name='detalhe_produto'),
     path('detalhe-pedido/<int:pk>', detalhe_pedido, name='detalhe_pedido'),
+    path('detalhe-venda/<int:pk>', detalhe_venda, name='detalhe_venda'),
 
     # Remoção
     path('modal-remove-produto/<int:pk>', modal_remove_produto, name='modal-remove-produto'),
     path("remove-produto/<int:pk>", remove_produto, name="remove-produto"),
+    path('modal-remove-pedido/<int:pk>', modal_remove_pedido, name='modal-remove-pedido'),
+    path("remove-pedido/<int:pk>", remove_pedido, name="remove-pedido"),
 
+    # Atualização
+    path('modal-atualiza-pedido/<int:pk>', modal_atualiza_pedido, name='modal-atualiza-pedido'),
+    path("atualiza-produto/<int:pk>", atualiza_produto, name="atualiza-produto"),
 ]
