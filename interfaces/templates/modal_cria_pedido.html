@@ -1,0 +1,119 @@
+{% load static %}
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-center">
+            <h3 class="modal-title">{{pedido}}</h3>
+            <button type="button" class="close" data-dismiss="modal">
+                <span class="text-danger">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="container mt-lg-4">
+                <div class="col-md-12">
+                    <form action="" method="post">
+                        {% csrf_token %}
+
+                    <div class="row mt-lg-3">
+                        <div class="col-md-6 mb-4">
+                            <h4>Status</h4>
+                            <p>{{form.get_status_display}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Fornecedor</h4>
+                            <p>{{form.fornecedor}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Descrição</h4>
+                            {% if form.descricao == "" %}
+                            <p>Sem Descrição</p>
+                            {% else %}
+                            <p>{{form.descricao}}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Nota Fiscal</h4>
+                            {% if form.nota_fiscal%}
+                            <span class="text-center"><i class="fa fa-check-circle text-success"></i></span>
+                            {% else %}
+                                <span class="text-center"><i class="fa fa-times-circle text-danger"></i></span>
+                            {% endif %}
+                            <p>{{form.nota_fiscal}}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-3">
+                        <div class="col-md-6 mb-4">
+                            <h4>Data de Pedido</h4>
+                            <p>{{form.data_pedido}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Preço do Pedido</h4>
+                            <p>R$ {{form.preco_pedido}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Criado Por</h4>
+                            <p>{{form.criado_por|title}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Criado Em</h4>
+                            <p>{{form.criado_em}}</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Atualizado Por</h4>
+                            {% if form.atualizado_por == None %}
+                            <p>Sem Atualização</p>
+                            {% else %}
+                            <p>{{form.atualizado_por|title}}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Atualizado Em</h4>
+                            {% if form.atualizado_por == None %}
+                            <p>Sem Atualização</p>
+                            {% else %}
+                            <p>{{form.atualizado_em}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if produtos %}
+                    <div class="row mt-lg-12">
+                        <h4 class="text-center">Produtos</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="table" style="background-color: #5e72e4; color: #fff">
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Cor</th>
+                                    <th>Fornecedor</th>
+                                    <th>Preço de Compra</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for produto in produtos %}
+                                <tr>
+                                    <td>{{produto.produto.sku}}</td>
+                                    <td>{{produto.produto.cor}}</td>
+                                    <td>{{produto.produto.fornecedor}}</td>
+                                    <td>{{produto.produto.preco_compra}}</td>
+                                    <td>{{produto.quantidade}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}
+                    <h4>Sem produtos cadastrados para este pedido</h4>
+                    {% endif %}
+                        <button type="submit" class="btn btn-info mr-2">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mb-5">
+            <div class="row mt-5" style="position: absolute; right: 2em">
+                <button type="submit" class="btn btn-info mr-2" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

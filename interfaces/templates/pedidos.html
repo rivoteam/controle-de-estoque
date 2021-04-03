@@ -1,67 +1,91 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="card">
-        <div class="card-header">
-            <h3 class="text-darker">Listagem Pedidos</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped table-responsive-lg">
-                <thead class="thead-light">
-                <tr>
-                    <th class="text-center">#</th>
-                    <th>Fornecedor</th>
-                    <th>Data Pedido</th>
-                    <th>Qtd. Produtos</th>
-                    <th>Status</th>
-                    <th>Criado em</th>
-                    <th>Criado Por</th>
-                    <th>Atualizado em</th>
-                    <th>Descrição</th>
-
-                    <th colspan="2" class="text-center">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for pedido in pedidos %}
-
-                    <tr>
-                        <td>
-                            <a href="#" onclick="open_modal_details('{% url 'detalhe_pedido' pedido.id %}')">
-                                Pedido {{ pedido.id }}
-                            </a>
-                        </td>
-                        <td> {{ pedido.fornecedor }} </td>
-                        <td> {{ pedido.data_pedido }} </td>
-                        <td> {{ pedido.get_len_produtos_comprados }} un.</td>
-                        <td> {{ pedido.get_status_display }} </td>
-                        <td> {{ pedido.criado_em }} </td>
-                        <td> {{ pedido.criado_por }} </td>
-                        <td> {{ pedido.atualizado_em }} </td>
-                        {% if pedido.descricao == "" %}
-                            <td> Sem descrição</td>
-                        {% else %}
-                            <td> {{ pedido.descricao }} </td>
-                        {% endif %}
-                        <td><i class="fa fa-edit text-info"></i></td>
-                        <td><i class="fa fa-trash text-danger"></i></td>
-                    </tr>
-
-                {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-darker">Listagem Pedidos</h3>
     </div>
-    <div class="modal fade center" id="detail_modal" tabindex="-1" role="dialog"></div>
+    <div class="card-body">
+        <table class="table table-striped table-responsive-lg">
+            <thead class="thead-light">
+            <tr>
+                <th class="text-center">#</th>
+                <th>Fornecedor</th>
+                <th>Data Pedido</th>
+                <th>Qtd. Produtos</th>
+                <th>Status</th>
+                <th>Criado em</th>
+                <th>Criado Por</th>
+                <th>Atualizado em</th>
+                <th>Descrição</th>
+
+                <th colspan="2" class="text-center">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for pedido in pedidos %}
+
+            <tr>
+                <td>
+                    <a href="#" onclick="open_modal_details('{% url 'detalhe_pedido' pedido.id %}')">
+                        Pedido {{ pedido.id }}
+                    </a>
+                </td>
+                <td> {{ pedido.fornecedor }}</td>
+                <td> {{ pedido.data_pedido }}</td>
+                <td> {{ pedido.get_len_produtos_comprados }} un.</td>
+                <td> {{ pedido.get_status_display }}</td>
+                <td> {{ pedido.criado_em }}</td>
+                <td> {{ pedido.criado_por }}</td>
+                <td> {{ pedido.atualizado_em }}</td>
+                {% if pedido.descricao == "" %}
+                <td> Sem descrição</td>
+                {% else %}
+                <td> {{ pedido.descricao }}</td>
+                {% endif %}
+                <td><a href="{% url 'modal-cria-pedido' %}"><i class="fa fa-edit text-info"></i></a>
+                    <a href="#" onclick="open_modal_cria('{% url 'modal-cria-pedido' %}')">
+                        <i class="fa fa-trash text-danger"></i></a>
+                </td>
+            </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<div class="modal fade center" id="detail_modal" tabindex="-1" role="dialog"></div>
+<div class="modal fade center" id="cria_modal" tabindex="-1" role="dialog"></div>
+<div class="modal fade center" id="atualiza_modal" tabindex="-1" role="dialog"></div>
+<div class="modal fade center" id="remove_modal" tabindex="-1" role="dialog"></div>
 
 {% endblock %}
 
 {% block extrajs %}
-    <script>
+<script>
         function open_modal_details(url) {
             $('#detail_modal').focus().load(url, function () {
                 $(this).modal('show');
             })
         }
-    </script>
+
+        function open_modal_cria(url) {
+            var modal = $('#cria_modal').focus().load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
+        function open_modal_atualiza(url) {
+            var modal = $('#atualiza_modal').focus().load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
+        function open_modal_remove(url) {
+            var modal = $('#remove_modal').focus().load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
+</script>
 {% endblock %}
