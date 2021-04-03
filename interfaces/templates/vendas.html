@@ -8,7 +8,7 @@
             <table class="table table-striped table-responsive-lg">
                 <thead class="thead-light">
                 <tr>
-                    <th class="text-center">#</th>
+                    <th class="text-center">Vendas</th>
                     <th>Descrição</th>
                     <th>Status</th>
                     <th>Caixa</th>
@@ -28,8 +28,9 @@
 
                     <tr>
                         <td>
+                            <a href="#" onclick="open_modal_details('{% url 'detalhe_venda' venda.id %}')">
                             Venda {{ venda }}
-
+                            </a>
                         </td>
                         <td> {{ venda.descricao }} </td>
                         <td> {{ venda.status }} </td>
