@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-darker">Listagem de Vendas</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-responsive-lg">
+                <thead class="thead-light">
+                <tr>
+                    <th class="text-center">#</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Caixa</th>
+                    <th>Vendedor</th>
+                    <th>Nota Fiscal</th>
+                    <th>CPF</th>
+                    <th>Desconto</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Valor Total da Venda</th>
+                    <th>Criado Em</th>
+                    <th>Criado Por</th>
+                    <th colspan="2" class="text-center">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for venda in vendas %}
+
+                    <tr>
+                        <td>
+                            Venda {{ venda }}
+
+                        </td>
+                        <td> {{ venda.descricao }} </td>
+                        <td> {{ venda.status }} </td>
+                        <td> {{ venda.caixa }} </td>
+                        <td> {{ venda.vendedor }} </td>
+                        <td> {{ venda.nota_fiscal }} </td>
+                        <td> {{ venda.cpf }} </td>
+                        <td> {{ venda.desconto }} </td>
+                        <td> {{ venda.forma_pagto }} </td>
+                        <td> {{ venda.valor_total_venda }} </td>
+                        <td> {{ venda.criado_em }} </td>
+                        <td> {{ venda.criado_por }} </td>
+                        <td><i class="fa fa-edit text-info"></i></td>
+                        <td><i class="fa fa-trash text-danger"></i></td>
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="modal fade center" id="detail_modal" tabindex="-1" role="dialog"></div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+        function open_modal_details(url) {
+            $('#detail_modal').focus().load(url, function () {
+                $(this).modal('show');
+            })
+        }
+    </script>
+{% endblock %}
