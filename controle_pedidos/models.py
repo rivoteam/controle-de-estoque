@@ -23,6 +23,7 @@ class PedidoCompra(models.Model):
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
     data_pedido = models.DateTimeField('Pedido Realizado Em', auto_now_add=True)
     status = models.SmallIntegerField('Status', choices=STATUS_COMPRA_CHOICES, default=1)
+    ativo = models.BooleanField(default=True)
     criado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='pedido_criadopor',
                                    editable=False)
     criado_em = models.DateTimeField(auto_now_add=True)
