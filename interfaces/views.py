@@ -97,18 +97,16 @@ class ModalCriaPedido(CreateView):
         return super().form_valid(form)
 
 
-modal_cria_pedido = ModalCriaPedido.as_view()
+class ModalAtualizaPedido(UpdateView):
+    template_name = "modal_atualiza_pedido.html"
+    model = PedidoCompra
+    fields = "__all__"
+    context_object_name = "form"
+    success_url = reverse_lazy("lista-pedidos")
 
-
-@login_required()
-def modal_atualiza_pedido(request):
-    pass
-
-
-# class RemovePedido(UpdateView):
-#     template_name = "modal_remove_pedido"
-#     model = PedidoCompra
-#     success_url = reverse_lazy("lista-pedidos")
+    def form_valid(self, form):
+        form.instance.atualizado_por = self.request.user
+        return super().form_valid(form)
 
 
 @login_required()
@@ -127,12 +125,5 @@ def remove_pedido(request, pk):
     return redirect(reverse('lista-pedidos'))
 
 
-# modal_remove_pedido = RemovePedido.as_view()
-
-
-# @login_required()
-# def remove_pedido(request, pk):
-#     produto = Produto.objects.get(pk=pk)
-#     produto.ativo = False
-#     produto.save()
-#     return redirect(reverse('lista-pedidos'))
+modal_atualiza_pedido = ModalAtualizaPedido.as_view()
+modal_cria_pedido = ModalCriaPedido.as_view()
