@@ -19,7 +19,7 @@ class CarrinhoPedido(models.Model):
 class PedidoCompra(models.Model):
     fornecedor = models.ForeignKey('controle_estoque.Fornecedor', on_delete=models.PROTECT, related_name='pedidos')
     preco_pedido = models.DecimalField('Preço Total do Pedido', decimal_places=2, max_digits=12, default=0)
-    descricao = models.TextField('Descrição do Pedido', max_length=150, blank=True, null=True)
+    descricao = models.CharField('Descrição do Pedido', max_length=50, blank=True, null=True)
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
     data_pedido = models.DateTimeField('Pedido Realizado Em', auto_now_add=True)
     status = models.SmallIntegerField('Status', choices=STATUS_COMPRA_CHOICES, default=1)
