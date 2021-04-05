@@ -17,7 +17,7 @@ class CarrinhoVenda(models.Model):
 
 
 class Venda(models.Model):
-    descricao = models.TextField('Descrição da Venda', max_length=150, blank=True, null=True)
+    descricao = models.CharField('Descrição da Venda', max_length=50, blank=True, null=True)
     status = models.SmallIntegerField('Status', choices=STATUS_VENDA_CHOICES, default=1)
     caixa = models.ForeignKey(Funcionario, on_delete=models.PROTECT, related_name='venda_caixa',
                               verbose_name='Operador/Caixa', help_text="Caixa que está efetuando a venda")
