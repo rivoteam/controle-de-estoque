@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
+from interfaces.forms import PedidoForm
 
 
 @login_required()
@@ -59,3 +60,20 @@ def detalhe_pedido(request, pk):
         'produtos': produtos,
     }
     return render(request, 'modal_detalhe_pedido.html', context)
+
+
+def cria_pedido(request, pk=None):
+    form = PedidoForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if not pk is None:
+        pedido = PedidoCompra.objects.filter(pk=pk)
+        produtos = pedido.carrinhopedido_set.all()
+        context['pedido'] = pedido,
+        context['produtos'] = produtos
+    if form.is_valid():
+        form.instance.criado_por = request.user
+        form.save()
+        return HttpResponseRedirect('/lista-pedidos')
+    return render(request, 'cria-pedido.html', context)
