@@ -11,10 +11,12 @@
                 <span><strong>{{ produto }}</strong></span> ?</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-info" data-dismiss="modal">Não</button>
-            <a href="{% url 'remove-produto' produto.id %}">
+            <form action="{% url 'modal-remove-produto' produto.id %}" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Sim</button>
-            </a>
+            </form>
+            <button type="button" class="btn btn-info" data-dismiss="modal">Não</button>
         </div>
     </div>
 </div>

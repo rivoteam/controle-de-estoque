@@ -41,7 +41,7 @@
                         <td> {{ produto.total_pecas }}</td>
                         <td> {{ produto.ean }}</td>
                         <td> {{ produto.sku }}</td>
-                        <td><a href="#" onclick="open_modal('{% url 'modal_atualiza_produto' produto.id %}')">
+                        <td><a href="#" onclick="open_modal('{% url 'modal-atualiza-produto' produto.id %}')">
                                 <i class="fa fa-edit text-info"></i></a>
                             <a href="#" onclick="open_modal('{% url 'modal-remove-produto' produto.id %}')">
                                 <i class="fa fa-trash text-danger"></i></a>

@@ -85,19 +85,35 @@ def detalhe_venda(request, pk):
     return render(request, 'modal_detalhe_venda.html', context)
 
 
-# @login_required()
-class CriaProduto(CreateView):
-    template_name = "modal_cria_produto.html"
-    model = Produto
-    fields = "__all__"
-    context_object_name = "form"
-    success_url = reverse_lazy("lista-produtos")
+@login_required()
+def modal_cria_produto(request):
+    form = ProdutoForm(request.POST or None)
+    if form.is_valid():
+        form.instance.criado_por = request.user
+        form.save()
+        return redirect(reverse('lista-produtos'))
+    return render(request, 'modal_cria_produto.html', {'form': form})
 
-    def form_valid(self, form):
-        form.instance.criado_por = self.request.user
-        # form.instance.motivo_alteracao_preco = None
-        form.instance.ativo = True
-        return super().form_valid(form)
+
+def modal_atualiza_produto(request, pk):
+    produto = get_object_or_404(Produto, pk=pk)
+    form = ProdutoForm(request.POST or None, instance=produto)
+    if form.is_valid():
+        produto.atualizado_por = request.user
+        produto.save()
+        return redirect(reverse('lista-produtos'))
+    return render(request, 'modal_atualiza_produto.html', {'form': form})
+
+
+def modal_remove_produto(request, pk):
+    produto = get_object_or_404(Produto, pk=pk)
+    if request.POST:
+        produto.atualizado_por = request.user
+        produto.ativo = False
+        produto.save()
+        return redirect(reverse('lista-produtos'))
+    else:
+        return render(request, 'modal_remove_produto.html', {'produto': produto})
 
 
 class ModalCriaPedido(CreateView):
@@ -112,38 +128,6 @@ class ModalCriaPedido(CreateView):
         return super().form_valid(form)
 
 
-def modal_atualiza_produto(request, pk):
-    produto = get_object_or_404(Produto, pk=pk)
-    form = ProdutoForm(request.POST or None, instance=produto)
-    return render(request, 'modal_atualiza_produto.html')
-
-
-def atualiza_produto(request, pk):
-    produto = get_object_or_404(Produto, pk=pk)
-    form = ProdutoForm(request.POST or None, instance=produto)
-    if form.is_valid():
-        produto.criado_por = request.user
-        produto.save()
-        return redirect(reverse('lista-produtos'))
-    return render(request, 'modal_atualiza_produto.html')
-
-@login_required()
-def modal_remove_produto(request, pk):
-    produto = get_object_or_404(Produto, pk=pk)
-    context = {
-        'produto': produto,
-    }
-    return render(request, 'modal_remove_produto.html', context)
-
-
-@login_required()
-def remove_produto(request, pk):
-    produto = Produto.objects.get(pk=pk)
-    produto.ativo = False
-    produto.save()
-    return redirect(reverse('lista-produtos'))
-
-
 def modal_atualiza_pedido(request, pk):
     pedido = get_object_or_404(PedidoCompra, pk=pk)
     form = PedidoForm(request.POST or None, request.FILES or None, instance=pedido)
@@ -154,7 +138,7 @@ def atualiza_pedido(request, pk):
     pedido = get_object_or_404(PedidoCompra, pk=pk)
     form = PedidoForm(request.POST or None, request.FILES or None, instance=pedido)
     if form.is_valid():
-        pedido.criado_por = request.user
+        pedido.atualiza_por = request.user
         pedido.save()
         return HttpResponseRedirect('lista-pedidos')
     return render(request, 'atualiza_pedido.html', {'form': form})
@@ -172,25 +156,10 @@ def modal_remove_pedido(request, pk):
 @login_required()
 def remove_pedido(request, pk):
     pedido = PedidoCompra.objects.get(pk=pk)
-    pedido.criado_por = request.user
+    pedido.atualizado_por = request.user
     pedido.ativo = False
     pedido.save()
     return redirect(reverse('lista-pedidos'))
 
 
 modal_cria_pedido = ModalCriaPedido.as_view()
-modal_cria_produto = CriaProduto.as_view()
-
-
-# class ModalAtualizaPedido(UpdateView):
-#     template_name = "modal_atualiza_pedido.html"
-#     model = PedidoCompra
-#     fields = "__all__"
-#     context_object_name = "form"
-#     success_url = reverse_lazy("lista-pedidos")
-#
-#     def form_valid(self, form):
-#         form.instance.atualizado_por = self.request.user
-#         return super().form_valid(form)
-
-# modal_atualiza_pedido = ModalAtualizaPedido.as_view()

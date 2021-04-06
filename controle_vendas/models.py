@@ -39,6 +39,7 @@ class Venda(models.Model):
     class Meta:
         verbose_name = 'Venda'
         verbose_name_plural = 'Vendas'
+        ordering = ['-id']
 
     def __str__(self):
         try:

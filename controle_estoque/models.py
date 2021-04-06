@@ -88,7 +88,7 @@ class Produto(models.Model):
     class Meta:
         verbose_name = 'Produto'
         verbose_name_plural = 'Produtos'
-        ordering = ['descricao']
+        ordering = ['-id']
 
 
 class HistoricoAtualizacaoPrecos(models.Model):

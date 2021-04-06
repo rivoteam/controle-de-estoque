@@ -16,7 +16,7 @@ class CarrinhoPedidoInLine(admin.TabularInline):
 @admin.register(PedidoCompra)
 class PedidoAdmin(admin.ModelAdmin):
     inlines = [CarrinhoPedidoInLine]
-    list_display = ["fornecedor", "ativo", "preco_pedido", "descricao", "nota_fiscal", "data_pedido", "status",
+    list_display = ["id", "fornecedor", "ativo", "preco_pedido", "descricao", "nota_fiscal", "data_pedido", "status",
                     "criado_por", "criado_em", "atualizado_por", "atualizado_em"]
     search_fields = ["fornecedor", "ativo", "preco_pedido", "descricao", "nota_fiscal", "data_pedido", "status",
                      "criado_por", "criado_em", "atualizado_por", "atualizado_em"]
