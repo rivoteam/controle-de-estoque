@@ -7,7 +7,7 @@ from django.views.generic import CreateView, DeleteView, UpdateView
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
 from controle_vendas.models import Venda
-from interfaces.forms import PedidoForm
+from interfaces.forms import PedidoForm, ProdutoForm
 
 
 @login_required()
@@ -111,6 +111,21 @@ class ModalCriaPedido(CreateView):
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
+
+def modal_atualiza_produto(request, pk):
+    produto = get_object_or_404(Produto, pk=pk)
+    form = ProdutoForm(request.POST or None, instance=produto)
+    return render(request, 'modal_atualiza_produto.html')
+
+
+def atualiza_produto(request, pk):
+    produto = get_object_or_404(Produto, pk=pk)
+    form = ProdutoForm(request.POST or None, instance=produto)
+    if form.is_valid():
+        produto.criado_por = request.user
+        produto.save()
+        return redirect(reverse('lista-produtos'))
+    return render(request, 'modal_atualiza_produto.html')
 
 @login_required()
 def modal_remove_produto(request, pk):

@@ -4,7 +4,7 @@
         <div class="card-header">
             <div style="display: flex; align-items: center; justify-content: space-between">
                 <h3 class="text-darker">Listagem de Produtos</h3>
-                <a href="#" onclick="open_modal_cria('{% url 'modal-cria-produto' %}')">
+                <a href="#" onclick="open_modal('{% url 'modal-cria-produto' %}')">
                     <button class="btn btn-info mr-2" type="submit">Criar Novo Produto</button>
                 </a>
             </div>
@@ -30,7 +30,7 @@
                     <tr>
                         <td>{{ produto.id }}</td>
                         <td>
-                            <a href="#" onclick="open_modal_details('{% url 'detalhe_produto' produto.id %}')">
+                            <a href="#" onclick="open_modal('{% url 'detalhe_produto' produto.id %}')">
                                 Produto {{ produto.ean }}
                             </a>
                         </td>
@@ -41,8 +41,9 @@
                         <td> {{ produto.total_pecas }}</td>
                         <td> {{ produto.ean }}</td>
                         <td> {{ produto.sku }}</td>
-                        <td><a href="#"><i class="fa fa-edit text-info"></i></a>
-                            <a href="#" onclick="open_modal_remove('{% url 'modal-remove-produto' produto.id %}')">
+                        <td><a href="#" onclick="open_modal('{% url 'modal_atualiza_produto' produto.id %}')">
+                                <i class="fa fa-edit text-info"></i></a>
+                            <a href="#" onclick="open_modal('{% url 'modal-remove-produto' produto.id %}')">
                                 <i class="fa fa-trash text-danger"></i></a>
                         </td>
                     </tr>
@@ -51,32 +52,14 @@
             </table>
         </div>
     </div>
-    <div class="modal fade center" id="detail_modal" tabindex="-1" role="dialog"></div>
-    <div class="modal fade center" id="cria_modal" tabindex="-1" role="dialog"></div>
-    <div class="modal fade center" id="remove_modal" tabindex="-1" role="dialog"></div>
-
+    <div class="modal fade center" id="open-modal" tabindex="-1" role="dialog"></div>
 {% endblock %}
-
 {% block extrajs %}
     <script>
-        function open_modal_details(url) {
-            $('#detail_modal').focus().load(url, function () {
+        function open_modal(url) {
+            $('#open-modal').focus().load(url, function () {
                 $(this).modal('show');
             })
         }
-
-         function open_modal_cria(url) {
-            var modal = $('#cria_modal').focus().load(url, function () {
-                $(this).modal('show');
-            })
-        }
-
-
-        function open_modal_remove(url) {
-            var modal = $('#remove_modal').focus().load(url, function () {
-                $(this).modal('show');
-            })
-        }
-
     </script>
 {% endblock %}
