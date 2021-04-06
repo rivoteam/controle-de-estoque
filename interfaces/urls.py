@@ -1,7 +1,6 @@
 from django.urls import path
 from .views import homepage, appvendas, lista_pedidos, detalhe_produto, detalhe_pedido, lista_produtos, user_logout, \
-    lista_vendas, detalhe_venda, modal_cria_pedido, modal_atualiza_pedido, modal_remove_pedido, remove_pedido, \
-    cria_produto, modal_remove_produto, remove_produto, atualiza_produto
+    lista_vendas, detalhe_venda, modal_cria_pedido, modal_atualiza_pedido, modal_remove_pedido, remove_pedido, modal_remove_produto, remove_produto, atualiza_pedido, modal_cria_produto
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -14,7 +13,7 @@ urlpatterns = [
     path('lista-vendas', lista_vendas, name="lista-vendas"),
 
     # Criação
-    path("cria-produto", cria_produto, name="cria-produto"),
+    path("modal-cria-produto", modal_cria_produto, name="modal-cria-produto"),
     path('modal-cria-pedido', modal_cria_pedido, name='modal-cria-pedido'),
 
     # Detalhes
@@ -30,5 +29,6 @@ urlpatterns = [
 
     # Atualização
     path('modal-atualiza-pedido/<int:pk>', modal_atualiza_pedido, name='modal-atualiza-pedido'),
-    path("atualiza-produto/<int:pk>", atualiza_produto, name="atualiza-produto"),
+    # path("atualiza-produto/<int:pk>", atualiza_produto, name="atualiza-produto"),
+    path('atualiza-pedido/<int:pk>', atualiza_pedido, name='atualiza-pedido'),
 ]

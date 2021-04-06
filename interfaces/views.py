@@ -7,6 +7,7 @@ from django.views.generic import CreateView, DeleteView, UpdateView
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
 from controle_vendas.models import Venda
+from interfaces.forms import PedidoForm
 
 
 @login_required()
@@ -31,7 +32,7 @@ def appvendas(request):
 @login_required()
 def lista_produtos(request):
     context = {
-        "produtos": Produto.objects.all(),
+        "produtos": Produto.objects.filter(ativo=True),
         "active": "lista-produtos"
     }
     return render(request, 'produtos.html', context)
@@ -47,7 +48,7 @@ def detalhe_produto(request, pk):
 @login_required()
 def lista_pedidos(request):
     context = {
-        "pedidos": PedidoCompra.objects.all(),
+        "pedidos": PedidoCompra.objects.filter(ativo=True),
         "active": "lista-pedidos"
     }
     return render(request, 'pedidos.html', context)
@@ -67,7 +68,7 @@ def detalhe_pedido(request, pk):
 @login_required()
 def lista_vendas(request):
     context = {
-        "vendas": Venda.objects.all(),
+        "vendas": Venda.objects.filter(ativo=True),
         "active": "lista-vendas"
     }
     return render(request, 'vendas.html', context)
@@ -86,11 +87,17 @@ def detalhe_venda(request, pk):
 
 # @login_required()
 class CriaProduto(CreateView):
-    template_name = "cria-produto.html"
+    template_name = "modal_cria_produto.html"
     model = Produto
     fields = "__all__"
     context_object_name = "form"
     success_url = reverse_lazy("lista-produtos")
+
+    def form_valid(self, form):
+        form.instance.criado_por = self.request.user
+        # form.instance.motivo_alteracao_preco = None
+        form.instance.ativo = True
+        return super().form_valid(form)
 
 
 class ModalCriaPedido(CreateView):
@@ -102,18 +109,6 @@ class ModalCriaPedido(CreateView):
 
     def form_valid(self, form):
         form.instance.criado_por = self.request.user
-        return super().form_valid(form)
-
-
-# @login_required()
-class AtualizaProduto(UpdateView):
-    template_name = "cria-produto.html"
-    model = Produto
-    fields = "__all__"
-    success_url = reverse_lazy("lista-produtos")
-
-    def form_valid(self, form):
-        form.instance.atualizado_por = self.request.user
         return super().form_valid(form)
 
 
@@ -134,9 +129,20 @@ def remove_produto(request, pk):
     return redirect(reverse('lista-produtos'))
 
 
-@login_required()
-def modal_atualiza_pedido(request):
-    pass
+def modal_atualiza_pedido(request, pk):
+    pedido = get_object_or_404(PedidoCompra, pk=pk)
+    form = PedidoForm(request.POST or None, request.FILES or None, instance=pedido)
+    return render(request, 'atualiza_pedido.html', {'form': form})
+
+
+def atualiza_pedido(request, pk):
+    pedido = get_object_or_404(PedidoCompra, pk=pk)
+    form = PedidoForm(request.POST or None, request.FILES or None, instance=pedido)
+    if form.is_valid():
+        pedido.criado_por = request.user
+        pedido.save()
+        return HttpResponseRedirect('lista-pedidos')
+    return render(request, 'atualiza_pedido.html', {'form': form})
 
 
 @login_required()
@@ -151,11 +157,25 @@ def modal_remove_pedido(request, pk):
 @login_required()
 def remove_pedido(request, pk):
     pedido = PedidoCompra.objects.get(pk=pk)
-    pedido.delete()
+    pedido.criado_por = request.user
+    pedido.ativo = False
+    pedido.save()
     return redirect(reverse('lista-pedidos'))
 
 
 modal_cria_pedido = ModalCriaPedido.as_view()
-cria_produto = CriaProduto.as_view()
-atualiza_produto = AtualizaProduto.as_view()
+modal_cria_produto = CriaProduto.as_view()
 
+
+# class ModalAtualizaPedido(UpdateView):
+#     template_name = "modal_atualiza_pedido.html"
+#     model = PedidoCompra
+#     fields = "__all__"
+#     context_object_name = "form"
+#     success_url = reverse_lazy("lista-pedidos")
+#
+#     def form_valid(self, form):
+#         form.instance.atualizado_por = self.request.user
+#         return super().form_valid(form)
+
+# modal_atualiza_pedido = ModalAtualizaPedido.as_view()

@@ -6,4 +6,4 @@ from controle_pedidos.models import PedidoCompra
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = PedidoCompra
-        fields = "__all__"
+        fields = ['status', 'fornecedor', 'descricao', 'nota_fiscal']
