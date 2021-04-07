@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header text-center">
@@ -10,71 +11,17 @@
         <div class="modal-body">
             <div class="container mt-lg-4">
                 <div class="col-md-12">
-                    <form action="{% url 'modal-cria-produto' %}" method="post" enctype="multipart/form-data" method="post">
+                    <form action="{% url 'modal-cria-produto' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form }}
-{#                        <div class="row mt-lg-3">#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Descrição</h4>#}
-{#                                <p>{{ form.descricao }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Gênero</h4>#}
-{#                                <p>{{ form.genero|title }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Categoria</h4>#}
-{#                                <p>{{ form.categoria }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Sub Categoria</h4>#}
-{#                                <p>{{ form.subcategoria }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Tamanho</h4>#}
-{#                                <p>{{ form.tamanho }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Cor</h4>#}
-{#                                <p>{{ form.cor }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Mínimo de Peças em Estoque</h4>#}
-{#                                <p>{{ form.min_pecas }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Alerta Mínimo de Peças</h4>#}
-{#                                <p>{{ form.alerta_min }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Total Peças em Estoque</h4>#}
-{#                                <p>{{ form.total_pecas }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Preço Compra</h4>#}
-{#                                <p>R$ {{ form.preco_compra }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Preço Venda</h4>#}
-{#                                <p>R$ {{ form.preco_venda }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Pedido Automático </h4>#}
-{#                                {{ form.auto_pedido }}#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Fornecedor</h4>#}
-{#                                <p>{{ form.fornecedor }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Motivo da Alteração</h4>#}
-{#                                <p>{{ form.motivo_alteracao_preco }}</p>#}
-{#                            </div>#}
-{#                            <div class="col-md-6 mb-4">#}
-{#                                <h4>Ativo</h4>#}
-{#                                <p>{{ form.ativo }}</p>#}
-{#                            </div>#}
-{#                        </div>#}
+                        <div class="row mt-lg-3">
+                            {% for field in form %}
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ field.auto_id }}"><strong>{{ field.label }}</strong></label>
+                                    {% render_field field class="form-control" %}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
                         <button type="submit" class="btn btn-info mr-2">Salvar</button>
                     </form>
                 </div>

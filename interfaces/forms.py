@@ -13,5 +13,5 @@ class PedidoForm(forms.ModelForm):
 class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
-        fields = ['descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'min_pecas', 'alerta_min',
-                  'total_pecas', 'preco_compra', 'preco_venda', 'motivo_alteracao_preco', 'auto_pedido', 'fornecedor']
+        fields = ['descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'preco_compra', 'preco_venda',
+                  'min_pecas', 'alerta_min', 'total_pecas', 'motivo_alteracao_preco', 'fornecedor', 'auto_pedido']
