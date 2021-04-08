@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Total vendas</h5>
-                            <span class="h2 font-weight-bold mb-0">1</span>
+                            <span class="h2 font-weight-bold mb-0">{{ qtd_vendas }}</span>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Produtos em alerta minimo</h5>
-                            <span class="h2 font-weight-bold mb-0">X Produtos </span>
+                            <span class="h2 font-weight-bold mb-0">{{ qtd_produtos_limite_alerta_min}} </span>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -53,7 +53,7 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Produtos</h5>
-                            <span class="h2 font-weight-bold mb-0">153 Produtos</span>
+                            <span class="h2 font-weight-bold mb-0">{{ qtd_produtos}}</span>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">

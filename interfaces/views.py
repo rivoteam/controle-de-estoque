@@ -4,11 +4,22 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
+from controle_vendas.models import Venda
 
 
 @login_required()
 def homepage(request):
-    return render(request, 'homepage.html', {'active': 'homepage'})
+    qtd_produtos = Produto.objects.filter(ativo=True).count()
+    qtd_produtos_limite_alerta_min = Produto.objects.filter(ativo=True, limite_alerta_min=False).count()
+    qtd_vendas = Venda.objects.filter(ativo=True).count()
+
+    context = {
+        'active': 'homepage',
+        'qtd_produtos': qtd_produtos,
+        'qtd_vendas': qtd_vendas,
+        'qtd_produtos_limite_alerta_min':qtd_produtos_limite_alerta_min
+    }
+    return render(request, 'homepage.html', context)
 
 @login_required()
 def user_logout(request):
