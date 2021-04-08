@@ -85,7 +85,7 @@ let app = new Vue({
 
             const csrftoken = getCookie('csrftoken');
             console.log(csrftoken)
-            axios.post("{% url 'post_realiza_vendas' %}", data = this.produtos, headers = {
+            axios.post("api-rest/produto/realiza_vendas/", data = this.produtos, headers = {
                 'csrftoken': csrftoken
             })
                 .then(response => {
