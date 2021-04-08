@@ -7,14 +7,16 @@
             </button>
         </div>
         <div class="modal-body">
-            <p>Tem certeza que deseja deletar esse Pedido:
+            <p>Tem certeza que deseja deletar esse pedido:
                 <span><strong>{{ pedido }}</strong></span> ?</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-info" data-dismiss="modal">Não</button>
-            <a href="{% url 'remove-pedido' pedido.id %}">
+            <form action="{% url 'modal-remove-pedido' pedido.id %}" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Sim</button>
-            </a>
+            </form>
+            <button type="button" class="btn btn-info" data-dismiss="modal">Não</button>
         </div>
     </div>
 </div>
