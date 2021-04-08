@@ -15,7 +15,7 @@
                         {% csrf_token %}
                         <div class="row mt-lg-3">
                             {% for field in form %}
-                                <div class="col-md-6 mb-4">
+                                <div class="col-md-4 mb-4">
                                     <label for="{{ field.auto_id }}"><strong>{{ field.label }}</strong></label>
                                     {% render_field field class="form-control" %}
                                     {{ field.errors }}
