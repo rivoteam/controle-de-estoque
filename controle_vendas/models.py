@@ -17,7 +17,7 @@ class CarrinhoVenda(models.Model):
 
 
 class Venda(models.Model):
-    descricao = models.TextField('Descrição da Venda', max_length=150, blank=True, null=True)
+    descricao = models.CharField('Descrição da Venda', max_length=50, blank=True, null=True)
     status = models.SmallIntegerField('Status', choices=STATUS_VENDA_CHOICES, default=1)
     caixa = models.ForeignKey(Funcionario, on_delete=models.PROTECT, related_name='venda_caixa',
                               verbose_name='Operador/Caixa', help_text="Caixa que está efetuando a venda")
@@ -29,6 +29,7 @@ class Venda(models.Model):
                                    help_text="Digite o valor de desconto da venda, exemplo R$ 10,00")
     forma_pagto = models.SmallIntegerField("Forma De Pagamento", choices=PAGAMENTO_CHOICES)
     valor_total_venda = models.DecimalField('Valor Total da Venda', decimal_places=2, max_digits=12, default=0)
+    ativo = models.BooleanField(default=True)
     criado_em = models.DateTimeField('Venda Realizada Em', auto_now_add=True)
     criado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='venda_criadopor', editable=False)
     atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT,
