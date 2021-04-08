@@ -17,13 +17,14 @@ let app = new Vue({
         }
     },
     methods: {
-        validateProdutoinProdutosCart(produto_ean) {
+        validateProdutoinProdutosCart(produto_ean, quantidade) {
             console.log(produto_ean)
             var i;
             for (i = 0; i < this.produtos.length; i++) {
                 console.log(this.produtos[i].produto.ean)
                 if (this.produtos[i].produto.ean === produto_ean) {
-                    this.errors.push("Produto já consta na lista de compra")
+                    this.produtos[i].quantidade += Number(quantidade)
+                    this.errors.push("Produto já consta na lista de compra, quantidade adicionada ao produto")
                     return true
                 }
             }
@@ -34,7 +35,7 @@ let app = new Vue({
                     .then(response => {
                         if (response.status === 200) {
                             this.errors = []
-                            if (!this.validateProdutoinProdutosCart(this.produto_ean)) {
+                            if (!this.validateProdutoinProdutosCart(this.produto_ean, this.quantidade)) {
                                 this.produtos.push(
                                     {
                                         'produto': response.data,
