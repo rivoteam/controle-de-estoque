@@ -7,7 +7,11 @@ let app = new Vue({
             quantidade: 1,
             produtos: [],
             valor_total: 0.00,
-            errors: []
+            errors: [],
+            cpf: false,
+            vendedor: '',
+            numCpf: '',
+            formaPagamento: ''
         }
     },
     computed: {
@@ -85,7 +89,12 @@ let app = new Vue({
 
             const csrftoken = getCookie('csrftoken');
             console.log(csrftoken)
-            axios.post("api-rest/produto/realiza_vendas/", data = this.produtos, headers = {
+            axios.post("api-rest/produto/realiza_vendas/", data = {
+                "produtos": this.produtos,
+                "vendedor": this.vendedor,
+                "numerocpf": this.numCpf,
+                "forma_pgto": this.formaPagamento
+            }, headers = {
                 'csrftoken': csrftoken
             })
                 .then(response => {

@@ -5,5 +5,14 @@ from .models import Venda
 class VendaForm(forms.ModelForm):
     class Meta:
         model = Venda
-        fields = ['nota_fiscal', 'forma_pagto', 'vendedor']
-        widgets = {}
+        fields = ['forma_pagto', 'vendedor']
+        widgets = {
+            'forma_pagto': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'pagamento',
+            }),
+            'vendedor': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'vendedor',
+            })
+        }

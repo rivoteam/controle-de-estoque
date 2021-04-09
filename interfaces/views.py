@@ -6,6 +6,7 @@ from controle_estoque.models import Produto
 from controle_pedidos.models import PedidoCompra
 from controle_vendas.models import Venda
 import datetime
+from controle_vendas.forms import VendaForm
 
 
 @login_required()
@@ -51,6 +52,7 @@ def user_logout(request):
 @login_required()
 def appvendas(request):
     context = {
+        'form': VendaForm(),
         'produtos': Produto.objects.all(),
         "active": "app-vendas"
     }

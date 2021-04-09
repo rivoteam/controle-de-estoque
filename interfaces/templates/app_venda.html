@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block content %}
     <div id="vue-app">
         <div class="card">
@@ -17,9 +18,6 @@
                             <div class="col-sm-5">
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     <span class="alert-text"><strong>Atenção</strong> [[error]]</span>
-                                    <button type="button" class="close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -51,13 +49,13 @@
                     </div>
                 </form>
 
-                <div class="col-sm-12 mt-15 pt-5 mb-lg-5">
+                <div class="col-sm-12 pt-5 mb-lg-5">
                     <template v-if="produtos.length">
                         <div class="card-header text-center">
 
                             <h2>Lista de produtos selecionados:</h2>
                         </div>
-                        <table class="table table-responsive mt-lg-5">
+                        <table class="table table-responsive mt-5">
                             <thead class="thead-active text-muted">
                             <tr>
                                 <th scope="col">Produtos</th>
@@ -98,16 +96,44 @@
                             </template>
                             </tbody>
                         </table>
+                        <div class="form-group mt-lg-5">
+                            <div class="form-row align-items-center justify-content-center">
+                                <div class="col-3" style="text-align: center">
+                                    <label for="vendedor">Vendedor</label>
+                                    {% render_field form.vendedor v-model="vendedor" %}
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-3" style="text-align: center">
+                                    <label for="pagamento">Forma de Pagamento</label>
+                                    {% render_field form.forma_pagto v-model="formaPagamento" %}
+                                </div>
+                            </div>
+                            <div class="form-row mt-5 align-items-center justify-content-center">
+                                <div class="col-3 inline-block text-center align-bottom">
+                                    <input type="checkbox" class="custom-control-input" id="cpf" v-model="cpf">
+                                    <label class="custom-control-label" for="cpf">Adicionar CPF</label>
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-3" style="text-align: center">
+                                    <template v-if="cpf">
+                                        <label for="numerocpf">CPF</label>
+                                        <input type="text" class="form-control cpf" id="numerocpf" name="numerocpf"
+                                               maxlength="13" v-model="numCpf">
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                 </div>
-                <div class="row mt-5 d-flex justify-content-center">
-
-                    <h3 class="mr-5">Valor total: [[ valor_total.toLocaleString(
-                        'pt-br',{style: 'currency', currency: 'BRL'}) ]]</h3>
-                    <button @click="realiza_venda" class="btn btn-success mr-5">
-                        Finalizar Venda
-                        <i aria-hidden="true" class="fas fa-money-bill-wave"></i>
-                    </button>
+                <div class="form-row mt-5 align-items-center justify-content-center">
+                    <div class="form-group">
+                        <h3>Valor total: [[ valor_total.toLocaleString(
+                            'pt-br',{style: 'currency', currency: 'BRL'}) ]]</h3>
+                        <button @click="realiza_venda" class="btn btn-success mr-5">
+                            Realizar Venda
+                            <i aria-hidden="true" class="fas fa-store ml-2"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
