@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+    <div id="vue-app">
+        <div class="card">
+            <div class="card-header text-center mt-2">
+                <h2 class="card-text">App de Venda</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert-warning" v-if="errors">
+
+                </div>
+                <form @submit.prevent="add_produto" name="produtos_comprados">
+                    {% csrf_token %}
+                    <div class="col-sm-12 padding-off">
+                        <div class="row justify-content-center" v-if="errors.length" v-for="error in errors">
+                            <div class="col-sm-5">
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <span class="alert-text"><strong>Atenção</strong> [[error]]</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-3">
+                                <div class="form-group-inline">
+                                    <label class="sr-only" for="Produto"></label>
+                                    <input type="text" id="Produto" name="produto_ean"
+                                           class="form-control" placeholder="Digite o EAN do produto"
+                                           v-model="produto_ean" maxlength="13"
+                                           data-ls-module="charCounter"/>
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <div class="form-group-inline">
+                                    <label class="sr-only" for="quantidade"></label>
+                                    <input type="text" id="quantidade" name="newDomain"
+                                           class="form-control" v-model="quantidade"/>
+                                </div>
+                            </div>
+                            <div class="col-1 ">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <i aria-hidden="true" class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="col-sm-12 pt-5 mb-lg-5">
+                    <template v-if="produtos.length">
+                        <div class="card-header text-center">
+
+                            <h2>Lista de produtos selecionados:</h2>
+                        </div>
+                        <table class="table table-responsive mt-5">
+                            <thead class="thead-active text-muted">
+                            <tr>
+                                <th scope="col">Produtos</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Subcategoria</th>
+                                <th scope="col">Tamanho</th>
+                                <th scope="col">Quantidade</th>
+                                <th scope="col">Cor</th>
+                                <th scope="col">Genero</th>
+                                <th scope="col">Codigo de Barras</th>
+                                <th scope="col">Em estoque</th>
+                                <th scope="col">Preço</th>
+                                <th scope="col">Remover</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template v-for="produto in produtos">
+                                <tr>
+                                    <td>[[ produto.produto.descricao ]]</td>
+                                    <td>[[ produto.produto.nome_categoria ]]</td>
+                                    <td>[[ produto.produto.nome_subcategoria ]]</td>
+                                    <td>[[ produto.produto.tamanho ]]</td>
+                                    <td>[[ produto.quantidade ]]</td>
+                                    <td>[[ produto.produto.cor ]]</td>
+                                    <td>[[ produto.produto.genero ]]</td>
+                                    <td>[[ produto.produto.ean ]]</td>
+                                    <td>[[ produto.produto.total_pecas ]]</td>
+                                    <td>[[ (produto.produto.preco_venda * produto.quantidade).toLocaleString(
+                                        'pt-br',{style: 'currency', currency: 'BRL'}) ]]
+                                    </td>
+                                    <td>
+                                        <button @click="remove_produto(produto)" class="btn btn-sm btn-danger">
+                                            <i aria-hidden="true" class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </template>
+                            </tbody>
+                        </table>
+                        <div class="form-group mt-lg-5">
+                            <div class="form-row align-items-center justify-content-center">
+                                <div class="col-3" style="text-align: center">
+                                    <label for="vendedor">Vendedor</label>
+                                    {% render_field form.vendedor v-model="vendedor" %}
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-3" style="text-align: center">
+                                    <label for="pagamento">Forma de Pagamento</label>
+                                    {% render_field form.forma_pagto v-model="formaPagamento" %}
+                                </div>
+                            </div>
+                            <div class="form-row mt-5 align-items-center justify-content-center">
+                                <div class="col-3 inline-block text-center align-bottom">
+                                    <input type="checkbox" class="custom-control-input" id="cpf" v-model="cpf">
+                                    <label class="custom-control-label" for="cpf">Adicionar CPF</label>
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-3" style="text-align: center">
+                                    <template v-if="cpf">
+                                        <label for="numerocpf">CPF</label>
+                                        <input type="text" class="form-control cpf" id="numerocpf" name="numerocpf"
+                                               maxlength="13" v-model="numCpf">
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div class="form-row mt-5 align-items-center justify-content-center">
+                    <div class="form-group">
+                        <h3>Valor total: [[ valor_total.toLocaleString(
+                            'pt-br',{style: 'currency', currency: 'BRL'}) ]]</h3>
+                        <button @click="realiza_venda" class="btn btn-success mr-5">
+                            Realizar Venda
+                            <i aria-hidden="true" class="fas fa-store ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extrajs %}
+    <script src="{% static 'js/appvenda.js' %}"></script>
+{% endblock %}

@@ -32,15 +32,15 @@ class SubcategoriaAdmin(admin.ModelAdmin):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'descricao', 'categoria', 'subcategoria', 'tamanho', 'cor', 'min_pecas',
+    list_display = ['id', "ativo", 'descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'min_pecas',
                     'alerta_min', 'limite_alerta_min', 'total_pecas', 'preco_compra', 'preco_venda',
                     'motivo_alteracao_preco', 'auto_pedido', 'ean',
                     'sku', 'fornecedor', 'criado_por', 'criado_em', 'atualizado_por', 'atualizado_em', ]
-    search_fields = ['id', 'descricao', 'categoria', 'subcategoria', 'tamanho', 'cor', 'alerta_min',
+    search_fields = ['id', "ativo", 'descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'alerta_min',
                      'limite_alerta_min', 'motivo_alteracao_preco', 'auto_pedido', 'ean', 'sku',
                      'fornecedor', 'criado_por', 'criado_em',
                      'atualizado_por', 'atualizado_em', ]
-    list_filter = ['descricao',  'categoria', 'subcategoria', 'tamanho', 'cor', 'alerta_min',
+    list_filter = ["ativo", 'descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'alerta_min',
                    'limite_alerta_min', 'motivo_alteracao_preco', 'auto_pedido', 'ean', 'sku',
                    'fornecedor', 'criado_por', 'criado_em',
                    'atualizado_por', 'atualizado_em', ]

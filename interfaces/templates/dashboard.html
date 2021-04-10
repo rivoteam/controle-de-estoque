@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <!-- Card stats -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" style="height: 120px">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total vendas</h5>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-coins" style="font-size: 32px"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="h2 font-weight-bold mt-3">{{ qtd_vendas }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" style="height: 120px">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Produtos em alerta minimo</h5>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation" style="font-size: 32px"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="h2 font-weight-bold mb-0">{{ qtd_produtos_limite_alerta_min }} </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" style="height: 120px">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Produtos</h5>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tshirt" style="font-size: 32px"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="h2 font-weight-bold mb-0">{{ qtd_produtos }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" style="height: 120px">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-poll" style="font-size: 32px"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="h2 font-weight-bold mb-0">49,65%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Faturamento nos ultimos 12 meses</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="last_months_graph" class="chart line-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extrajs %}
+    <script>
+        var ctx = document.getElementById('last_months_graph');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['{{mes_11}}', '{{mes_10}}', '{{mes_9}}', '{{mes_8}}', '{{mes_7}}', '{{mes_6}}', '{{mes_5}}',
+                    '{{mes_4}}', '{{mes_3}}', '{{mes_2}}', '{{mes_1}}', '{{mes_0}}',],
+                datasets: [{
+                    label: 'R$ ',
+                    data: ['{{registro_11}}', '{{registro_10}}', '{{registro_9}}', '{{registro_8}}', '{{registro_7}}',
+                        '{{registro_6}}', '{{registro_5}}', '{{registro_4}}', '{{registro_3}}', '{{registro_2}}',
+                        '{{registro_1}}', '{{registro_0}}'],
+                    backgroundColor: 'rgb(84, 56, 143)',
+                    fill: false,
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    lineTension: 0,
+                }]
+            },
+            options: {
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            return `R$: ${Number(tooltipItem.yLabel).toFixed(2)}`;
+                        }
+                    }
+                },
+            }
+        });
+    </script>
+{% endblock %}

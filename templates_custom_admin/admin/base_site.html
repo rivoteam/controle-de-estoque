@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Arara Modas') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Arara Modas<br />Administração e Controle Geral</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+

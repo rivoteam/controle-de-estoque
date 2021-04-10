@@ -1,7 +1,7 @@
-from django.contrib import admin
 from django.urls import path
-from .views import homepage
+from .views import dashboard, user_logout
 
 urlpatterns = [
-    path('', homepage, name="homepage"),
+    path('', dashboard, name="dashboard"),
+    path('logout/', user_logout, name="logout"),
 ]

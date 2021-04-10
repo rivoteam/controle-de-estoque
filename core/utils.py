@@ -1,8 +1,64 @@
-import csv
+from django.conf import settings
+from django.core import mail
 from datetime import datetime
-
+import csv
 import xlwt
 from django.http import HttpResponse
+import logging
+
+logger = logging.getLogger(__name__)
+
+# from random import randint
+# from controle_estoque.models import Produto
+
+
+# def generate_barcode(self):
+#     code_id = str(randint(7890000000000, 7899999999999))
+#     if not Produto.objects.filter(ean=code_id).first() is None:
+#         self.generate_barcode()
+#     return code_id
+
+
+GENERO_CHOICES = (
+    ('masculino', "Masculino"),
+    ('feminino', "Feminino"),
+    ('unissex', "Unissex"),
+)
+
+STATUS_COMPRA_CHOICES = (
+    (1, 'Gerado'),
+    (2, 'Em separação'),
+    (3, 'Enviado'),
+    (4, 'Mecadoria Recebida'),
+    (5, 'Concluído'),
+)
+
+CARGOS_CHOICES = (
+    ("estoquista", "Estoquista"),
+    ("caixa", "Caixa"),
+    ("vendedor", "Vendedor"),
+    ("analista", "Analista"),
+    ("gerente", "Gerente"),
+)
+
+STATUS_VENDA_CHOICES = (
+    (1, 'Pendente'),
+    (2, 'Cancelada'),
+    (3, 'Concluída'),
+)
+
+PAGAMENTO_CHOICES = (
+    (1, 'Debito'),
+    (2, 'Credito'),
+    (3, 'Dinheiro'),
+    (4, 'PicPay'),
+    (5, 'Pix'),
+)
+
+numeros_social = tuple((str(n), str(n)) for n in range(1, 6))
+numeros = tuple((str(n), str(n)) for n in range(30, 62, 2))
+letras = tuple((l, l) for l in ["P", "M", "G", "GG", "XG"])
+TAMANHO_CHOICES = numeros_social + numeros + letras
 
 
 def export_as_csv(self, request, queryset):
@@ -55,43 +111,36 @@ def salva_criado_por(request, obj):
     obj.save()
 
 
-GENERO_CHOICES = (
-    ('masculino', "Masculino"),
-    ('feminino', "Feminino"),
-    ('unissex', "Unissex"),
-)
+def send_email_logs():
+    logger.info('Email enviado com sucesso!')
+    filename = 'logs.log'
 
-STATUS_COMPRA_CHOICES = (
-    (1, 'Gerado'),
-    (2, 'Em separação'),
-    (3, 'Enviado'),
-    (4, 'Concluído'),
-)
+    email_default = settings.DEFAULT_FROM_EMAIL
 
-CARGOS_CHOICES = (
-    ("estoquista", "Estoquista"),
-    ("caixa", "Caixa"),
-    ("vendedor", "Vendedor"),
-    ("analista", "Analista"),
-    ("gerente", "Gerente"),
-)
+    with open(filename) as logfile:
+        mail.EmailMessage(
+            'Novo log gerado',
+            'Mensagem de teste de envio de email do Django',
+            email_default,
+            [email_default],
+            attachments=[(filename, logfile.read(), 'text/plain')]
+        ).send()
 
-STATUS_VENDA_CHOICES = (
-    (1, 'Pendente'),
-    (2, 'Cancelada'),
-    (3, 'Concluída'),
-)
 
-PAGAMENTO_CHOICES = (
-    (1, 'Debito'),
-    (2, 'Credito'),
-    (3, 'Dinheiro'),
-    (4, 'PicPay'),
-    (5, 'Pix'),
-)
+def teste_logging():
+    logger.warning("Resposta do teste de logging warning")
+    # logger_django.info("INFO = Mostra os logs do django")
+    # logger_django.warning("WARNING = Mostra os logs do django")
 
-numeros_social = tuple((str(n), str(n)) for n in range(1, 6))
-numeros = tuple((str(n), str(n)) for n in range(30, 62, 2))
-letras = tuple((l, l) for l in ["P", "M", "G", "GG", "XG"])
-TAMANHO_CHOICES = numeros_social + numeros + letras
 
+# //TODO Deixar esse código comentado por enquanto
+'''
+def generate_barcode(self):
+    code_id = str(randint(7890000000000, 7899999999999))
+    if not Produto.objects.filter(ean=code_id).first() is None:
+        self.generate_barcode()
+    ean_number = barcode.get('ean13', code_id)
+    barcodes_folder = Path(__file__).resolve().parent / "barcodes"
+    ean_number.save()
+    return code_id
+'''

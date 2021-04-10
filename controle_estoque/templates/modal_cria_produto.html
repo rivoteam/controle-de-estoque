@@ -1,0 +1,36 @@
+{% load static %}
+{% load widget_tweaks %}
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-center">
+            <h3 class="modal-title">Cadastrar Novo Produto</h3>
+            <button type="button" class="close" data-dismiss="modal">
+                <span class="text-danger">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="container mt-lg-4">
+                <div class="col-md-12">
+                    <form action="{% url 'modal-cria-produto' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row mt-lg-3">
+                            {% for field in form %}
+                                <div class="col-md-4 mb-4">
+                                    <label for="{{ field.auto_id }}"><strong>{{ field.label }}</strong></label>
+                                    {% render_field field class="form-control" %}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-info mr-2">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mb-5">
+            <div class="row mt-5" style="position: absolute; right: 2em">
+                <button type="submit" class="btn btn-info mr-2" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
