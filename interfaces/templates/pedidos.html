@@ -41,9 +41,9 @@
                         {% else %}
                             <td> {{ pedido.descricao }}</td>
                         {% endif %}
-                        <td style="display: flex; align-items: center; justify-content: space-between"><a href="#"
-                                                  onclick="open_modal_atualiza('{% url 'modal-atualiza-pedido' pedido.id %}')"><i
-                                class="fa fa-edit text-info"></i></a>
+                        <td style="display: flex; align-items: center; justify-content: space-between">
+                            <a href="#" onclick="open_modal_atualiza('{% url 'modal-atualiza-pedido' pedido.id %}')">
+                                <i class="fa fa-edit text-info"></i></a>
                             <a href="#" onclick="open_modal_remove('{% url 'modal-remove-pedido' pedido.id %}')">
                                 <i class="fa fa-trash text-danger"></i></a>
                         </td>
