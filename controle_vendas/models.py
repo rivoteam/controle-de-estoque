@@ -15,6 +15,9 @@ class CarrinhoVenda(models.Model):
     def get_total_preco_produto(self):
         return self.quantidade * self.produto.preco_venda
 
+    def get_total_faturado(self):
+        return  (self.quantidade * self.produto.preco_venda) - (self.quantidade * self.produto.preco_compra)
+
 
 class Venda(models.Model):
     descricao = models.CharField('Descrição da Venda', max_length=50, blank=True, null=True)
@@ -51,6 +54,12 @@ class Venda(models.Model):
         total = 0
         for order_item in CarrinhoVenda.objects.filter(venda_id=self.id):
             total += order_item.get_total_preco_produto()
+        return total
+
+    def calc_faturamento(self):
+        total = 0
+        for order_item in CarrinhoVenda.objects.filter(venda_id=self.id):
+            total += order_item.get_total_faturado()
         return total
 
     def save(self, *args, **kwargs):

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <div id="vue-app">
         <div class="card">
-            <div class="card-header text-center mt-lg-5">
+            <div class="card-header text-center mt-2">
                 <h2 class="card-text">App de Venda</h2>
             </div>
             <div class="card-body">
@@ -12,23 +13,34 @@
                 <form @submit.prevent="add_produto" name="produtos_comprados">
                     {% csrf_token %}
                     <div class="col-sm-12 padding-off">
-                        <div class="row">
-                            <div class="col-sm-7">
+                        <div class="row justify-content-center" v-if="errors.length" v-for="error in errors">
+                            <div class="col-sm-5">
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <span class="alert-text"><strong>Atenção</strong> [[error]]</span>
+                                    <button type="button" class="close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-3">
                                 <div class="form-group-inline">
                                     <label class="sr-only" for="Produto"></label>
                                     <input type="text" id="Produto" name="produto_ean"
                                            class="form-control" placeholder="Digite o EAN do produto"
-                                           v-model="produto_ean" maxlength="13" data-ls-module="charCounter"/>
+                                           v-model="produto_ean" maxlength="13"
+                                           data-ls-module="charCounter"/>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-1">
                                 <div class="form-group-inline">
                                     <label class="sr-only" for="quantidade"></label>
                                     <input type="text" id="quantidade" name="newDomain"
                                            class="form-control" v-model="quantidade"/>
                                 </div>
                             </div>
-                            <div class="col-sm-2 padding-off">
+                            <div class="col-1 ">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-success btn-block">
                                         <i aria-hidden="true" class="fa fa-plus"></i>
@@ -36,7 +48,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </form>
 
@@ -46,7 +57,7 @@
 
                             <h2>Lista de produtos selecionados:</h2>
                         </div>
-                        <table class="table table-responsive-lg mt-lg-5">
+                        <table class="table table-responsive mt-lg-5">
                             <thead class="thead-active text-muted">
                             <tr>
                                 <th scope="col">Produtos</th>
@@ -71,11 +82,12 @@
                                     <td>[[ produto.produto.tamanho ]]</td>
                                     <td>[[ produto.quantidade ]]</td>
                                     <td>[[ produto.produto.cor ]]</td>
-                                    <td>[[ produto.produto.genero.toUpperCase() ]]</td>
+                                    <td>[[ produto.produto.genero ]]</td>
                                     <td>[[ produto.produto.ean ]]</td>
                                     <td>[[ produto.produto.total_pecas ]]</td>
                                     <td>[[ (produto.produto.preco_venda * produto.quantidade).toLocaleString(
-                                            'pt-br',{style: 'currency', currency: 'BRL'}) ]]</td>
+                                        'pt-br',{style: 'currency', currency: 'BRL'}) ]]
+                                    </td>
                                     <td>
                                         <button @click="remove_produto(produto)" class="btn btn-sm btn-danger">
                                             <i aria-hidden="true" class="fa fa-times"></i>
@@ -88,7 +100,7 @@
                         </table>
                     </template>
                 </div>
-                <div class="row mt-lg-5 d-flex justify-content-center">
+                <div class="row mt-5 d-flex justify-content-center">
 
                     <h3 class="mr-5">Valor total: [[ valor_total.toLocaleString(
                         'pt-br',{style: 'currency', currency: 'BRL'}) ]]</h3>
@@ -103,90 +115,5 @@
 
 {% endblock %}
 {% block extrajs %}
-    <script type="text/javascript">
-        let app = new Vue({
-            el: "#vue-app",
-            delimiters: ['[[', ']]'],
-            data: {
-                produto_ean: '',
-                quantidade: 1,
-                produtos: [],
-                valor_total: 0.00,
-                errors: '',
-                http: "{% url 'api_http' %}"
-            },
-            methods: {
-                add_produto() {
-                    if (this.produto_ean === "") {
-                        this.errors = "Não encontrado"
-                        console.log(this.errors)
-                    } else {
-                        axios.get(`${this.http}produto/${this.produto_ean}`)
-                            .then(response => {
-                                if (response.status === 200) {
-                                    this.produtos.push(
-                                        {
-                                            'produto': response.data,
-                                            "quantidade": this.quantidade
-                                        }
-                                    )
-                                    this.produto_ean = ""
-                                    this.valor_total += (Number(response.data.preco_venda) * this.quantidade)
-                                    this.quantidade = 1
-                                }
-                            })
-                            .catch(error => {
-                                if (error.response) {
-                                    console.log(error.response.status);
-                                }
-                                if (error === 404) {
-                                    //this.errors = response.data
-                                    console.log(this.errors)
-                                }
-                                console.log(error);
-                            })
-                    }
-                },
-                remove_produto(produto) {
-                    this.valor_total -= (Number(this.produtos[this.produtos.indexOf(produto)].produto.preco_venda) *
-                        this.produtos[this.produtos.indexOf(produto)].quantidade)
-                    this.produtos.splice(this.produtos.indexOf(produto), 1)
-                    if (this.produtos.length === 0) {
-                        this.valor_total = 0
-                    }
-                },
-                realiza_venda() {
-                    function getCookie(name) {
-                        let cookieValue = null;
-                        if (document.cookie && document.cookie !== '') {
-                            const cookies = document.cookie.split(';');
-                            for (let i = 0; i < cookies.length; i++) {
-                                const cookie = cookies[i].trim();
-                                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                    break;
-                                }
-                            }
-                        }
-                        return cookieValue;
-                    }
-
-                    const csrftoken = getCookie('csrftoken');
-                    console.log(csrftoken)
-                    axios.post("{% url 'post_realiza_vendas' %}", data = this.produtos, headers = {
-                        'csrftoken': csrftoken
-                    })
-                        .then(response => {
-                            if (response.status === 200) {
-                                console.log("realizado", response)
-                                location.reload()
-                            }
-                        })
-                        .catch(error => {
-                            console.log(error.response);
-                        })
-                }
-            }
-        })
-    </script>
+    <script src="{% static 'js/appvenda.js' %}"></script>
 {% endblock %}
