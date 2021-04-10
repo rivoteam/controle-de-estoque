@@ -17,7 +17,7 @@ class Funcionario(models.Model):
     ativo = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.funcionario} - {self.cargo_funcionario}'
+        return f'{self.funcionario.first_name} {self.funcionario.last_name}'
 
     class Meta:
         verbose_name = 'Funcionário'

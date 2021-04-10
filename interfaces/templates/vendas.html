@@ -8,43 +8,35 @@
             <table class="table table-striped table-responsive-lg">
                 <thead class="thead-light">
                 <tr>
-                    <th class="text-center">Venda</th>
-                    <th>Descrição</th>
+                    <th class="text-center">Vendas</th>
                     <th>Status</th>
                     <th>Caixa</th>
                     <th>Vendedor</th>
-                    <th>Nota Fiscal</th>
-                    <th>CPF</th>
                     <th>Desconto</th>
-                    <th>Forma de Pagamento</th>
                     <th>Valor Total da Venda</th>
+                    <th>Forma de Pagamento</th>
                     <th>Criado Em</th>
-                    <th>Criado Por</th>
-                    <th colspan="2" class="text-center">Ações</th>
+                    <th>Descrição</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for venda in vendas %}
-
                     <tr>
-                        <td>
-                            <a href="#" onclick="open_modal_details('{% url 'detalhe_venda' venda.id %}')">
-                            Venda {{ venda }}
-                            </a>
+                        <td><a href="#"
+                               onclick="open_modal_details('{% url 'detalhe_venda' venda.id %}')">Venda {{ venda }}</a>
                         </td>
-                        <td> {{ venda.descricao }} </td>
-                        <td> {{ venda.status }} </td>
+                        <td> {{ venda.get_status_display }} </td>
                         <td> {{ venda.caixa }} </td>
                         <td> {{ venda.vendedor }} </td>
-                        <td> {{ venda.nota_fiscal }} </td>
-                        <td> {{ venda.cpf }} </td>
                         <td> {{ venda.desconto }} </td>
-                        <td> {{ venda.forma_pagto }} </td>
-                        <td> {{ venda.valor_total_venda }} </td>
+                        <td> R$ {{ venda.valor_total_venda }} </td>
+                        <td> {{ venda.get_forma_pagto_display }} </td>
                         <td> {{ venda.criado_em }} </td>
-                        <td> {{ venda.criado_por }} </td>
-                        <td><i class="fa fa-edit text-info"></i></td>
-                        <td><i class="fa fa-trash text-danger"></i></td>
+                        {% if venda.descricao == None %}
+                            <td>Sem descrição</td>
+                        {% else %}
+                            <td>{{ venda.descricao }}</td>
+                        {% endif %}
                     </tr>
 
                 {% endfor %}

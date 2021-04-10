@@ -16,7 +16,7 @@ class CarrinhoVenda(models.Model):
         return self.quantidade * self.produto.preco_venda
 
     def get_total_faturado(self):
-        return  (self.quantidade * self.produto.preco_venda) - (self.quantidade * self.produto.preco_compra)
+        return (self.quantidade * self.produto.preco_venda) - (self.quantidade * self.produto.preco_compra)
 
 
 class Venda(models.Model):
@@ -42,12 +42,10 @@ class Venda(models.Model):
     class Meta:
         verbose_name = 'Venda'
         verbose_name_plural = 'Vendas'
+        ordering = ['-id']
 
     def __str__(self):
-        try:
-            return f'Venda {self.id} - {self.criado_em.strftime("%d/%m/%Y - %H:%M:%S")}'
-        except AttributeError:
-            return f'Venda {self.id} - {self.criado_em}'
+        return f'{self.id}'
 
     def calc_total(self):
         total = 0

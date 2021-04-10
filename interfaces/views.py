@@ -127,7 +127,6 @@ def modal_cria_produto(request):
         return redirect(reverse('lista-produtos'))
     return render(request, 'modal_cria_produto.html', {'form': form})
 
-
 def modal_atualiza_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     form = ProdutoForm(request.POST or None, instance=produto)
@@ -177,3 +176,4 @@ def modal_remove_pedido(request, pk):
         return redirect(reverse('lista-pedidos'))
     else:
         return render(request, 'modal_remove_pedido.html', {'pedido': pedido})
+

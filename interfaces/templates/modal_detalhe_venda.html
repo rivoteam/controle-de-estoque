@@ -2,7 +2,7 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header text-center">
-            <h3 class="modal-title">{{venda}}</h3>
+            <h3 class="modal-title">{{ venda }}</h3>
             <button type="button" class="close" data-dismiss="modal">
                 <span class="text-danger">x</span>
             </button>
@@ -13,90 +13,90 @@
                     <div class="row mt-lg-3">
                         <div class="col-md-6 mb-4">
                             <h4>Status</h4>
-                            <p>{{venda.get_status_display}}</p>
+                            <p>{{ venda.get_status_display }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Descrição</h4>
-                            {% if venda.descricao == "" %}
-                            <p>Sem Descrição</p>
+                            {% if venda.descricao == None %}
+                                <p>Sem Descrição</p>
                             {% else %}
-                            <p>{{venda.descricao}}</p>
+                                <p>{{ venda.descricao }}</p>
                             {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Caixa</h4>
-                            <p>{{venda.caixa}}</p>
+                            <p>{{ venda.caixa }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Vendedor</h4>
-                            <p>{{venda.vendedor}}</p>
+                            <p>{{ venda.vendedor }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>CPF Consumidor</h4>
-                            <p>{{venda.cpf}}</p>
+                            <p>{{ venda.cpf }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Nota Fiscal</h4>
-                            {% if venda.nota_fiscal%}
-                            <span class="text-center"><i class="fa fa-check-circle text-success"></i></span>
+                            {% if venda.nota_fiscal %}
+                                <span class="text-center"><i class="fa fa-check-circle text-success"></i></span>
                             {% else %}
                                 <span class="text-center"><i class="fa fa-times-circle text-danger"></i></span>
                             {% endif %}
-                            <p>{{venda.nota_fiscal}}</p>
+                            <p>{{ venda.nota_fiscal }}</p>
                         </div>
                     </div>
                     <div class="row mt-lg-3">
                         <div class="col-md-6 mb-4">
                             <h4>Data da Venda</h4>
-                            <p>{{venda.criado_em}}</p>
+                            <p>{{ venda.criado_em }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Desconto</h4>
-                            <p>{{venda.desconto}}</p>
+                            <p>{{ venda.desconto }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Valor Total da Venda</h4>
-                            <p>R$ {{venda.valor_total_venda}}</p>
+                            <p>R$ {{ venda.valor_total_venda }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Forma de Pagamento</h4>
-                            <p>{{venda.forma_pagto}}</p>
+                            <p>{{ venda.get_forma_pagto_display }}</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Criado Por</h4>
-                            <p>{{venda.criado_por|title}}</p>
+                            <p>{{ venda.criado_por|title }}</p>
                         </div>
                     </div>
                     {% if produtos %}
-                    <div class="row mt-lg-12">
-                        <h4 class="text-center">Produtos</h4>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="table" style="background-color: #5e72e4; color: #fff">
-                                <tr>
-                                    <th>SKU</th>
-                                    <th>Cor</th>
-                                    <th>Fornecedor</th>
-                                    <th>Preço de Compra</th>
-                                    <th>Quantidade</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for produto in produtos %}
-                                <tr>
-                                    <td>{{produto.produto.sku}}</td>
-                                    <td>{{produto.produto.cor}}</td>
-                                    <td>{{produto.produto.fornecedor}}</td>
-                                    <td>{{produto.produto.preco_compra}}</td>
-                                    <td>{{produto.quantidade}}</td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="row mt-lg-12">
+                            <h4 class="text-center">Produtos</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="table" style="background-color: #5e72e4; color: #fff">
+                                    <tr>
+                                        <th>SKU</th>
+                                        <th>Cor</th>
+                                        <th>Fornecedor</th>
+                                        <th>Preço de Compra</th>
+                                        <th>Quantidade</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for produto in produtos %}
+                                        <tr>
+                                            <td>{{ produto.produto.sku }}</td>
+                                            <td>{{ produto.produto.cor }}</td>
+                                            <td>{{ produto.produto.fornecedor }}</td>
+                                            <td>{{ produto.produto.preco_compra }}</td>
+                                            <td>{{ produto.quantidade }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
                     {% else %}
-                    <h4>Sem produtos cadastrados para esta venda</h4>
+                        <h4>Sem produtos cadastrados para esta venda</h4>
                     {% endif %}
                 </div>
             </div>
