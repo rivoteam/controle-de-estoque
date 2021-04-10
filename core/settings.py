@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'api',
     'widget_tweaks',
     'rest_framework',
+    'dj_static',
 ]
 
 MIDDLEWARE = [
