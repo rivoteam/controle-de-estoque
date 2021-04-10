@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from controle_pedidos.models import PedidoCompra
 from controle_pedidos.forms import PedidoForm
+from controle_estoque.models import Produto, Fornecedor
 
 
 @login_required()
@@ -56,3 +57,11 @@ def modal_remove_pedido(request, pk):
         return redirect(reverse('lista-pedidos'))
     else:
         return render(request, 'modal_remove_pedido.html', {'pedido': pedido})
+
+
+def compra_automatica_produtos():
+    """
+    Realiza compra automática de produtos em alerta minimo
+    """
+    produtos_em_alerta = Produto.objects.filter(ativo=True, limite_alerta_min=True)
+
