@@ -11,7 +11,7 @@ def lista_pedidos(request):
         "pedidos": PedidoCompra.objects.filter(ativo=True),
         "active": "lista-pedidos"
     }
-    return render(request, 'pedidos.html', context)
+    return render(request, 'lista_pedidos.html', context)
 
 
 @login_required()
@@ -35,6 +35,7 @@ def modal_cria_pedido(request):
     return render(request, 'modal_cria_pedido.html', {'form': form})
 
 
+@login_required()
 def modal_atualiza_pedido(request, pk):
     pedido = get_object_or_404(PedidoCompra, pk=pk)
     form = PedidoForm(request.POST or None, instance=pedido)
@@ -45,6 +46,7 @@ def modal_atualiza_pedido(request, pk):
     return render(request, 'modal_atualiza_pedido.html', {'form': form})
 
 
+@login_required()
 def modal_remove_pedido(request, pk):
     pedido = get_object_or_404(PedidoCompra, pk=pk)
     if request.POST:
