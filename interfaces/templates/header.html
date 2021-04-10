@@ -103,13 +103,9 @@
                         <div class="dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Bem-vindo, {{ user.first_name }} {{ user.last_name }}!</h6>
                         </div>
-                        <a href="#" class="dropdown-item">
+                        <a href="/admin/" class="dropdown-item" target="_blank">
                             <i class="ni ni-single-02"></i>
-                            <span>Meu perfil</span>
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <i class="ni ni-support-16"></i>
-                            <span>Suporte</span>
+                            <span>Admin</span>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="{% url 'logout' %}" class="dropdown-item">

@@ -11,6 +11,7 @@ class Fornecedor(models.Model):
     pessoa_contato = models.CharField(max_length=100)
     email = models.EmailField(max_length=120)
     ativo = models.BooleanField(default=True)
+    faturamento_minimo = models.IntegerField(default=1000)
 
     def __str__(self):
         return self.nome_empresa
