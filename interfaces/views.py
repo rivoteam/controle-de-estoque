@@ -2,13 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from controle_estoque.models import Produto
-from controle_pedidos.models import PedidoCompra
 from controle_vendas.models import Venda
+from interfaces.forms import ProdutoForm
 import datetime
-from controle_vendas.forms import VendaForm
-from interfaces.forms import PedidoForm, ProdutoForm
 
 
 @login_required()
@@ -69,28 +67,6 @@ def detalhe_produto(request, pk):
 
 
 @login_required()
-def lista_pedidos(request):
-    context = {
-        "pedidos": PedidoCompra.objects.filter(ativo=True),
-        "active": "lista-pedidos"
-    }
-    return render(request, 'pedidos.html', context)
-
-
-@login_required()
-def detalhe_pedido(request, pk):
-    pedido = PedidoCompra.objects.get(pk=pk)
-    produtos = pedido.carrinhopedido_set.all()
-    context = {
-        'pedido': pedido,
-        'produtos': produtos,
-    }
-    return render(request, 'modal_detalhe_pedido.html', context)
-
-
-
-
-@login_required()
 def modal_cria_produto(request):
     form = ProdutoForm(request.POST or None)
     if form.is_valid():
@@ -118,34 +94,4 @@ def modal_remove_produto(request, pk):
         return redirect(reverse('lista-produtos'))
     else:
         return render(request, 'modal_remove_produto.html', {'produto': produto})
-
-@login_required()
-def modal_cria_pedido(request):
-    form = PedidoForm(request.POST or None)
-    if form.is_valid():
-        form.instance.criado_por = request.user
-        form.save()
-        return redirect(reverse('lista-pedidos'))
-    return render(request, 'modal_cria_pedido.html', {'form': form})
-
-
-def modal_atualiza_pedido(request, pk):
-    pedido = get_object_or_404(PedidoCompra, pk=pk)
-    form = PedidoForm(request.POST or None, instance=pedido)
-    if form.is_valid():
-        pedido.atualizado_por = request.user
-        pedido.save()
-        return redirect(reverse('lista-pedidos'))
-    return render(request, 'modal_atualiza_pedido.html', {'form': form})
-
-
-def modal_remove_pedido(request, pk):
-    pedido = get_object_or_404(PedidoCompra, pk=pk)
-    if request.POST:
-        pedido.atualizado_por = request.user
-        pedido.ativo = False
-        pedido.save()
-        return redirect(reverse('lista-pedidos'))
-    else:
-        return render(request, 'modal_remove_pedido.html', {'pedido': pedido})
 

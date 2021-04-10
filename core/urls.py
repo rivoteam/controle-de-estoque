@@ -18,6 +18,7 @@ from django.urls import path, include
 from interfaces import urls as interface_urls
 from api import urls as api_urls
 from controle_vendas import urls as vendas_urls
+from controle_pedidos import urls as pedidos_urls
 from django.conf import settings  # visualizar img
 from django.conf.urls.static import static  # visualizar img
 
@@ -26,4 +27,5 @@ urlpatterns = [
     path('', include(interface_urls)),
     path('api-rest/', include(api_urls)),
     path('vendas/', include(vendas_urls)),
+    path('pedidos/', include(pedidos_urls)),
 ]
