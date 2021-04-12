@@ -25,5 +25,5 @@ class Funcionario(models.Model):
         ordering = ['funcionario']
 
     def is_manager(self):
-        if self.cargo_funcionario == "gerente":
-            return True
+        return self.funcionario.groups.filter(name__in=['Gerência']).exists()
+

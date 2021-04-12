@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -11,7 +11,9 @@ import datetime
 def homepage(request):
     return render(request, 'homepage.html')
 
+
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager(), login_url="/", redirect_field_name=None)
 def dashboard(request):
     """
     Cards Front
