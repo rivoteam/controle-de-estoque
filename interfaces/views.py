@@ -48,5 +48,5 @@ def dashboard(request):
 @login_required()
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/admin/login/?next=/produtos/lista-produtos/')
+    return HttpResponseRedirect('/')
 
