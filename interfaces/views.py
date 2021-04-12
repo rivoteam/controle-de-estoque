@@ -8,6 +8,10 @@ import datetime
 
 
 @login_required()
+def homepage(request):
+    return render(request, 'homepage.html')
+
+@login_required()
 def dashboard(request):
     """
     Cards Front
