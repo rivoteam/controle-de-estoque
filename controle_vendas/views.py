@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from controle_estoque.models import Produto
 from .models import Venda
 from .forms import VendaForm
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_cashier(), login_url="/", redirect_field_name=None)
 def appvendas(request):
     context = {
         'form': VendaForm(),
@@ -16,6 +17,7 @@ def appvendas(request):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst_or_cashier_or_seller(), login_url="/", redirect_field_name=None)
 def lista_vendas(request):
     context = {
         "vendas": Venda.objects.filter(ativo=True),
@@ -25,6 +27,7 @@ def lista_vendas(request):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst_or_cashier_or_seller(), login_url="/", redirect_field_name=None)
 def detalhe_venda(request, pk):
     venda = Venda.objects.get(pk=pk)
     produtos = venda.carrinhovenda_set.all()

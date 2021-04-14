@@ -13,7 +13,7 @@ def homepage(request):
 
 
 @login_required()
-@user_passes_test(lambda u: u.funcionario.is_manager(), login_url="/", redirect_field_name=None)
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def dashboard(request):
     """
     Cards Front

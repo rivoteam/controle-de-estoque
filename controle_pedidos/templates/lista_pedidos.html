@@ -19,8 +19,9 @@
                     <th>Qtd. Produtos</th>
                     <th>Status</th>
                     <th>Descrição</th>
-
-                    <th class="text-center">Ações</th>
+                    {% if perms.controle_estoque.change_pedido or perms.controle_estoque.delete_pedido %}
+                        <th class="text-center">Ações</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -36,16 +37,28 @@
                         <td> {{ pedido.data_pedido }}</td>
                         <td> {{ pedido.get_len_produtos_comprados }} un.</td>
                         <td> {{ pedido.get_status_display }}</td>
+
                         {% if pedido.descricao == "" %}
                             <td> Sem descrição</td>
                         {% else %}
                             <td> {{ pedido.descricao }}</td>
                         {% endif %}
-                        <td style="display: flex; align-items: center; justify-content: space-between">
+
+                        {% if perms.controle_estoque.change_pedido and perms.controle_estoque.delete_pedido %}
+                            <td style="display: flex; align-items: center; justify-content: space-between">
+                        {% elif perms.controle_estoque.change_pedido or perms.controle_estoque.delete_pedido %}
+                            <td class="text-center">
+                        {% endif %}
+
+                        {% if perms.controle_estoque.change_pedido %}
                             <a href="#" onclick="open_modal_atualiza('{% url 'modal-atualiza-pedido' pedido.id %}')">
                                 <i class="fa fa-edit text-info"></i></a>
+                        {% endif %}
+
+                        {% if perms.controle_estoque.delete_pedido %}
                             <a href="#" onclick="open_modal_remove('{% url 'modal-remove-pedido' pedido.id %}')">
                                 <i class="fa fa-trash text-danger"></i></a>
+                        {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

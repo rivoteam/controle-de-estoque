@@ -4,9 +4,12 @@
         <div class="card-header">
             <div style="display: flex; align-items: center; justify-content: space-between">
                 <h3 class="text-darker">Listagem de Produtos</h3>
-                <a href="#" onclick="open_modal('{% url 'modal-cria-produto' %}')">
-                    <button class="btn btn-info mr-2" type="submit">Criar Novo Produto</button>
-                </a>
+                {#                {% if user.funcionario.is_manager_or_analyst %}#}
+                {% if perms.controle_estoque.add_produto %}
+                    <a href="#" onclick="open_modal('{% url 'modal-cria-produto' %}')">
+                        <button class="btn btn-info mr-2" type="submit">Criar Novo Produto</button>
+                    </a>
+                {% endif %}
             </div>
         </div>
         <div class="card-body">
@@ -21,7 +24,7 @@
                     <th>total_pecas</th>
                     <th>EAN</th>
                     <th>SKU</th>
-                    {% if perms.controle_estoque.change_produto or perms.controle_estoque.delete_produto %}
+                    {% if perms.controle_estoque.change_produto %}
                         <th class="text-center">Ações</th>
                     {% endif %}
                 </tr>
@@ -41,19 +44,20 @@
                         <td> {{ produto.total_pecas }}</td>
                         <td> {{ produto.ean }}</td>
                         <td> {{ produto.sku }}</td>
-                        {% if perms.controle_estoque.change_produto and perms.controle_estoque.delete_produto %}
-                            <td style="display: flex; justify-content: space-between;">
-                                {% elif perms.controle_estoque.change_produto or perms.controle_estoque.delete_produto %}
-                            <td class="text-center">
-                        {% endif %}
-                        {% if perms.controle_estoque.change_produto %}
-                            <a href="#" onclick="open_modal('{% url 'modal-atualiza-produto' produto.id %}')">
-                                <i class="fa fa-edit text-info"></i></a>
-                        {% endif %}
 
-                        {% if perms.controle_estoque.delete_produto %}
-                            <a href="#" onclick="open_modal('{% url 'modal-remove-produto' produto.id %}')">
-                                <i class="fa fa-trash text-danger"></i></a>
+
+                        {% if user.funcionario.is_manager %}
+                            <td style="display: flex; justify-content: space-between">
+                                <a href="#" onclick="open_modal('{% url 'modal-atualiza-produto' produto.id %}')">
+                                    <i class="fa fa-edit text-info"></i></a>
+                                <a href="#" onclick="open_modal('{% url 'modal-remove-produto' produto.id %}')">
+                                    <i class="fa fa-trash text-danger"></i></a>
+                            </td>
+                        {% elif user.funcionario.is_analyst %}
+                            <td class="text-center">
+                                <a href="#" onclick="open_modal('{% url 'modal-atualiza-produto' produto.id %}')">
+                                    <i class="fa fa-edit text-info"></i></a>
+                            </td>
                         {% endif %}
                         </td>
                     </tr>
