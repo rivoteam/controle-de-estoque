@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 from controle_usuarios.models import Funcionario
@@ -27,7 +28,8 @@ class Venda(models.Model):
     vendedor = models.ForeignKey(Funcionario, on_delete=models.PROTECT, related_name='venda_vendedor',
                                  verbose_name="Vendedor", help_text="Vendedor que atendeu o cliente")
     nota_fiscal = models.FileField('Nota Fiscal Eletronica', upload_to='controle_pedidos/NFE', blank=True, null=True)
-    cpf = models.CharField("CPF", max_length=30, null=True, blank=True)
+    cpf = models.CharField('CPF', max_length=11, help_text='Preencha o campo apenas com números.', validators=[
+        RegexValidator(r'^\d{11,11}$', message='Por favor, não insira letras, " . " e " - " no campo abaixo.')])
     desconto = models.DecimalField('Desconto', decimal_places=2, max_digits=12, default=0,
                                    help_text="Digite o valor de desconto da venda, exemplo R$ 10,00")
     forma_pagto = models.SmallIntegerField("Forma De Pagamento", choices=PAGAMENTO_CHOICES)

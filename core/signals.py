@@ -35,7 +35,7 @@ def post_save_venda(sender, created, instance, **kwargs):
 
 
 def generate_barcode(self):
-    code_id = str(randint(7890000000000, 7899999999999))
+    code_id = str(randint(7890120000000, 7890129999999))
     if not Produto.objects.filter(ean=code_id).first() is None:
         self.generate_barcode()
     return code_id
@@ -49,6 +49,7 @@ def pre_save_product_data(sender, instance, **kwargs):
     instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}{tamanho_sku}".upper()
     return
 
+
 @receiver(post_save, sender=Produto)
 def post_save_price_update_history(sender, instance, **kwargs):
     historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).first()
@@ -58,14 +59,15 @@ def post_save_price_update_history(sender, instance, **kwargs):
             or instance and not historico:
         HistoricoAtualizacaoPrecos.objects.create(
             produto=instance,
-            descricao=instance.descricao,
+            descricao=instance.descricao.title(),
             preco_compra=instance.preco_compra,
             preco_venda=instance.preco_venda,
-            motivo_alteracao_preco=instance.motivo_alteracao_preco,
+            motivo_alteracao_preco=instance.motivo_alteracao_preco.title(),
             criado_por=instance.criado_por
         )
     Produto.objects.filter(pk=instance.pk).update(motivo_alteracao_preco=None)
     return
+
 
 '''
 produto_salvo = Busca o produto salvo acima
