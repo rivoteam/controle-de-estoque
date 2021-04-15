@@ -35,7 +35,7 @@ let app = new Vue({
         },
         add_produto() {
             if (this.eanIsValid) {
-                axios.get(`api-rest/produto/${this.produto_ean}`)
+                axios.get(`/api-rest/produto/${this.produto_ean}`)
                     .then(response => {
                         if (response.status === 200) {
                             this.errors = []
@@ -89,7 +89,7 @@ let app = new Vue({
 
             const csrftoken = getCookie('csrftoken');
             console.log(csrftoken)
-            axios.post("api-rest/produto/realiza_vendas/", data = {
+            axios.post("/api-rest/produto/realiza_vendas/", data = {
                 "produtos": this.produtos,
                 "vendedor": this.vendedor,
                 "numerocpf": this.numCpf,
