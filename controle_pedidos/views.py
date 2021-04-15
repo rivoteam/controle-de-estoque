@@ -65,3 +65,11 @@ def compra_automatica_produtos():
     """
     produtos_em_alerta = Produto.objects.filter(ativo=True, limite_alerta_min=True)
 
+
+def app_compra(request):
+    context = {
+        'form': PedidoForm(),
+        'produtos': Produto.objects.all(),
+        "active": "app_compra"
+    }
+    return render(request, 'app_compra.html', context)

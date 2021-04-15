@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+    <div id="vue-app">
+        <div class="card">
+            <div class="card-header text-center mt-2">
+                <h2 class="card-text">App de Pedidos</h2>
+            </div>
+            <div class="card-body">
+                <table class="table display" id="table_id">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="text-center">Produto</th>
+                        <th>categoria</th>
+                        <th>subcategoria</th>
+                        <th>tamanho</th>
+                        <th>Cor</th>
+                        <th>total_pecas</th>
+                        <th>EAN</th>
+                        <th>SKU</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for produto in produtos %}
+                        <tr>
+                            <td>Produto {{ produto.ean }}</td>
+                            <td> {{ produto.categoria }}</td>
+                            <td> {{ produto.subcategoria }}</td>
+                            <td> {{ produto.tamanho }}</td>
+                            <td> {{ produto.cor }}</td>
+                            <td> {{ produto.total_pecas }}</td>
+                            <td> {{ produto.ean }}</td>
+                            <td> {{ produto.sku }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="col-sm-12 pt-5 mb-lg-5">
+                    <template v-if="produtos.length">
+                        <div class="card-header text-center">
+
+                            <h2>Lista de produtos selecionados:</h2>
+                        </div>
+                        <table class="table table-responsive mt-5">
+                            <thead class="thead-active text-muted">
+                            <tr>
+                                <th scope="col">Produtos</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Subcategoria</th>
+                                <th scope="col">Tamanho</th>
+                                <th scope="col">Quantidade</th>
+                                <th scope="col">Cor</th>
+                                <th scope="col">Genero</th>
+                                <th scope="col">Codigo de Barras</th>
+                                <th scope="col">Em estoque</th>
+                                <th scope="col">Preço</th>
+                                <th scope="col">Remover</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template v-for="produto in produtos">
+                                <tr>
+                                    <td>[[ produto.produto.descricao ]]</td>
+                                    <td>[[ produto.produto.nome_categoria ]]</td>
+                                    <td>[[ produto.produto.nome_subcategoria ]]</td>
+                                    <td>[[ produto.produto.tamanho ]]</td>
+                                    <td>[[ produto.quantidade ]]</td>
+                                    <td>[[ produto.produto.cor ]]</td>
+                                    <td>[[ produto.produto.genero ]]</td>
+                                    <td>[[ produto.produto.ean ]]</td>
+                                    <td>[[ produto.produto.total_pecas ]]</td>
+                                    <td>[[ (produto.produto.preco_venda * produto.quantidade).toLocaleString(
+                                        'pt-br',{style: 'currency', currency: 'BRL'}) ]]
+                                    </td>
+                                    <td>
+                                        <button @click="remove_produto(produto)" class="btn btn-sm btn-danger">
+                                            <i aria-hidden="true" class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </template>
+                            </tbody>
+                        </table>
+                        <div class="form-group mt-lg-5">
+                            <div class="form-row align-items-center justify-content-center">
+                                <div class="col-3" style="text-align: center">
+                                    <label for="vendedor">Vendedor</label>
+                                    {% render_field form.vendedor v-model="vendedor" %}
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-3" style="text-align: center">
+                                    <label for="pagamento">Forma de Pagamento</label>
+                                    {% render_field form.forma_pagto v-model="formaPagamento" %}
+                                </div>
+                            </div>
+                            <div class="form-row mt-5 align-items-center justify-content-center">
+                                <div class="col-3 inline-block text-center align-bottom">
+                                    <input type="checkbox" class="custom-control-input" id="cpf" v-model="cpf">
+                                    <label class="custom-control-label" for="cpf">Adicionar CPF</label>
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-3" style="text-align: center">
+                                    <template v-if="cpf">
+                                        <label for="numerocpf">CPF</label>
+                                        <input type="text" class="form-control cpf" id="numerocpf" name="numerocpf"
+                                               maxlength="13" v-model="numCpf">
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div class="form-row mt-5 align-items-center justify-content-center">
+                    <div class="form-group">
+                        <h3>Valor total: [[ valor_total.toLocaleString(
+                            'pt-br',{style: 'currency', currency: 'BRL'}) ]]</h3>
+                        <button class="btn btn-success mr-5" id="button_test">
+                            Realizar Venda
+                            <i aria-hidden="true" class="fas fa-store ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extrajs %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var table_id = $('#table_id').DataTable({
+                select: true
+            });
+            $('#table_id tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+
+            $('#button_test').click(function () {
+                window.alert(table_id.row('.selected').data() + 'obj');
+            });
+        });
+        let app = new Vue({
+            el: "#vue-app",
+            delimiters: ['[[', ']]'],
+            data() {
+                return {
+                    produto_ean: '',
+                    quantidade: 1,
+                    produtos: [],
+                    valor_total: 0.00,
+                    errors: [],
+                    cpf: false,
+                    vendedor: '',
+                    numCpf: '',
+                    formaPagamento: ''
+                }
+            },
+            computed: {
+                eanIsValid() {
+                    this.errors = []
+                    return this.produto_ean.length >= 13
+                }
+            },
+            methods: {
+                validateProdutoinProdutosCart(produto_ean, quantidade) {
+                    console.log(produto_ean)
+                    var i;
+                    for (i = 0; i < this.produtos.length; i++) {
+                        console.log(this.produtos[i].produto.ean)
+                        if (this.produtos[i].produto.ean === produto_ean) {
+                            this.produtos[i].quantidade += Number(quantidade)
+                            this.errors.push("Produto já consta na lista de compra, quantidade adicionada ao produto")
+                            return true
+                        }
+                    }
+                },
+                add_produto() {
+                    if (this.eanIsValid) {
+                        axios.get(`api-rest/produto/${this.produto_ean}`)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    this.errors = []
+                                    if (!this.validateProdutoinProdutosCart(this.produto_ean, this.quantidade)) {
+                                        this.produtos.push(
+                                            {
+                                                'produto': response.data,
+                                                "quantidade": this.quantidade
+                                            }
+                                        )
+                                        this.valor_total += (Number(response.data.preco_venda) * this.quantidade)
+                                    }
+                                    this.quantidade = 1
+                                    this.produto_ean = ""
+                                }
+                            })
+                            .catch(error => {
+                                if (error.response.status === 404) {
+                                    this.errors = []
+                                    this.errors.push("Produto não localizado")
+                                }
+                                console.log(error);
+                            })
+                    } else {
+                        this.errors.push("Digite um EAN com no mínimo 13 digitos")
+                    }
+                },
+                remove_produto(produto) {
+                    this.valor_total -= (Number(this.produtos[this.produtos.indexOf(produto)].produto.preco_venda) *
+                        this.produtos[this.produtos.indexOf(produto)].quantidade)
+                    this.produtos.splice(this.produtos.indexOf(produto), 1)
+                    if (this.produtos.length === 0) {
+                        this.valor_total = 0
+                    }
+                },
+                realiza_venda() {
+                    function getCookie(name) {
+                        let cookieValue = null;
+                        if (document.cookie && document.cookie !== '') {
+                            const cookies = document.cookie.split(';');
+                            for (let i = 0; i < cookies.length; i++) {
+                                const cookie = cookies[i].trim();
+                                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+
+                    const csrftoken = getCookie('csrftoken');
+                    console.log(csrftoken)
+                    axios.post("api-rest/produto/realiza_vendas/", data = {
+                        "produtos": this.produtos,
+                        "vendedor": this.vendedor,
+                        "numerocpf": this.numCpf,
+                        "forma_pgto": this.formaPagamento
+                    }, headers = {
+                        'csrftoken': csrftoken
+                    })
+                        .then(response => {
+                            if (response.status === 200) {
+                                console.log("realizado", response)
+                                location.reload()
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error.response);
+                        })
+                }
+            }
+        })
+    </script>
+{% endblock %}
