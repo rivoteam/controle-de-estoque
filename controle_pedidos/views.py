@@ -63,7 +63,24 @@ def compra_automatica_produtos():
     """
     Realiza compra automática de produtos em alerta minimo
     """
+    valor_compra = 0
+    produtos_comprados = []
+    temp_list = []
+
     produtos_em_alerta = Produto.objects.filter(ativo=True, limite_alerta_min=True)
+    for produto in produtos_em_alerta:
+        temp_list.append(produto.fornecedor)
+    fornecedores_instance = set(temp_list)
+
+    for fornecedor in fornecedores_instance:
+        for produto in produtos_em_alerta:
+            if produto.fornecedor == fornecedor:
+                valor_compra += produto.preco_compra
+                produtos_comprados.append(produto)
+                if valor_compra >= fornecedor.faturamento_minimo:
+                    # Criar carrinho e criar pedido, depois zerar valor_compra
+                    pass
+
 
 
 def app_compra(request):
