@@ -63,6 +63,7 @@ class Venda(models.Model):
 
     def save(self, *args, **kwargs):
         self.valor_total_venda = self.calc_total()
+        # import pdb; pdb.set_trace()
         super(Venda, self).save(*args, **kwargs)
 
     def get_produtos_vendidos(self):
