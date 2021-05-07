@@ -60,8 +60,24 @@
                 $(this).modal('show');
             })
         }
+
         $(document).ready(function () {
-            $('#table_produtos').DataTable();
+            $('#table_produtos').DataTable({
+                "language": {
+                    "lengthMenu": "Listando _MENU_ registros por pagina",
+                    "zeroRecords": "Nenhum registro localizado",
+                    "info": "Pagina _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponível",
+                    "infoFiltered": "(Filtrado de _MAX_ total resultados)",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primeira",
+                        "last": "Ultima",
+                        "next": "Proxima",
+                        "previous": "Anterior"
+                    },
+                }
+            });
         });
     </script>
 {% endblock %}

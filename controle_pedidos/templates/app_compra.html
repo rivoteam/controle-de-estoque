@@ -133,7 +133,21 @@
 
         $(document).ready(function () {
             var table_id = $('#table_id').DataTable({
-                select: true
+                select: true,
+                "language": {
+                    "lengthMenu": "Listando _MENU_ registros por pagina",
+                    "zeroRecords": "Nenhum registro localizado",
+                    "info": "Pagina _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponível",
+                    "infoFiltered": "(Filtrado de _MAX_ total resultados)",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primeira",
+                        "last": "Ultima",
+                        "next": "Proxima",
+                        "previous": "Anterior"
+                    },
+                }
             });
             $('#table_id tbody').on('click', 'tr', function () {
                 $(this).toggleClass('selected');
