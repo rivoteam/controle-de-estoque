@@ -4,7 +4,6 @@
         <div class="card-header">
             <div style="display: flex; align-items: center; justify-content: space-between">
                 <h3 class="text-darker">Listagem de Produtos</h3>
-                {#                {% if user.funcionario.is_manager_or_analyst %}#}
                 {% if perms.controle_estoque.add_produto %}
                     <a href="#" onclick="open_modal('{% url 'modal-cria-produto' %}')">
                         <button class="btn btn-info mr-2" type="submit">Criar Novo Produto</button>

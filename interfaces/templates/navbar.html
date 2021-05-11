@@ -17,13 +17,15 @@
                     <span class="nav-link-text">Produtos em Estoque</span>
                 </a>
             </li>
-            <li class="nav-item ">
-                <a class="nav-link {% if active == 'lista-pedidos' %} active {% endif %}"
-                   href="{% url 'lista-pedidos' %}">
-                    <i class="fa fa-truck"></i>
-                    <span class="nav-link-text">Listagem Pedidos</span>
-                </a>
-            </li>
+            {% if user.funcionario.is_manager_or_analyst_or_stockist %}
+                <li class="nav-item ">
+                    <a class="nav-link {% if active == 'lista-pedidos' %} active {% endif %}"
+                       href="{% url 'lista-pedidos' %}">
+                        <i class="fa fa-truck"></i>
+                        <span class="nav-link-text">Listagem Pedidos</span>
+                    </a>
+                </li>
+            {% endif %}
             {% if user.funcionario.is_manager_or_analyst_or_cashier_or_seller %}
                 <li class="nav-item">
                     <a class="nav-link {% if active == 'lista-vendas' %} active {% endif %}"
