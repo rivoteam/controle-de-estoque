@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
-from controle_estoque.models import Produto
+from controle_estoque.models import Produto, Fornecedor
+from controle_usuarios.models import Funcionario
 from controle_pedidos.models import PedidoCompra, CarrinhoPedido
 from controle_vendas.models import Venda, CarrinhoVenda
 from .serializers import ProdutoSerializer, PedidoSerializer, CarrinhoPedidoSerializer, VendaSerializer, \
@@ -68,9 +69,51 @@ def get_detail_produtos(request, pk):
 @login_required
 def post_realiza_vendas(request):
     produtos_json = json.loads(request.body)
-    instance_venda = Venda.objects.create(caixa=request.user.funcionario, vendedor=request.user.funcionario,
-                                          forma_pagto=5, criado_por=request.user)
-    for produto_json in produtos_json:
+    vendedor = Funcionario.objects.get(id=int(produtos_json['vendedor']))
+    instance_venda = Venda.objects.create(caixa=request.user.funcionario, vendedor=vendedor,
+                                          forma_pagto=int(produtos_json['forma_pgto']), criado_por=request.user,
+                                          status=3, cpf=produtos_json['numerocpf'])
+    for produto_json in produtos_json['produtos']:
         produto = Produto.objects.get(id=produto_json['produto']['id'])
-        CarrinhoVenda.objects.create(produto=produto, quantidade=produto_json['quantidade'], venda=instance_venda)
+        CarrinhoVenda.objects.create(produto=produto, quantidade=int(produto_json['quantidade']),
+                                     venda=instance_venda)
     return JsonResponse({"Requisicao": f"Venda registrada {instance_venda}"}, status=200, safe=False)
+
+
+@require_http_methods("POST")
+@csrf_exempt
+@login_required
+def post_realiza_compras(request):
+    erros_list = []
+    success = 0
+    fornecedor_temp_list = []
+
+    produtos_json = json.loads(request.body)
+    for produto_json in produtos_json['produtos']:
+        fornecedor_temp_list.append(int(produto_json['produto']['fornecedor']))
+    fornecedor_temp_list = set(fornecedor_temp_list)
+    for fornecedor in fornecedor_temp_list:
+        valor_compra = 0
+        fornecedor_obj = Fornecedor.objects.get(id=fornecedor)
+        instance_pedido = PedidoCompra.objects.create(fornecedor=fornecedor_obj, criado_por=request.user)
+        for produto_json in produtos_json['produtos']:
+            if produto_json['produto']['fornecedor'] == fornecedor_obj.id:
+                produto = Produto.objects.get(id=int(produto_json['produto']['id']))
+                valor_compra += (produto.preco_compra * int(produto_json['quantidade']))
+                CarrinhoPedido.objects.create(
+                    quantidade=int(produto_json['quantidade']),
+                    produto_id=produto.id,
+                    pedidocompra=instance_pedido)
+        if valor_compra < fornecedor_obj.faturamento_minimo:
+            erros_list.append({
+                "fornecedor": fornecedor_obj.nome_empresa.title(),
+                "faturamento": {fornecedor_obj.faturamento_minimo},
+                "valor_comprado": valor_compra
+            })
+        else:
+            success += 1
+    if len(erros_list) > 0 and success == 0:
+        return JsonResponse({"Requisicao": f"{erros_list}"}, status=200, safe=False)
+    elif len(erros_list) > 0 and success != 0:
+        return JsonResponse({"Requisicao": f"Compra registrada, porem, com erros {erros_list} "}, status=200, safe=False)
+    return JsonResponse({"Requisicao": f"Compra registrada "}, status=200, safe=False)

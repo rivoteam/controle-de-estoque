@@ -10,6 +10,8 @@
     <meta name="author" content="Creative Tim">
     <title>RivoTeam</title>
     <link rel="icon" href="{% static 'img/brand/favicon.png' %}" type="image/png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
           integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
@@ -25,7 +27,7 @@
 <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
         <div class="sidenav-header ">
-            <a class="navbar-brand" href="{% url 'homepage' %}">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
                 <img src="{% static 'img/brand/araras.png' %}" class="navbar-brand-img"
                      style="width: 100%; height: auto;" alt="">
             </a>
@@ -36,33 +38,13 @@
 <div class="main-content" id="panel">
     {% include "header.html" %}
     <div class="header bg-primary pb-6">
-        <div class="container-fluid">
-            <div class="header-body">
-                <div class="row align-items-center py-4">
-                    <div class="col-lg-6 col-7">
-                        <h6 class="h2 text-white d-inline-block mb-0">Default</h6>
-                        <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Default</li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <div class="col-lg-6 col-5 text-right">
-                        <a href="#" class="btn btn-sm btn-neutral">New</a>
-                        <a href="#" class="btn btn-sm btn-neutral">Filters</a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="container-fluid mt--6">
         {% block content %} {% endblock %}
         <footer class="footer container text-center">
             <ul class="nav nav-footer justify-content-center">
                 <li class="nav-item">
-                     <a href="#" class="nav-link">&copy; 2021</a>
+                    <a href="#" class="nav-link">&copy; 2021</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">RivoTeam - Oficina de Projeto Empresa</a>
@@ -97,6 +79,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
         integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
         crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 <script src="{% static 'js/argon.js' %}?v=1.2.0"></script>
 <!-- Custom JS -->
 <script src="{% static 'js/custom.js' %}"></script>

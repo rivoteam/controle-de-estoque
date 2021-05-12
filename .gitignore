@@ -137,3 +137,5 @@ python-version
 # NFE
 controle_pedidos/NFE/
 controle_usuarios/media
+media/
+static_root/

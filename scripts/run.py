@@ -28,7 +28,7 @@ def run():
                               email="cleidson@renner.com"),
 
     cores = ["Azul", "Verde", "Cinza", "Amarelo", "Preto", "Branco"]
-    generos = ["Masculino", "Feminino", "Unissex"]
+    generos = ["masculino", "feminino", "unissex"]
     tamanho = [str(ns) for ns in range(1, 6)] + [str(n) for n in range(30, 62, 2)] + ["P", "M", "G", "GG", "XG"]
     fornecedor = Fornecedor.objects.first()
     usuario = User.objects.first()

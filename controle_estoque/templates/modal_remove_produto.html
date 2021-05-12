@@ -1,0 +1,22 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirmação da exclusão</h3>
+            <button type="button" class="close" data-dismiss="modal">
+                <span>x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Tem certeza que deseja deletar esse produto:
+                <span><strong>{{ produto }}</strong></span> ?</p>
+        </div>
+        <div class="modal-footer">
+            <form action="{% url 'modal-remove-produto' produto.id %}" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sim</button>
+            </form>
+            <button type="button" class="btn btn-info" data-dismiss="modal">Não</button>
+        </div>
+    </div>
+</div>

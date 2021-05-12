@@ -42,19 +42,16 @@ def generate_barcode(self):
 
 
 @receiver(pre_save, sender=Produto)
-def pre_save_ean_sku_limite_alerta_min(sender, instance, **kwargs):
+def pre_save_product_data(sender, instance, **kwargs):
     tamanho_sku = f"{(2 - len(instance.tamanho)) * '0'}{instance.tamanho}"
     instance.limite_alerta_min = False if instance.total_pecas <= instance.alerta_min else True
     instance.ean = generate_barcode(self=instance.id) if not instance.ean else instance.ean
-    instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}" \
-                   f"{tamanho_sku}".upper()
+    instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}{tamanho_sku}".upper()
     return
 
-
 @receiver(post_save, sender=Produto)
-def post_save_create_historico(sender, instance, **kwargs):
-    historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).last()
-
+def post_save_price_update_history(sender, instance, **kwargs):
+    historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).first()
     if ((historico and instance)
         and ((historico.preco_compra != instance.preco_compra)
              or (historico.preco_venda != instance.preco_venda))) \
@@ -67,10 +64,8 @@ def post_save_create_historico(sender, instance, **kwargs):
             motivo_alteracao_preco=instance.motivo_alteracao_preco,
             criado_por=instance.criado_por
         )
-        instance.motivo_alteracao_preco = None
-        instance.save()
+    Produto.objects.filter(pk=instance.pk).update(motivo_alteracao_preco=None)
     return
-
 
 '''
 produto_salvo = Busca o produto salvo acima
