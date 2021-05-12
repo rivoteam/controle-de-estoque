@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst_or_stockist(), login_url="/", redirect_field_name=None)
 def lista_pedidos(request):
     context = {
         "pedidos": PedidoCompra.objects.filter(ativo=True),
@@ -19,6 +20,7 @@ def lista_pedidos(request):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst_or_stockist(), login_url="/", redirect_field_name=None)
 def detalhe_pedido(request, pk):
     pedido = PedidoCompra.objects.get(pk=pk)
     produtos = pedido.carrinhopedido_set.all()
@@ -30,6 +32,7 @@ def detalhe_pedido(request, pk):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def modal_cria_pedido(request):
     form = PedidoForm(request.POST or None)
     if form.is_valid():
@@ -40,6 +43,7 @@ def modal_cria_pedido(request):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def modal_atualiza_pedido(request, pk):
     pedido = get_object_or_404(PedidoCompra, pk=pk)
     form = PedidoForm(request.POST or None, instance=pedido)
@@ -51,6 +55,7 @@ def modal_atualiza_pedido(request, pk):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def modal_remove_pedido(request, pk):
     pedido = get_object_or_404(PedidoCompra, pk=pk)
     if request.POST:

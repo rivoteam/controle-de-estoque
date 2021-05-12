@@ -25,5 +25,35 @@ class Funcionario(models.Model):
         ordering = ['funcionario']
 
     def is_manager(self):
-        if self.cargo_funcionario == "gerente":
-            return True
+        return self.funcionario.groups.filter(name='gerente').exists()
+
+    def is_analyst(self):
+        return self.funcionario.groups.filter(name='analista').exists()
+
+    def is_manager_or_cashier(self):
+        return self.funcionario.groups.filter(name__in=['gerente', 'caixa']).exists()
+
+    def is_manager_or_analyst(self):
+        return self.funcionario.groups.filter(name__in=['gerente', 'analista']).exists()
+
+    def is_manager_or_analyst_or_cashier(self):
+        return self.funcionario.groups.filter(name__in=['gerente', 'analista', 'caixa']).exists()
+
+    def is_manager_or_analyst_or_cashier_or_seller(self):
+        return self.funcionario.groups.filter(name__in=['gerente', 'analista', 'caixa', 'vendedor']).exists()
+
+    def is_manager_or_analyst_or_stockist(self):
+        return self.funcionario.groups.filter(name__in=['gerente', 'analista', 'estoquista']).exists()
+
+    def is_stockist(self):
+        return self.funcionario.groups.filter(name='estoquista').exists()
+
+
+    # //TODO Criar funções e incluir no CHOICES em utils.py
+    '''
+    def is_developer(self):
+        return self.funcionario.groups.filter(name='desenvolvedor').exists()
+
+    def is_admin(self):
+        return self.funcionario.groups.filter(name='administrador').exists()
+    '''

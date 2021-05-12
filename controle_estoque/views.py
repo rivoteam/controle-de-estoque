@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from controle_estoque.models import Produto
@@ -23,6 +23,7 @@ def detalhe_produto(request, pk):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def modal_cria_produto(request):
     form = ProdutoForm(request.POST or None)
     if form.is_valid():
@@ -33,6 +34,7 @@ def modal_cria_produto(request):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def modal_atualiza_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     form = ProdutoForm(request.POST or None, instance=produto)
@@ -44,6 +46,7 @@ def modal_atualiza_produto(request, pk):
 
 
 @login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def modal_remove_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     if request.POST:
