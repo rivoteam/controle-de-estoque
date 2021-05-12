@@ -244,6 +244,7 @@
                         .then(response => {
                             if (response.status === 200) {
                                 console.log(response.data)
+                                setTimeout(() => { console.log("World!"); }, 25565160000)
                                 location.reload()
                             }
                         })
