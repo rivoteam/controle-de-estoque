@@ -21,12 +21,24 @@ let app = new Vue({
         }
     },
     methods: {
-        validateProdutoinProdutosCart(produto_ean, quantidade) {
-            console.log(produto_ean)
+        validateProdutoinProdutosCart(produto, quantidade) {
             var i;
+            if (Number(quantidade) > Number(produto.total_pecas)) {
+                this.errors.push("Quantidade solicitada maior que quantidade em estoque");
+                return true
+            }
+            else if (quantidade <= 0) {
+                this.errors.push("Insira uma quantidade válida");
+                return true
+            }
             for (i = 0; i < this.produtos.length; i++) {
-                console.log(this.produtos[i].produto.ean)
-                if (this.produtos[i].produto.ean === produto_ean) {
+                if (this.produtos[i].produto.ean === produto.ean) {
+                    console.log(produto)
+                    if ((Number(this.produtos[i].quantidade) + Number(quantidade)) > Number(produto.total_pecas)) {
+                        this.errors.push("Quantidade solicitada maior que quantidade em estoque");
+                        return true
+                    }
+                    this.valor_total += (Number(produto.preco_venda) * this.quantidade)
                     this.produtos[i].quantidade += Number(quantidade)
                     this.errors.push("Produto já consta na lista de compra, quantidade adicionada ao produto")
                     return true
@@ -39,7 +51,7 @@ let app = new Vue({
                     .then(response => {
                         if (response.status === 200) {
                             this.errors = []
-                            if (!this.validateProdutoinProdutosCart(this.produto_ean, this.quantidade)) {
+                            if (!this.validateProdutoinProdutosCart(response.data, this.quantidade)) {
                                 this.produtos.push(
                                     {
                                         'produto': response.data,

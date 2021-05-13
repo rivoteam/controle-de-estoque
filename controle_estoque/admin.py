@@ -35,15 +35,16 @@ class ProdutoAdmin(admin.ModelAdmin):
     list_display = ['id', "ativo", 'descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'min_pecas',
                     'alerta_min', 'limite_alerta_min', 'total_pecas', 'preco_compra', 'preco_venda',
                     'motivo_alteracao_preco', 'auto_pedido', 'ean',
-                    'sku', 'fornecedor', 'criado_por', 'criado_em', 'atualizado_por', 'atualizado_em', ]
-    search_fields = ['id', "ativo", 'descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'alerta_min',
-                     'limite_alerta_min', 'motivo_alteracao_preco', 'auto_pedido', 'ean', 'sku',
-                     'fornecedor', 'criado_por', 'criado_em',
-                     'atualizado_por', 'atualizado_em', ]
-    list_filter = ["ativo", 'descricao', 'genero', 'categoria', 'subcategoria', 'tamanho', 'cor', 'alerta_min',
-                   'limite_alerta_min', 'motivo_alteracao_preco', 'auto_pedido', 'ean', 'sku',
-                   'fornecedor', 'criado_por', 'criado_em',
-                   'atualizado_por', 'atualizado_em', ]
+                    'sku', 'fornecedor', 'criado_por', 'criado_em', 'atualizado_por', 'atualizado_em']
+
+    search_fields = ['id', "ativo", 'descricao', 'genero', 'tamanho', 'cor', 'alerta_min', 'limite_alerta_min',
+                     'motivo_alteracao_preco', 'auto_pedido', 'ean', 'sku', 'categoria__categoria',
+                     'subcategoria__subcategoria', 'fornecedor__nome_empresa', 'criado_por__username',
+                     'atualizado_por__username', 'criado_em', 'atualizado_em']
+
+    list_filter = ["ativo", 'genero', 'categoria', 'subcategoria', 'limite_alerta_min', 'auto_pedido', 'criado_por',
+                   'criado_em', 'atualizado_por', 'atualizado_em', 'fornecedor', 'cor', 'tamanho', 'ean', 'sku',
+                   'descricao']
 
     actions = (export_as_csv, export_xlsx)
 
@@ -59,10 +60,9 @@ export_as_csv.short_description = "Exportar dados em formato CSV"
 class HistoricoAtualizacaoPrecosAdmin(admin.ModelAdmin):
     list_display = ['id', 'produto', 'descricao', 'preco_compra', 'preco_venda', 'motivo_alteracao_preco', 'criado_por',
                     'criado_em']
-    search_fields = ['id', 'produto', 'descricao', 'preco_compra', 'preco_venda', 'motivo_alteracao_preco',
-                     'criado_por',
-                     'criado_em', ]
-    list_filter = ['produto', 'descricao', 'preco_compra', 'preco_venda', 'motivo_alteracao_preco', 'criado_por',
-                   'criado_em', ]
+    search_fields = ['id', 'produto__ean', 'descricao', 'preco_compra', 'preco_venda', 'motivo_alteracao_preco',
+                     'criado_por__username',
+                     'criado_em']
+    list_filter = ['motivo_alteracao_preco', 'criado_por', 'criado_em', 'produto', 'descricao']
 
     actions = (export_as_csv, export_xlsx)

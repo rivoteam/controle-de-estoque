@@ -52,11 +52,6 @@ def pre_save_product_data(sender, instance, **kwargs):
     if len(filtro) == 0:
         instance.sku = f"{instance.genero[:1]}{instance.categoria.codigo}{instance.subcategoria.codigo}{tamanho_sku}00".upper()
     else:
-        # lista = []
-        # for f in filtro:
-        #     lista.append(f.sku)
-        # lista = [f.sku for f in filtro]
-        # sku_final += 1
         sku_final = int(max([f.sku for f in filtro])[-2:]) + 1
         novo_sku_final = f"{(2 - len(str(sku_final))) * '0'}{sku_final}"
         instance.sku += str(novo_sku_final)
@@ -66,7 +61,8 @@ def pre_save_product_data(sender, instance, **kwargs):
 @receiver(post_save, sender=Produto)
 def post_save_price_update_history(sender, instance, **kwargs):
     historico = HistoricoAtualizacaoPrecos.objects.filter(produto=instance).first()
-    if ((historico and instance) and ((historico.preco_compra != instance.preco_compra) or (historico.preco_venda != instance.preco_venda))) or instance and not historico:
+    if ((historico and instance) and ((historico.preco_compra != instance.preco_compra) or (
+            historico.preco_venda != instance.preco_venda))) or instance and not historico:
         HistoricoAtualizacaoPrecos.objects.create(
             produto=instance,
             descricao=instance.descricao.title(),
