@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="card">
+        <div style="padding: 2%">
+            {% if user.first_name %}
+                <h1 class="text-darker">Bem vindo {{ user.first_name }} {{ user.last_name }}</h1>
+            {% else %}
+                <h1 class="text-darker">Bem vindo {{ user }}</h1>
+            {% endif %}
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <img src="{% static 'img/brand/araras.png' %}" alt="Logo Araras" style="width: 45%; height: 45%;">
+        </div>
+        <div class="card-body" style="padding: 3%; display: flex; justify-content: center">
+            <h2><i class="fas fa-arrow-alt-circle-left"></i> Acesse as páginas no menu ao lado
+            </h2>
+        </div>
+    </div>
+    <div class="modal fade center" id="open-modal" tabindex="-1" role="dialog"></div>
+{% endblock %}

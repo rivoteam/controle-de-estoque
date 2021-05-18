@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -8,6 +8,12 @@ import datetime
 
 
 @login_required()
+def homepage(request):
+    return render(request, 'homepage.html')
+
+
+@login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def dashboard(request):
     """
     Cards Front
@@ -44,5 +50,5 @@ def dashboard(request):
 @login_required()
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/admin/login/?next=/produtos/lista-produtos/')
+    return HttpResponseRedirect('/')
 
