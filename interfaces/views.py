@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
+from django.contrib import messages
 from controle_estoque.models import Produto
 from controle_vendas.models import Venda
 import datetime
@@ -52,3 +54,18 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
+def pag_login(request):
+    context = {}
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                dj_login(request, user)
+                return redirect(reverse('homepage'))
+        else:
+            messages.error(request, "Nome de usuário ou senha incorreta")
+            return redirect('login')
+    return render(request, 'login.html', context)
