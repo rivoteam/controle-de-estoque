@@ -12,6 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.decorators import login_required
+import pandas as pd
+from django.conf import settings
+from core.utils import send_csv_compra
+import os
 
 
 def api_home(request):
@@ -84,9 +88,8 @@ def post_realiza_vendas(request):
 @csrf_exempt
 @login_required
 def post_realiza_compras(request):
-    erros_list = []
-    success = 0
     fornecedor_temp_list = []
+    compra = []
 
     produtos_json = json.loads(request.body)
     for produto_json in produtos_json['produtos']:
@@ -100,20 +103,18 @@ def post_realiza_compras(request):
             if produto_json['produto']['fornecedor'] == fornecedor_obj.id:
                 produto = Produto.objects.get(id=int(produto_json['produto']['id']))
                 valor_compra += (produto.preco_compra * int(produto_json['quantidade']))
-                CarrinhoPedido.objects.create(
-                    quantidade=int(produto_json['quantidade']),
-                    produto_id=produto.id,
-                    pedidocompra=instance_pedido)
-        if valor_compra < fornecedor_obj.faturamento_minimo:
-            erros_list.append({
-                "fornecedor": fornecedor_obj.nome_empresa.title(),
-                "faturamento": {fornecedor_obj.faturamento_minimo},
-                "valor_comprado": valor_compra
-            })
-        else:
-            success += 1
-    if len(erros_list) > 0 and success == 0:
-        return JsonResponse({"Requisicao": f"{erros_list}"}, status=200, safe=False)
-    elif len(erros_list) > 0 and success != 0:
-        return JsonResponse({"Requisicao": f"Compra registrada, porem, com erros {erros_list} "}, status=200, safe=False)
+                compra.append({"produto": produto.ean, "tamanho": produto.tamanho,
+                               "quantidade": (produto.min_pecas - produto.total_pecas)})
+                CarrinhoPedido.objects.create(quantidade=int(produto_json['quantidade']), produto_id=produto.id,
+                                              pedidocompra=instance_pedido)
+                produto.em_compra = True
+                produto.save()
+        if valor_compra >= fornecedor_obj.faturamento_minimo:
+            file_df = pd.DataFrame(data=compra)
+            pasta_pedidos = os.path.join(settings.BASE_DIR, 'controle_pedidos/pedidos_gerados')
+            file_name = f'{pasta_pedidos}/compra-pedido-{instance_pedido.id}.csv'
+            file_df.to_csv(file_name, index=False)
+            send_csv_compra(file_name, fornecedor_obj.email)
+            instance_pedido.status = 3
+            instance_pedido.save()
     return JsonResponse({"Requisicao": f"Compra registrada "}, status=200, safe=False)

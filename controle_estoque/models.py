@@ -85,6 +85,7 @@ class Produto(models.Model):
                                        related_name='produto_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
     ativo = models.BooleanField(default=True)
+    em_compra = models.BooleanField(default=False, help_text='Para processo de compras')
 
     def __str__(self):
         return f'{self.descricao} {self.tamanho} - ean: {self.ean}'.title()

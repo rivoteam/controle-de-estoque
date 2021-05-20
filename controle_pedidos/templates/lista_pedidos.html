@@ -4,11 +4,6 @@
         <div class="card-header">
             <div style="display: flex; align-items: center; justify-content: space-between">
                 <h3 class="text-darker">Listagem Pedidos</h3>
-                {% if perms.controle_estoque.add_produto %}
-                    <a href="#" onclick="open_modal_cria('{% url 'modal-cria-pedido' %}')">
-                        <button class="btn btn-info mr-2" type="submit">Criar Novo Pedido</button>
-                    </a>
-                {% endif %}
             </div>
         </div>
         <div class="card-body">
@@ -21,9 +16,7 @@
                     <th>Qtd. Produtos</th>
                     <th>Status</th>
                     <th>Descrição</th>
-                    {% if perms.controle_pedidos.change_pedidocompra %}
-                        <th class="text-center">Ações</th>
-                    {% endif %}
+                    <th class="text-center">Gerado por</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,25 +32,13 @@
                         <td> {{ pedido.data_pedido }}</td>
                         <td> {{ pedido.get_len_produtos_comprados }} un.</td>
                         <td> {{ pedido.get_status_display }}</td>
-
-                        {% if pedido.descricao == "" %}
+                        {% if pedido.descricao == None %}
                             <td> Sem descrição</td>
                         {% else %}
                             <td> {{ pedido.descricao }}</td>
                         {% endif %}
-                        {% if user.funcionario.is_manager %}
-                            <td style="display: flex; justify-content: space-between">
-                                <a href="#" onclick="open_modal('{% url 'modal-atualiza-pedido' pedido.id %}')">
-                                    <i class="fa fa-edit text-info"></i></a>
-                                <a href="#" onclick="open_modal('{% url 'modal-remove-pedido' pedido.id %}')">
-                                    <i class="fa fa-trash text-danger"></i></a>
-                            </td>
-                        {% elif user.funcionario.is_analyst %}
-                            <td class="text-center">
-                                <a href="#" onclick="open_modal('{% url 'modal-atualiza-pedido' pedido.id %}')">
-                                    <i class="fa fa-edit text-info"></i></a>
-                            </td>
-                        {% endif %}
+                        <td> {{ pedido.criado_por.get_full_name }}</td>
+
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -66,9 +47,6 @@
         </div>
     </div>
     <div class="modal fade center" id="detail_modal" tabindex="-1" role="dialog"></div>
-    <div class="modal fade center" id="cria_modal" tabindex="-1" role="dialog"></div>
-    <div class="modal fade center" id="atualiza_modal" tabindex="-1" role="dialog"></div>
-    <div class="modal fade center" id="remove_modal" tabindex="-1" role="dialog"></div>
 
 {% endblock %}
 
@@ -76,24 +54,6 @@
     <script>
         function open_modal_details(url) {
             $('#detail_modal').focus().load(url, function () {
-                $(this).modal('show');
-            })
-        }
-
-        function open_modal_cria(url) {
-            var modal = $('#cria_modal').focus().load(url, function () {
-                $(this).modal('show');
-            })
-        }
-
-        function open_modal_atualiza(url) {
-            var modal = $('#atualiza_modal').focus().load(url, function () {
-                $(this).modal('show');
-            })
-        }
-
-        function open_modal_remove(url) {
-            var modal = $('#remove_modal').focus().load(url, function () {
                 $(this).modal('show');
             })
         }
