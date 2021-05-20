@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login as dj_login, logout as dj_lo
 from django.contrib import messages
 from controle_estoque.models import Produto
 from controle_vendas.models import Venda
+from controle_pedidos.models import PedidoCompra
 import datetime
 
 
@@ -23,12 +24,14 @@ def dashboard(request):
     qtd_produtos = Produto.objects.filter(ativo=True).count()
     qtd_produtos_limite_alerta_min = Produto.objects.filter(ativo=True, limite_alerta_min=False).count()
     qtd_vendas = Venda.objects.filter(ativo=True).count()
+    qtd_comprados = PedidoCompra.objects.filter(status__in=[1, 2, 3]).count()
 
     context = {
         'active': 'dashboard',
         'qtd_produtos': qtd_produtos,
         'qtd_vendas': qtd_vendas,
-        'qtd_produtos_limite_alerta_min': qtd_produtos_limite_alerta_min
+        'qtd_produtos_limite_alerta_min': qtd_produtos_limite_alerta_min,
+        'qtd_comprados': qtd_comprados,
     }
 
     """

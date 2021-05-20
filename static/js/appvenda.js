@@ -4,7 +4,7 @@ let app = new Vue({
     data() {
         return {
             produto_ean: '',
-            quantidade: 1,
+            quantidade: Number(1),
             produtos: [],
             valor_total: 0.00,
             errors: [],
@@ -23,7 +23,11 @@ let app = new Vue({
     methods: {
         validateProdutoinProdutosCart(produto, quantidade) {
             var i;
-            if (Number(quantidade) > Number(produto.total_pecas)) {
+            if (isNaN(quantidade)) {
+                this.errors.push("Quantidade precisa ser um numero valido");
+                return true
+            }
+            else if (Number(quantidade) > Number(produto.total_pecas)) {
                 this.errors.push("Quantidade solicitada maior que quantidade em estoque");
                 return true
             }

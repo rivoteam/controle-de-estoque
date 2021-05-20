@@ -162,7 +162,11 @@
             methods: {
                 validateProdutoinProdutosCart(produto, quantidade) {
                     var i;
-                   if (quantidade <= 0) {
+                    if (isNaN(quantidade)) {
+                        this.errors.push("Quantidade precisa ser um numero valido");
+                        return true
+                    }
+                    else if (quantidade <= 0) {
                         this.errors.push("Insira uma quantidade válida");
                         return true
                     }
@@ -237,7 +241,9 @@
                         .then(response => {
                             if (response.status === 200) {
                                 console.log(response.data)
-                                setTimeout(() => { console.log("World!"); }, 25565160000)
+                                setTimeout(() => {
+                                    console.log("World!");
+                                }, 25565160000)
                                 location.reload()
                             }
                         })

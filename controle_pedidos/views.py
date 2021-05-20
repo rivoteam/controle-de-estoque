@@ -71,3 +71,13 @@ def app_compra(request):
         "active": "app_compra"
     }
     return render(request, 'app_compra.html', context)
+
+
+@login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst_or_stockist(), login_url="/", redirect_field_name=None)
+def finaliza_pedido(request, pk):
+    pedido = get_object_or_404(PedidoCompra, pk=pk)
+    pedido.atualizado_por = request.user
+    pedido.status = 5
+    pedido.save()
+    return redirect(reverse('lista-pedidos'))
