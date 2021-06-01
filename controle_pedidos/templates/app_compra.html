@@ -73,7 +73,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <template v-for="produto in produtos">
+                            <template v-for="produto in produtos.slice().reverse()">
                                 <tr>
                                     <td>[[ produto.produto.descricao ]]</td>
                                     <td>[[ produto.produto.nome_categoria ]]</td>
@@ -165,15 +165,14 @@
                     if (isNaN(quantidade)) {
                         this.errors.push("Quantidade precisa ser um numero valido");
                         return true
-                    }
-                    else if (quantidade <= 0) {
+                    } else if (quantidade <= 0) {
                         this.errors.push("Insira uma quantidade válida");
                         return true
                     }
                     for (i = 0; i < this.produtos.length; i++) {
                         if (this.produtos[i].produto.ean === produto.ean) {
-                            this.valor_total += (Number(produto.preco_compra) * this.quantidade)
-                            this.produtos[i].quantidade += Number(quantidade)
+                            this.valor_total = (Number(produto.preco_compra) * this.quantidade) + this.valor_total
+                            this.produtos[i].quantidade = Number(quantidade) + Number(this.produtos[i].quantidade)
                             this.errors.push("Produto já consta na lista de compra, quantidade adicionada ao produto")
                             return true
                         }
@@ -206,6 +205,7 @@
                                 console.log(error);
                             })
                     } else {
+                        this.errors = []
                         this.errors.push("Digite um EAN com no mínimo 13 digitos")
                     }
                 },

@@ -26,12 +26,10 @@ let app = new Vue({
             if (isNaN(quantidade)) {
                 this.errors.push("Quantidade precisa ser um numero valido");
                 return true
-            }
-            else if (Number(quantidade) > Number(produto.total_pecas)) {
+            } else if (Number(quantidade) > Number(produto.total_pecas)) {
                 this.errors.push("Quantidade solicitada maior que quantidade em estoque");
                 return true
-            }
-            else if (quantidade <= 0) {
+            } else if (Number(quantidade) <= 0) {
                 this.errors.push("Insira uma quantidade válida");
                 return true
             }
@@ -42,8 +40,8 @@ let app = new Vue({
                         this.errors.push("Quantidade solicitada maior que quantidade em estoque");
                         return true
                     }
-                    this.valor_total += (Number(produto.preco_venda) * this.quantidade)
-                    this.produtos[i].quantidade += Number(quantidade)
+                    this.valor_total = (Number(produto.preco_compra) * this.quantidade) + this.valor_total
+                    this.produtos[i].quantidade = Number(quantidade) + Number(this.produtos[i].quantidade)
                     this.errors.push("Produto já consta na lista de compra, quantidade adicionada ao produto")
                     return true
                 }
@@ -76,6 +74,7 @@ let app = new Vue({
                         console.log(error);
                     })
             } else {
+                this.errors = []
                 this.errors.push("Digite um EAN com no mínimo 13 digitos")
             }
         },
