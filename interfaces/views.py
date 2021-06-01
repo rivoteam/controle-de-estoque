@@ -1,13 +1,22 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
+from django.contrib import messages
 from controle_estoque.models import Produto
 from controle_vendas.models import Venda
+from controle_pedidos.models import PedidoCompra
 import datetime
 
 
 @login_required()
+def homepage(request):
+    return render(request, 'homepage.html')
+
+
+@login_required()
+@user_passes_test(lambda u: u.funcionario.is_manager_or_analyst(), login_url="/", redirect_field_name=None)
 def dashboard(request):
     """
     Cards Front
@@ -15,12 +24,14 @@ def dashboard(request):
     qtd_produtos = Produto.objects.filter(ativo=True).count()
     qtd_produtos_limite_alerta_min = Produto.objects.filter(ativo=True, limite_alerta_min=False).count()
     qtd_vendas = Venda.objects.filter(ativo=True).count()
+    qtd_comprados = PedidoCompra.objects.filter(status__in=[1, 2, 3]).count()
 
     context = {
         'active': 'dashboard',
         'qtd_produtos': qtd_produtos,
         'qtd_vendas': qtd_vendas,
-        'qtd_produtos_limite_alerta_min': qtd_produtos_limite_alerta_min
+        'qtd_produtos_limite_alerta_min': qtd_produtos_limite_alerta_min,
+        'qtd_comprados': qtd_comprados,
     }
 
     """
@@ -44,5 +55,20 @@ def dashboard(request):
 @login_required()
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/admin/login/?next=/produtos/lista-produtos/')
+    return HttpResponseRedirect('/')
 
+
+def pag_login(request):
+    context = {}
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                dj_login(request, user)
+                return redirect(reverse('homepage'))
+        else:
+            messages.error(request, "Nome de usuário ou senha incorreta")
+            return redirect('login')
+    return render(request, 'login.html', context)

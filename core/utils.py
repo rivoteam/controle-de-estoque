@@ -31,6 +31,7 @@ STATUS_COMPRA_CHOICES = (
     (3, 'Enviado'),
     (4, 'Mecadoria Recebida'),
     (5, 'Concluído'),
+    (6, "Cancelado"),
 )
 
 CARGOS_CHOICES = (
@@ -116,15 +117,28 @@ def send_email_logs():
     filename = 'logs.log'
 
     email_default = settings.DEFAULT_FROM_EMAIL
+    mail.EmailMessage(
+        subject='Novo log gerado',
+        body='Mensagem de teste de envio de email do Django',
+        from_email=email_default,
+        to=[email_default],
+        attachments=[(filename, 'text/plain')]
+    ).send()
+    return
 
-    with open(filename) as logfile:
-        mail.EmailMessage(
-            'Novo log gerado',
-            'Mensagem de teste de envio de email do Django',
-            email_default,
-            [email_default],
-            attachments=[(filename, logfile.read(), 'text/plain')]
-        ).send()
+
+def send_csv_compra(arquivo, email_to):
+    email_default = settings.DEFAULT_FROM_EMAIL
+    email = mail.EmailMessage(
+        subject='Compra de produtos Arara Modas',
+        body='Pedido de compra dos itens em anexo para empresa Arara Modas',
+        from_email=email_default,
+        to=[email_to],
+        cc=[email_default],
+        )
+    email.attach_file(arquivo)
+    email.send()
+    return
 
 
 def teste_logging():
