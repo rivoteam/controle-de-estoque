@@ -30,6 +30,7 @@ class PedidoCompra(models.Model):
     atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT,
                                        related_name='pedido_atualizado_por', editable=False, null=True, blank=True)
     atualizado_em = models.DateTimeField(auto_now=True)
+    csv_compra = models.FileField(upload_to='pedidos_gerados/', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Pedido'

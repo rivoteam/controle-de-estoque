@@ -36,14 +36,15 @@ def compra_automatica_produtos():
                 if pedido.preco_pedido >= fornecedor_obj.faturamento_minimo:
                     produto.em_compra = True
                     produto.save()
+        pedido.save()
         if pedido.preco_pedido >= fornecedor_obj.faturamento_minimo:
             file_df = pd.DataFrame(data=compra)
-            pasta_pedidos = os.path.join(settings.BASE_DIR, 'controle_pedidos/pedidos_gerados')
-            file_name = f'{pasta_pedidos}/compra-pedido-{pedido.id}.csv'
+            file_name = f'compra-pedido-{pedido.id}.csv'
             file_df.to_csv(file_name, index=False)
-            send_csv_compra(file_name, fornecedor_obj.email)
+            pedido.csv_compra = file_name
             pedido.status = 3
             pedido.save()
+            send_csv_compra(file_name, fornecedor_obj.email)
         return
 
 

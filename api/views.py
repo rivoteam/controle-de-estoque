@@ -104,7 +104,7 @@ def post_realiza_compras(request):
                 produto = Produto.objects.get(id=int(produto_json['produto']['id']))
                 valor_compra += (produto.preco_compra * int(produto_json['quantidade']))
                 compra.append({"produto": produto.ean, "tamanho": produto.tamanho,
-                               "quantidade": (produto.min_pecas - produto.total_pecas)})
+                               "quantidade": int(produto_json['quantidade'])})
                 CarrinhoPedido.objects.create(quantidade=int(produto_json['quantidade']), produto_id=produto.id,
                                               pedidocompra=instance_pedido)
                 produto.em_compra = True

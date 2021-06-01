@@ -92,7 +92,11 @@
                         <div class="media align-items-center">
 
                             <div class="media-body  mr-2  d-none d-lg-block">
-                                <span class="mb-0 text-sm  font-weight-bold">{{ user.first_name }}</span>
+                                {% if user.first_name or user.last_name %}
+                                    <span class="mb-0 text-sm  font-weight-bold">{{ user.first_name }} {{ user.last_name }}</span>
+                                {% else %}
+                                    <span class="mb-0 text-sm  font-weight-bold">{{ user|title }}</span>
+                                {% endif %}
                             </div>
                             <span>
                                 <img alt="" src="{{ user.funcionario.image.url }}" class="avatar rounded-circle">
@@ -101,7 +105,14 @@
                     </a>
                     <div class="dropdown-menu  dropdown-menu-right ">
                         <div class="dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Bem-vindo, {{ user.first_name }} {{ user.last_name }}!</h6>
+                            {% if user.first_name != "" %}
+                                <h6 class="text-overflow m-0">
+                                    Bem-vindo, {{ user.first_name }} {{ user.last_name }}!</h6>
+                            {% else %}
+                                <h6 class="text-overflow m-0">
+                                    Bem-vindo, {{ user.username }} !</h6>
+
+                            {% endif %}
                         </div>
                         <a href="/admin/" class="dropdown-item" target="_blank">
                             <i class="ni ni-single-02"></i>
