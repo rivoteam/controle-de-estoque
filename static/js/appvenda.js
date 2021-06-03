@@ -40,7 +40,7 @@ let app = new Vue({
                         this.errors.push("Quantidade solicitada maior que quantidade em estoque");
                         return true
                     }
-                    this.valor_total = (Number(produto.preco_compra) * this.quantidade) + this.valor_total
+                    this.valor_total = (Number(produto.preco_venda) * Number(this.quantidade)) + Number(this.valor_total)
                     this.produtos[i].quantidade = Number(quantidade) + Number(this.produtos[i].quantidade)
                     this.errors.push("Produto já consta na lista de compra, quantidade adicionada ao produto")
                     return true

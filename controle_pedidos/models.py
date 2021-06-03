@@ -38,10 +38,7 @@ class PedidoCompra(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        try:
-            return f'Pedido {self.id} - {self.data_pedido.strftime("%d/%m/%Y - %H:%M:%S")}'
-        except AttributeError:
-            return f'Pedido {self.id} - {self.data_pedido}'
+        return f'Pedido {self.id}'
 
     def calc_total(self):
         total = 0

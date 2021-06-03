@@ -2,7 +2,7 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header text-center">
-            <h3 class="modal-title">{{ venda }}</h3>
+            <h3 class="modal-title">Venda {{ venda }}</h3>
             <button type="button" class="close" data-dismiss="modal">
                 <span class="text-danger">x</span>
             </button>
@@ -77,7 +77,7 @@
                                         <th>SKU</th>
                                         <th>Cor</th>
                                         <th>Fornecedor</th>
-                                        <th>Preço de Compra</th>
+                                        <th>Preço de Venda</th>
                                         <th>Quantidade</th>
                                     </tr>
                                     </thead>
@@ -87,7 +87,7 @@
                                             <td>{{ produto.produto.sku }}</td>
                                             <td>{{ produto.produto.cor }}</td>
                                             <td>{{ produto.produto.fornecedor }}</td>
-                                            <td>{{ produto.produto.preco_compra }}</td>
+                                            <td>{{ produto.produto.preco_venda }}</td>
                                             <td>{{ produto.quantidade }}</td>
                                         </tr>
                                     {% endfor %}
