@@ -5,8 +5,8 @@ from controle_estoque.models import Produto
 class ProdutoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProdutoForm, self).__init__(*args, **kwargs)
-        self.fields['preco_compra'] = forms.DecimalField(max_digits=6, decimal_places=2, min_value=1.00)
-        self.fields['preco_venda'] = forms.DecimalField(max_digits=6, decimal_places=2, min_value=1.00)
+        self.fields['preco_compra'] = forms.DecimalField(max_digits=6, decimal_places=2, min_value=0.01)
+        self.fields['preco_venda'] = forms.DecimalField(max_digits=6, decimal_places=2, min_value=0.01)
         self.fields['total_pecas'] = forms.IntegerField(min_value=1)
 
     class Meta:
