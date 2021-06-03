@@ -107,9 +107,11 @@
         </div>
         <div class="modal-footer mb-5">
             <div class="row mt-5" style="position: absolute; right: 2em">
+                {% if pedido.status is not 5 %}
                 <a href="{% url 'finaliza_pedido' pedido.id %}">
                     <button type="submit" class="btn btn-info mr-3">Finalizar Pedido</button>
                 </a>
+                {% endif %}
                 <button type="submit" class="btn btn-info mr-2" data-dismiss="modal">Fechar</button>
             </div>
         </div>
