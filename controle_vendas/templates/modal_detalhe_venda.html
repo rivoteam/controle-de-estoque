@@ -33,7 +33,11 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>CPF Consumidor</h4>
-                            <p>{{ venda.cpf }}</p>
+                            {% if venda.cpf == "" %}
+                                <p>CPF não informado</p>
+                            {% else %}
+                                <p>{{ venda.cpf }}</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-4">
                             <h4>Nota Fiscal</h4>
