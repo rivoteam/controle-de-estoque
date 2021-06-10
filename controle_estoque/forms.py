@@ -11,10 +11,9 @@ class ProdutoForm(forms.ModelForm):
                                                         label="Preço de Venda")
         self.fields['total_pecas'] = forms.IntegerField(min_value=0, label="Total de Peças")
         self.fields['min_pecas'] = forms.IntegerField(min_value=0, label="Mín. de Peças")
-        self.fields['genero'] = forms.IntegerField(min_value=0, label="Gênero")
-        self.fields['descricao'] = forms.IntegerField(min_value=0, label="Descrição")
-        self.fields['motivo_alteracao_preco'] = forms.IntegerField(min_value=0, label="Motivo Alteração de Preço")
-        self.fields['alerta_min'] = forms.IntegerField(min_value=0, label="Alerta Mín.")
+        self.fields['descricao'] = forms.CharField(label="Descrição")
+        self.fields['motivo_alteracao_preco'] = forms.CharField(label="Motivo Alteração de Preço")
+        self.fields['alerta_min'] = forms.IntegerField(label="Alerta Mín.")
 
     class Meta:
         model = Produto
