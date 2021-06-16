@@ -24,6 +24,7 @@ def compra_automatica_produtos():
                     "atualizado_por": User.objects.get(username='robo')}
         pedido, created = PedidoCompra.objects.get_or_create(fornecedor=fornecedor_obj, status=1, defaults=defaults,
                                                              descricao="Pedido gerado automaticamente")
+        pedido.preco_pedido = 0
         compra = []
         for produto in produtos_em_alerta:
             if produto.fornecedor == fornecedor_obj:
@@ -39,12 +40,12 @@ def compra_automatica_produtos():
         pedido.save()
         if pedido.preco_pedido >= fornecedor_obj.faturamento_minimo:
             file_df = pd.DataFrame(data=compra)
-            file_name = f'compra-pedido-{pedido.id}.csv'
+            pasta_pedidos = os.path.join(settings.BASE_DIR, 'controle_pedidos/pedidos_gerados')
+            file_name = f'{pasta_pedidos}/compra-pedido-{pedido.id}.csv'
             file_df.to_csv(file_name, index=False)
-            pedido.csv_compra = file_name
+            send_csv_compra(file_name, fornecedor_obj.email)
             pedido.status = 3
             pedido.save()
-            send_csv_compra(file_name, fornecedor_obj.email)
         return
 
 
